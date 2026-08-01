@@ -1,3 +1,7 @@
+# Local credentials — real secrets, never commit. Use backend/config.sample.yml as the template.
+backend/config.yml
+backend/config_*.yml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
