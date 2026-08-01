@@ -25,45 +25,10 @@ import './App.css'
 const PRIMARY_CAMPUS_ID = Number(import.meta.env.VITE_PRIMARY_CAMPUS_ID ?? 67)
 const POLL_INTERVAL_MS = 60_000
 
-type SourceMode = 'fresh_cache' | 'refreshed' | 'stale_fallback'
-
-type SummaryResponse = {
-  source_mode: SourceMode
-  cache_age_seconds: number | null
-  data_timestamp: string | null
-  summary: {
-    total_campuses: number
-    total_users: number
-    top_campus: {
-      id: number
-      name: string
-      users_count: number
-    } | null
-  }
-}
-
-type Highlight = {
-  id: number
-  name: string
-  city: string
-  country: string
-  users_count: number
-  users_delta_since_prev: number
-}
-
-type HighlightsResponse = {
-  source_mode: SourceMode
-  cache_age_seconds: number | null
-  data_timestamp: string | null
-  highlights: {
-    top_count: number
-    items: Highlight[]
-  }
-}
+type SourceMode = 'fresh_cache' | 'refreshed' | 'stale_fallback' | 'db_cache'
 
 type CampusResponse = {
   source_mode: SourceMode
-  cache_age_seconds: number | null
   data_timestamp: string | null
   campus: {
     id: number
@@ -71,7 +36,6 @@ type CampusResponse = {
     city: string
     country: string
     users_count: number
-    collected_at: string
     source_status: string
   }
 }
@@ -84,7 +48,6 @@ type HistoryPoint = {
 
 type HistoryResponse = {
   source_mode: SourceMode
-  cache_age_seconds: number | null
   data_timestamp: string | null
   campus: {
     id: number
@@ -94,9 +57,80 @@ type HistoryResponse = {
   history: HistoryPoint[]
 }
 
+type AnalyticsPillsResponse = {
+  source_mode: SourceMode
+  data_timestamp: string | null
+  analytics: {
+    campus_id: number
+    users: {
+      total: number
+      active: number
+      active_ratio: number
+    }
+    achievements: {
+      catalog_total: number
+      total_unlocks: number
+      avg_users_per_achievement: number
+      avg_achievements_per_user: number
+      users_with_achievements: number
+      total_achievements_earned: number
+    }
+    coalition_scores: {
+      avg_user_score: number
+      top_user_score: number
+      ranked_users: number
+    }
+  }
+}
+
+type CoalitionRankItem = {
+  coalition_id: number
+  coalition_name: string
+  slug: string
+  color: string
+  user_id: number
+  login: string | null
+  first_name: string | null
+  last_name: string | null
+  score: number
+  rank: number | null
+  collected_at: string
+}
+
+type CoalitionRankingsResponse = {
+  source_mode: SourceMode
+  data_timestamp: string | null
+  rankings: {
+    campus_id: number
+    total: number
+    items: CoalitionRankItem[]
+  }
+}
+
+type AchievementCoverageItem = {
+  achievement_id: number
+  name: string
+  kind: string
+  tier: string
+  visible: number
+  users_count: number
+  collected_at: string
+}
+
+type AchievementCoverageResponse = {
+  source_mode: SourceMode
+  data_timestamp: string | null
+  achievements: {
+    campus_id: number
+    total: number
+    items: AchievementCoverageItem[]
+  }
+}
+
 type DashboardData = {
-  summary: SummaryResponse
-  highlights: HighlightsResponse
+  analytics: AnalyticsPillsResponse
+  rankings: CoalitionRankingsResponse
+  coverage: AchievementCoverageResponse
   primaryCampus: CampusResponse
   history: HistoryResponse
 }
@@ -151,7 +185,17 @@ function sourceModeLabel(mode: SourceMode) {
   if (mode === 'refreshed') {
     return 'Freshly refreshed'
   }
+  if (mode === 'db_cache') {
+    return 'DB cache'
+  }
   return 'Cache live'
+}
+
+function trimLabel(value: string, maxLength = 24) {
+  if (value.length <= maxLength) {
+    return value
+  }
+  return `${value.slice(0, maxLength - 1)}…`
 }
 
 function App() {
@@ -162,15 +206,16 @@ function App() {
   const [chartRotation, setChartRotation] = useState(0)
 
   const fetchDashboard = useEffectEvent(async () => {
-    const [summary, highlights, primaryCampus, history] = await Promise.all([
-      readJson<SummaryResponse>('/api/v1/summary'),
-      readJson<HighlightsResponse>('/api/v1/highlights?top_n=6'),
+    const [analytics, rankings, coverage, primaryCampus, history] = await Promise.all([
+      readJson<AnalyticsPillsResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/analytics/pills`),
+      readJson<CoalitionRankingsResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/coalitions/rankings?limit_per_coalition=5`),
+      readJson<AchievementCoverageResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/achievements/coverage?limit=16`),
       readJson<CampusResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}`),
       readJson<HistoryResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/history?points=24`),
     ])
 
     startTransition(() => {
-      setDashboard({ summary, highlights, primaryCampus, history })
+      setDashboard({ analytics, rankings, coverage, primaryCampus, history })
       setError(null)
       setLoading(false)
     })
@@ -202,20 +247,36 @@ function App() {
     }
   }, [])
 
+  const championRows = useMemo(() => {
+    if (!dashboard) {
+      return []
+    }
+
+    const byCoalition = new Map<number, CoalitionRankItem>()
+    for (const item of dashboard.rankings.rankings.items) {
+      const existing = byCoalition.get(item.coalition_id)
+      if (!existing || (item.rank ?? 9_999) < (existing.rank ?? 9_999) || item.score > existing.score) {
+        byCoalition.set(item.coalition_id, item)
+      }
+    }
+
+    return Array.from(byCoalition.values()).sort((a, b) => a.coalition_name.localeCompare(b.coalition_name))
+  }, [dashboard])
+
   useEffect(() => {
-    if (!dashboard?.highlights.highlights.items.length) {
+    if (!championRows.length) {
       return
     }
 
     const intervalId = window.setInterval(() => {
       setCarouselIndex((currentIndex) => {
-        const total = dashboard.highlights.highlights.items.length
+        const total = championRows.length
         return (currentIndex + 1) % total
       })
     }, 4500)
 
     return () => window.clearInterval(intervalId)
-  }, [dashboard])
+  }, [championRows])
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -225,11 +286,7 @@ function App() {
     return () => window.clearInterval(intervalId)
   }, [])
 
-  const highlightItems = useMemo(
-    () => dashboard?.highlights.highlights.items ?? [],
-    [dashboard?.highlights.highlights.items],
-  )
-  const activeHighlight = highlightItems[carouselIndex] ?? null
+  const activeChampion = championRows[carouselIndex] ?? null
 
   const historySeries = useMemo(() => {
     return (dashboard?.history.history ?? []).map((point) => ({
@@ -239,44 +296,67 @@ function App() {
     }))
   }, [dashboard?.history.history])
 
-  const leaderboardSeries = useMemo(() => {
-    return highlightItems.map((item) => ({
-      name: item.name,
-      users: item.users_count,
-      delta: item.users_delta_since_prev,
+  const coalitionChampionsSeries = useMemo(() => {
+    return championRows.map((item) => ({
+      coalition: item.coalition_name,
+      user: item.login ?? `${item.first_name ?? ''} ${item.last_name ?? ''}`.trim(),
+      score: item.score,
+      rank: item.rank ?? 0,
+      fill: item.color || '#4ecdc4',
     }))
-  }, [highlightItems])
+  }, [championRows])
+
+  const achievementsSeries = useMemo(() => {
+    return (dashboard?.coverage.achievements.items ?? []).slice(0, 10).map((item) => ({
+      name: trimLabel(item.name),
+      users: item.users_count,
+      kind: item.kind,
+    }))
+  }, [dashboard?.coverage.achievements.items])
+
+  const achievementSpreadSeries = useMemo(() => {
+    if (!dashboard) {
+      return []
+    }
+
+    const totalUsers = dashboard.analytics.analytics.users.total
+    const usersWithAchievements = dashboard.analytics.analytics.achievements.users_with_achievements
+
+    return [
+      { label: 'With achievements', users: usersWithAchievements },
+      { label: 'Without achievements', users: Math.max(totalUsers - usersWithAchievements, 0) },
+    ]
+  }, [dashboard])
 
   const overviewStats = useMemo(() => {
     if (!dashboard) {
       return []
     }
 
-    const warsawUsers = dashboard.primaryCampus.campus.users_count
-    const totalUsers = dashboard.summary.summary.total_users
-    const shareOfGlobal = totalUsers > 0 ? (warsawUsers / totalUsers) * 100 : 0
-    const topHighlight = dashboard.highlights.highlights.items[0]
+    const users = dashboard.analytics.analytics.users
+    const achievements = dashboard.analytics.analytics.achievements
+    const coalition = dashboard.analytics.analytics.coalition_scores
 
     return [
       {
-        label: 'Total network',
-        value: formatFullNumber(totalUsers),
-        detail: `${dashboard.summary.summary.total_campuses} campuses tracked`,
+        label: 'Campus users',
+        value: formatFullNumber(users.total),
+        detail: `${formatFullNumber(users.active)} active (${(users.active_ratio * 100).toFixed(1)}%)`,
       },
       {
-        label: '42Warsaw',
-        value: formatFullNumber(warsawUsers),
-        detail: `${shareOfGlobal.toFixed(1)}% of tracked users`,
+        label: 'Achievement unlocks',
+        value: formatFullNumber(achievements.total_achievements_earned),
+        detail: `${formatFullNumber(achievements.catalog_total)} tracked achievements`,
       },
       {
-        label: 'Top campus now',
-        value: topHighlight?.name ?? 'No data',
-        detail: topHighlight ? `${formatCompactNumber(topHighlight.users_count)} students` : 'Awaiting refresh',
+        label: 'Avg achievements / user',
+        value: achievements.avg_achievements_per_user.toFixed(2),
+        detail: `${formatFullNumber(achievements.users_with_achievements)} users unlocked at least one`,
       },
       {
-        label: 'Data freshness',
-        value: sourceModeLabel(dashboard.summary.source_mode),
-        detail: `Snapshot ${formatTimestamp(dashboard.summary.data_timestamp)}`,
+        label: 'Avg coalition score',
+        value: coalition.avg_user_score.toFixed(1),
+        detail: `Top user score ${formatFullNumber(coalition.top_user_score)}`,
       },
     ]
   }, [dashboard])
@@ -290,8 +370,8 @@ function App() {
       {
         id: 'warsaw-line',
         eyebrow: 'Timeline',
-        title: '42Warsaw student count trend',
-        description: 'The primary campus history panel is already wired to SQLite snapshots, so new refreshes will naturally extend this chart.',
+        title: 'Campus users trend by snapshot',
+        description: 'The trend line still reads directly from cached history snapshots so every refresh extends this automatically.',
         chart: (
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={historySeries}>
@@ -305,64 +385,64 @@ function App() {
         ),
       },
       {
-        id: 'warsaw-area',
-        eyebrow: 'Pulse',
-        title: '42Warsaw snapshot build-up',
-        description: 'This area view emphasizes accumulation and gives you a more atmospheric hero-style metric for the lower graph zone.',
+        id: 'coalition-champions',
+        eyebrow: 'Coalitions',
+        title: 'Top ranked user per coalition',
+        description: 'This chart is sourced from /coalitions/{id}/coalitions_users snapshots and lets you surface live competitive leaders.',
         chart: (
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={historySeries}>
+            <BarChart data={coalitionChampionsSeries} layout="vertical" margin={{ left: 12, right: 12 }}>
+              <CartesianGrid stroke="rgba(255,255,255,0.08)" horizontal={false} />
+              <XAxis type="number" tickLine={false} axisLine={false} />
+              <YAxis type="category" dataKey="coalition" tickLine={false} axisLine={false} width={92} />
+              <Tooltip formatter={(value) => formatFullNumber(Number(value))} />
+              <Bar dataKey="score" fill="#4ecdc4" radius={[0, 10, 10, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        ),
+      },
+      {
+        id: 'achievement-coverage',
+        eyebrow: 'Achievements',
+        title: 'Most earned achievements in campus',
+        description: 'Coverage is derived from /achievements/{achievement_id}/achievements_users filtered against your campus users.',
+        chart: (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={achievementsSeries}>
+              <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
+              <XAxis dataKey="name" tickLine={false} axisLine={false} interval={0} angle={-14} textAnchor="end" height={76} />
+              <YAxis tickLine={false} axisLine={false} width={52} />
+              <Tooltip formatter={(value) => formatFullNumber(Number(value))} />
+              <Bar dataKey="users" fill="#ffd166" radius={[10, 10, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        ),
+      },
+      {
+        id: 'achievement-spread',
+        eyebrow: 'Population',
+        title: 'Achievement penetration in campus',
+        description: 'Quick split showing how many users have at least one achievement versus users with none.',
+        chart: (
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={achievementSpreadSeries}>
               <defs>
-                <linearGradient id="warsawGlow" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="5%" stopColor="#ffd166" stopOpacity={0.7} />
-                  <stop offset="95%" stopColor="#ffd166" stopOpacity={0.05} />
+                <linearGradient id="achievementSpread" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="5%" stopColor="#4ecdc4" stopOpacity={0.7} />
+                  <stop offset="95%" stopColor="#4ecdc4" stopOpacity={0.1} />
                 </linearGradient>
               </defs>
               <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-              <XAxis dataKey="label" tickLine={false} axisLine={false} minTickGap={30} />
-              <YAxis tickLine={false} axisLine={false} width={60} />
-              <Tooltip />
-              <Area type="monotone" dataKey="users" stroke="#ffd166" fill="url(#warsawGlow)" strokeWidth={2.5} />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} />
+              <YAxis tickLine={false} axisLine={false} width={52} />
+              <Tooltip formatter={(value) => formatFullNumber(Number(value))} />
+              <Area type="monotone" dataKey="users" stroke="#4ecdc4" fill="url(#achievementSpread)" strokeWidth={2.5} />
             </AreaChart>
           </ResponsiveContainer>
         ),
       },
-      {
-        id: 'leaders-bar',
-        eyebrow: 'Leaders',
-        title: 'Largest campuses in the current cache',
-        description: 'This is a strong default for the first bottom chart while you are still curating more specific school KPIs.',
-        chart: (
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={leaderboardSeries} layout="vertical" margin={{ left: 12, right: 12 }}>
-              <CartesianGrid stroke="rgba(255,255,255,0.08)" horizontal={false} />
-              <XAxis type="number" tickLine={false} axisLine={false} />
-              <YAxis type="category" dataKey="name" tickLine={false} axisLine={false} width={92} />
-              <Tooltip />
-              <Bar dataKey="users" fill="#4ecdc4" radius={[0, 10, 10, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        ),
-      },
-      {
-        id: 'delta-bar',
-        eyebrow: 'Momentum',
-        title: 'Change since previous snapshot',
-        description: 'As your cache accumulates more snapshots, this view becomes a compact indicator of which campuses are moving fastest.',
-        chart: (
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={leaderboardSeries}>
-              <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-              <XAxis dataKey="name" tickLine={false} axisLine={false} interval={0} angle={-12} textAnchor="end" height={60} />
-              <YAxis tickLine={false} axisLine={false} width={52} />
-              <Tooltip />
-              <Bar dataKey="delta" fill="#ff6b6b" radius={[10, 10, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        ),
-      },
     ]
-  }, [dashboard, historySeries, leaderboardSeries])
+  }, [dashboard, historySeries, coalitionChampionsSeries, achievementsSeries, achievementSpreadSeries])
 
   const leftChart = chartViews[chartRotation % Math.max(chartViews.length, 1)]
   const rightChart = chartViews[(chartRotation + 2) % Math.max(chartViews.length, 1)]
@@ -372,8 +452,8 @@ function App() {
       <main className="dashboard-shell loading-state">
         <section className="loading-card">
           <p className="eyebrow">Booting dashboard</p>
-          <h1>Preparing the first 42Warsaw community view.</h1>
-          <p>Fetching summary, highlights, and Warsaw snapshot history from the FastAPI cache.</p>
+          <h1>Preparing analytics for coalition and achievement insights.</h1>
+          <p>Fetching pills, rankings, achievement coverage, and campus trend snapshots from the FastAPI cache.</p>
         </section>
       </main>
     )
@@ -386,8 +466,8 @@ function App() {
           <p className="eyebrow">Frontend can reach Vite, but data is missing</p>
           <h1>Dashboard data request failed.</h1>
           <p>{error ?? 'Unknown error'}</p>
-          <a className="inline-link" href="http://127.0.0.1:8000/api/v1/summary" target="_blank" rel="noreferrer">
-            Check backend summary endpoint
+          <a className="inline-link" href="http://127.0.0.1:8000/api/v1/campus/67/analytics/pills" target="_blank" rel="noreferrer">
+            Check backend analytics endpoint
           </a>
         </section>
       </main>
@@ -398,56 +478,55 @@ function App() {
     <main className="dashboard-shell">
       <section className="hero-panel">
         <div className="hero-copy">
-          <p className="eyebrow">42Warsaw student community dashboard</p>
-          <h1>Static shell, live campus pulse.</h1>
+          <p className="eyebrow">42Warsaw analytics cockpit</p>
+          <h1>Live ranking, active users, achievement spread.</h1>
           <p className="hero-text">
-            This first frontend pass already consumes your FastAPI cache and turns it into an animated overview for highlights, steady metrics, and chart-ready campus history.
+            The UI now consumes dedicated analytics endpoints so your pills and charts map directly to cached coalition scores and filtered achievement data.
           </p>
           <div className="hero-meta-row">
-            <span className={`status-pill status-${dashboard.summary.source_mode}`}>
-              {sourceModeLabel(dashboard.summary.source_mode)}
+            <span className={`status-pill status-${dashboard.analytics.source_mode}`}>
+              {sourceModeLabel(dashboard.analytics.source_mode)}
             </span>
-            <span className="hero-meta">Snapshot: {formatTimestamp(dashboard.summary.data_timestamp)}</span>
+            <span className="hero-meta">Snapshot: {formatTimestamp(dashboard.analytics.data_timestamp)}</span>
           </div>
         </div>
 
         <div className="carousel-card">
           <div className="carousel-header">
-            <span>Top highlights</span>
-            <span>{highlightItems.length} tracked</span>
+            <span>Coalition champions</span>
+            <span>{championRows.length} coalitions</span>
           </div>
 
           <AnimatePresence mode="wait">
-            {activeHighlight ? (
+            {activeChampion ? (
               <motion.article
-                key={activeHighlight.id}
+                key={`${activeChampion.coalition_id}-${activeChampion.user_id}`}
                 className="highlight-slide"
                 initial={{ opacity: 0, y: 24, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.97 }}
                 transition={{ duration: 0.45, ease: 'easeOut' }}
               >
-                <p className="eyebrow">Carousel focus</p>
-                <h2>{activeHighlight.name}</h2>
-                <p className="highlight-location">{activeHighlight.city}, {activeHighlight.country}</p>
-                <div className="highlight-metric">{formatCompactNumber(activeHighlight.users_count)}</div>
-                <p className="highlight-subtext">students currently represented in the latest cache snapshot</p>
-                <div className="delta-pill">
-                  Delta since previous snapshot: {activeHighlight.users_delta_since_prev >= 0 ? '+' : ''}
-                  {activeHighlight.users_delta_since_prev}
-                </div>
+                <p className="eyebrow">{activeChampion.coalition_name}</p>
+                <h2>{activeChampion.login ?? `User ${activeChampion.user_id}`}</h2>
+                <p className="highlight-location">
+                  {(activeChampion.first_name ?? '').trim()} {(activeChampion.last_name ?? '').trim()}
+                </p>
+                <div className="highlight-metric">{formatCompactNumber(activeChampion.score)}</div>
+                <p className="highlight-subtext">ranked #{activeChampion.rank ?? '-'} with latest coalition score snapshot</p>
+                <div className="delta-pill">Coalition: {activeChampion.slug}</div>
               </motion.article>
             ) : null}
           </AnimatePresence>
 
-          <div className="carousel-dots" aria-label="highlight slides">
-            {highlightItems.map((item, index) => (
+          <div className="carousel-dots" aria-label="champion slides">
+            {championRows.map((item, index) => (
               <button
-                key={item.id}
+                key={item.coalition_id}
                 type="button"
                 className={index === carouselIndex ? 'dot active' : 'dot'}
                 onClick={() => setCarouselIndex(index)}
-                aria-label={`Show ${item.name}`}
+                aria-label={`Show ${item.coalition_name}`}
               />
             ))}
           </div>
@@ -472,29 +551,28 @@ function App() {
 
       <section className="story-grid">
         <article className="story-card emphasis-card">
-          <p className="eyebrow">Primary campus</p>
+          <p className="eyebrow">Campus profile</p>
           <h2>{dashboard.primaryCampus.campus.name}</h2>
           <p className="story-copy">
-            {dashboard.primaryCampus.campus.city}, {dashboard.primaryCampus.campus.country} is pinned as the first campus profile and will stay stable even when you curate narrower student-specific metrics later.
+            {dashboard.primaryCampus.campus.city}, {dashboard.primaryCampus.campus.country} remains your main context and all analytics widgets are filtered to this campus data.
           </p>
           <div className="pill-row">
             <span className="info-pill">Campus ID {dashboard.primaryCampus.campus.id}</span>
             <span className="info-pill">{formatFullNumber(dashboard.primaryCampus.campus.users_count)} users</span>
-            <span className="info-pill">Source {dashboard.primaryCampus.campus.source_status}</span>
+            <span className="info-pill">Achievement records {formatFullNumber(dashboard.coverage.achievements.total)}</span>
           </div>
         </article>
 
         <article className="story-card">
-          <p className="eyebrow">Why this shape works now</p>
-          <h2>Frontend before final KPI curation</h2>
+          <p className="eyebrow">Data path</p>
+          <h2>Backend endpoints now drive every KPI</h2>
           <p className="story-copy">
-            The shell is already structured around your future dashboard plan: a top hero carousel, a middle strip of static pills, and two evolving graph spaces below. You can swap the datasets later without changing the layout system.
+            Pills consume /analytics/pills, leaderboard consumes /coalitions/rankings, and achievement chart consumes /achievements/coverage. This keeps frontend logic thin and lets backend cache own aggregation.
           </p>
           <div className="pill-row compact-pills">
-            <span className="info-pill">React + Vite</span>
-            <span className="info-pill">Framer Motion</span>
-            <span className="info-pill">Recharts</span>
             <span className="info-pill">Polling every 60s</span>
+            <span className="info-pill">FastAPI + SQLite cache</span>
+            <span className="info-pill">Framer Motion + Recharts</span>
           </div>
         </article>
       </section>

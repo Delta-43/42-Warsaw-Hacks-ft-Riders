@@ -1,28 +1,57 @@
 from datetime import datetime, timedelta, timezone
-import json
+import os
 from pathlib import Path
 import sqlite3
 import threading
 from typing import Any
 
-from api42lib import IntraAPIClient
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from api_routes import create_router
+from long_term_sync import sync_long_term_data
+from short_term_sync import sync_short_term_data
 
 
 APP_NAME = "42 Warsaw Campus Dashboard API"
-CACHE_TTL_SECONDS = 600
-AUTO_REFRESH_SECONDS = 600
+LONG_TERM_SYNC_INTERVAL = timedelta(days=30)
+SHORT_TERM_SYNC_INTERVAL = timedelta(days=1)
+COORDINATOR_POLL_INTERVAL_SECONDS = 3600
 
 BASE_DIR = Path(__file__).resolve().parent
+
+
+def load_env_file(env_path: Path) -> None:
+    if not env_path.exists():
+        return
+
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+def resolve_primary_campus_id(default: int = 67) -> int:
+    raw_value = os.getenv("CAMPUS", str(default)).strip()
+    try:
+        return int(raw_value)
+    except ValueError:
+        return default
+
+
+load_env_file(BASE_DIR.parent / ".env")
+load_env_file(BASE_DIR / ".env")
+PRIMARY_CAMPUS_ID = resolve_primary_campus_id()
+
 DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
 DB_PATH = DATA_DIR / "dashboard_cache.db"
-
-FALLBACK_PATHS = [
-    DATA_DIR / "campus.json",
-    Path(__file__).resolve().parent.parent / "data" / "campus.json",
-]
+CONFIG_PATH = BASE_DIR / "config.yml"
 
 refresh_stop_event = threading.Event()
 refresh_thread: threading.Thread | None = None
@@ -90,6 +119,158 @@ def init_db() -> None:
 
     conn.execute(
         """
+        CREATE TABLE IF NOT EXISTS coalition_reference (
+            coalition_id INTEGER PRIMARY KEY,
+            campus_id INTEGER NOT NULL,
+            cursus_id INTEGER,
+            coalition_name TEXT NOT NULL,
+            slug TEXT,
+            image_url TEXT,
+            cover_url TEXT,
+            color TEXT,
+            last_seen_at TEXT NOT NULL
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS coalition_score_snapshot (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            coalition_id INTEGER NOT NULL,
+            campus_id INTEGER NOT NULL,
+            score INTEGER NOT NULL,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL,
+            FOREIGN KEY(coalition_id) REFERENCES coalition_reference(coalition_id)
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS campus_user (
+            user_id INTEGER PRIMARY KEY,
+            campus_id INTEGER NOT NULL,
+            login TEXT NOT NULL UNIQUE,
+            first_name TEXT,
+            last_name TEXT,
+            url TEXT,
+            kind TEXT,
+            image TEXT,
+            pool_month TEXT,
+            pool_year TEXT,
+            active INTEGER NOT NULL,
+            alumni INTEGER NOT NULL,
+            is_staff INTEGER NOT NULL DEFAULT 0,
+            is_alumni INTEGER NOT NULL DEFAULT 0,
+            is_active INTEGER NOT NULL DEFAULT 0,
+            achievements_count INTEGER NOT NULL DEFAULT 0,
+            last_seen_at TEXT NOT NULL
+        )
+        """
+    )
+
+    # Keep old DBs compatible when schema evolved from earlier versions.
+    try:
+        conn.execute("ALTER TABLE campus_user ADD COLUMN url TEXT")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        conn.execute("ALTER TABLE campus_user ADD COLUMN kind TEXT")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        conn.execute("ALTER TABLE campus_user ADD COLUMN image TEXT")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        conn.execute("ALTER TABLE campus_user ADD COLUMN active INTEGER NOT NULL DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        conn.execute("ALTER TABLE campus_user ADD COLUMN alumni INTEGER NOT NULL DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        conn.execute("ALTER TABLE campus_user ADD COLUMN is_staff INTEGER NOT NULL DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        conn.execute("ALTER TABLE campus_user ADD COLUMN is_alumni INTEGER NOT NULL DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        conn.execute("ALTER TABLE campus_user ADD COLUMN is_active INTEGER NOT NULL DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        conn.execute("ALTER TABLE campus_user ADD COLUMN achievements_count INTEGER NOT NULL DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS short_term_metric_snapshot (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            campus_id INTEGER NOT NULL,
+            metric_name TEXT NOT NULL,
+            metric_value REAL,
+            payload_json TEXT,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS achievement_reference (
+            achievement_id INTEGER PRIMARY KEY,
+            campus_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            description TEXT,
+            tier TEXT,
+            kind TEXT,
+            visible INTEGER NOT NULL,
+            nbr_of_success INTEGER,
+            last_seen_at TEXT NOT NULL
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS achievement_metric_snapshot (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            campus_id INTEGER NOT NULL,
+            achievement_id INTEGER NOT NULL,
+            users_count INTEGER NOT NULL,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL,
+            FOREIGN KEY(achievement_id) REFERENCES achievement_reference(achievement_id)
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS coalition_user_score_snapshot (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            campus_id INTEGER NOT NULL,
+            coalition_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            score INTEGER NOT NULL,
+            rank INTEGER,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL,
+            FOREIGN KEY(coalition_id) REFERENCES coalition_reference(coalition_id)
+        )
+        """
+    )
+
+    conn.execute(
+        """
         CREATE INDEX IF NOT EXISTS idx_snapshots_campus_time
         ON campus_metrics_snapshot(campus_id, collected_at)
         """
@@ -102,54 +283,74 @@ def init_db() -> None:
         """
     )
 
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_campus_user_campus_login
+        ON campus_user(campus_id, login)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_coalition_reference_campus
+        ON coalition_reference(campus_id)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_coalition_score_campus_time
+        ON coalition_score_snapshot(campus_id, collected_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_short_term_metric_campus_time
+        ON short_term_metric_snapshot(campus_id, collected_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_achievement_reference_campus
+        ON achievement_reference(campus_id)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_achievement_metric_campus_time
+        ON achievement_metric_snapshot(campus_id, collected_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_achievement_metric_achievement_time
+        ON achievement_metric_snapshot(achievement_id, collected_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_coalition_user_score_campus_time
+        ON coalition_user_score_snapshot(campus_id, collected_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_coalition_user_score_user
+        ON coalition_user_score_snapshot(campus_id, user_id)
+        """
+    )
+
     conn.commit()
     conn.close()
 
 
-def get_client() -> IntraAPIClient:
-    return IntraAPIClient(config_path="config.yml")
-
-
-def normalize_campus_payload(campus_payload: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    normalized: list[dict[str, Any]] = []
-    for item in campus_payload:
-        if not all(k in item for k in ("id", "name", "city", "country", "users_count")):
-            continue
-        normalized.append(
-            {
-                "id": int(item["id"]),
-                "name": str(item["name"]),
-                "city": str(item.get("city", "")),
-                "country": str(item.get("country", "")),
-                "users_count": int(item["users_count"]),
-            }
-        )
-    return normalized
-
-
-def write_seed_files(campus_payload: list[dict[str, Any]]) -> None:
-    full_path = DATA_DIR / "full_campus.json"
-    with full_path.open("w", encoding="utf-8") as fh:
-        json.dump(campus_payload, fh, indent=2, ensure_ascii=False)
-
-    compact = normalize_campus_payload(campus_payload)
-    compact_path = DATA_DIR / "campus.json"
-    with compact_path.open("w", encoding="utf-8") as fh:
-        json.dump(compact, fh, indent=2, ensure_ascii=False)
-
-
-def load_json_fallback() -> list[dict[str, Any]]:
-    for path in FALLBACK_PATHS:
-        if not path.exists():
-            continue
-        with path.open("r", encoding="utf-8") as fh:
-            payload = json.load(fh)
-        if isinstance(payload, list):
-            return normalize_campus_payload(payload)
-    return []
-
-
-def log_refresh(started_at: str, success: bool, error_summary: str | None = None) -> None:
+def log_refresh(job_name: str, started_at: str, success: bool, error_summary: str | None = None) -> None:
     finished_at = iso_now()
     conn = sqlite3.connect(DB_PATH)
     conn.execute(
@@ -157,423 +358,149 @@ def log_refresh(started_at: str, success: bool, error_summary: str | None = None
         INSERT INTO refresh_log (job_name, started_at, finished_at, success, error_summary)
         VALUES (?, ?, ?, ?, ?)
         """,
-        ("campus_refresh", started_at, finished_at, int(success), error_summary),
+        (job_name, started_at, finished_at, int(success), error_summary),
     )
     conn.commit()
     conn.close()
 
 
-def upsert_campus_snapshot(rows: list[dict[str, Any]], source_status: str) -> None:
-    collected_at = iso_now()
+def get_last_successful_refresh(job_name: str) -> datetime | None:
     conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA foreign_keys=ON;")
-
-    for row in rows:
-        conn.execute(
-            """
-            INSERT INTO campus_reference (campus_id, campus_name, city, country, last_seen_at)
-            VALUES (?, ?, ?, ?, ?)
-            ON CONFLICT(campus_id) DO UPDATE SET
-                campus_name=excluded.campus_name,
-                city=excluded.city,
-                country=excluded.country,
-                last_seen_at=excluded.last_seen_at
-            """,
-            (row["id"], row["name"], row["city"], row["country"], collected_at),
-        )
-        conn.execute(
-            """
-            INSERT INTO campus_metrics_snapshot (campus_id, users_count, collected_at, source_status)
-            VALUES (?, ?, ?, ?)
-            """,
-            (row["id"], row["users_count"], collected_at, source_status),
-        )
-
-    conn.commit()
+    row = conn.execute(
+        """
+        SELECT finished_at
+        FROM refresh_log
+        WHERE job_name = ? AND success = 1 AND finished_at IS NOT NULL
+        ORDER BY finished_at DESC
+        LIMIT 1
+        """,
+        (job_name,),
+    ).fetchone()
     conn.close()
 
-
-def prune_old_snapshots(days: int = 180) -> None:
-    cutoff = (utcnow() - timedelta(days=days)).isoformat()
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute(
-        "DELETE FROM campus_metrics_snapshot WHERE collected_at < ?",
-        (cutoff,),
-    )
-    conn.commit()
-    conn.close()
+    if row is None:
+        return None
+    return parse_iso_datetime(row[0])
 
 
-def fetch_campus_from_api() -> list[dict[str, Any]]:
-    client = get_client()
-    response = client.get("/campus")
-    if response.status_code != 200:
-        raise HTTPException(
-            status_code=503,
-            detail=f"Upstream 42 API failed with status {response.status_code}",
-        )
-    payload = response.json()
-    if not isinstance(payload, list):
-        raise HTTPException(status_code=503, detail="Unexpected campus payload shape")
-    return normalize_campus_payload(payload)
+def should_run(job_name: str, interval: timedelta, force: bool = False) -> bool:
+    if force:
+        return True
+
+    last_refresh = get_last_successful_refresh(job_name)
+    if last_refresh is None:
+        return True
+
+    return utcnow() - last_refresh >= interval
 
 
-def refresh_cache_from_api() -> dict[str, Any]:
-    started = iso_now()
-    try:
-        campus_rows = fetch_campus_from_api()
-        upsert_campus_snapshot(campus_rows, source_status="live_api")
-        prune_old_snapshots()
-        write_seed_files(campus_rows)
-        log_refresh(started, success=True)
+def run_long_term_sync(force: bool = False) -> dict[str, Any]:
+    if not should_run("long_term_sync", LONG_TERM_SYNC_INTERVAL, force=force):
         return {
-            "success": True,
-            "source_mode": "refreshed",
-            "inserted_campuses": len(campus_rows),
-            "refreshed_at": iso_now(),
+            "job_name": "long_term_sync",
+            "ran": False,
+            "source_mode": "fresh_cache",
         }
-    except Exception as exc:  # defensive logging for upstream/downstream failures
-        log_refresh(started, success=False, error_summary=str(exc))
+
+    started_at = iso_now()
+    try:
+        result = sync_long_term_data(
+            db_path=DB_PATH,
+            config_path=CONFIG_PATH,
+            campus_id=PRIMARY_CAMPUS_ID,
+        )
+        log_refresh("long_term_sync", started_at, success=True)
+        return {
+            "job_name": "long_term_sync",
+            "ran": True,
+            "source_mode": "refreshed",
+            **result,
+        }
+    except Exception as exc:
+        log_refresh("long_term_sync", started_at, success=False, error_summary=str(exc))
         raise
 
 
-def get_latest_snapshot() -> tuple[list[dict[str, Any]], datetime | None]:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-
-    latest_row = conn.execute(
-        "SELECT MAX(collected_at) AS latest FROM campus_metrics_snapshot"
-    ).fetchone()
-
-    latest = latest_row["latest"] if latest_row else None
-    if latest is None:
-        conn.close()
-        return [], None
-
-    rows = conn.execute(
-        """
-        SELECT
-            ref.campus_id AS id,
-            ref.campus_name AS name,
-            ref.city AS city,
-            ref.country AS country,
-            snap.users_count AS users_count,
-            snap.collected_at AS collected_at,
-            snap.source_status AS source_status
-        FROM campus_metrics_snapshot snap
-        JOIN campus_reference ref ON ref.campus_id = snap.campus_id
-        WHERE snap.collected_at = ?
-        ORDER BY snap.users_count DESC
-        """,
-        (latest,),
-    ).fetchall()
-    conn.close()
-
-    snapshot = [dict(row) for row in rows]
-    parsed = parse_iso_datetime(latest)
-    return snapshot, parsed
-
-
-def get_snapshot_by_timestamp(collected_at: str) -> list[dict[str, Any]]:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    rows = conn.execute(
-        """
-        SELECT
-            ref.campus_id AS id,
-            ref.campus_name AS name,
-            ref.city AS city,
-            ref.country AS country,
-            snap.users_count AS users_count,
-            snap.collected_at AS collected_at,
-            snap.source_status AS source_status
-        FROM campus_metrics_snapshot snap
-        JOIN campus_reference ref ON ref.campus_id = snap.campus_id
-        WHERE snap.collected_at = ?
-        ORDER BY snap.users_count DESC
-        """,
-        (collected_at,),
-    ).fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
-
-
-def get_recent_snapshot_timestamps(limit: int = 2) -> list[str]:
-    conn = sqlite3.connect(DB_PATH)
-    rows = conn.execute(
-        """
-        SELECT DISTINCT collected_at
-        FROM campus_metrics_snapshot
-        ORDER BY collected_at DESC
-        LIMIT ?
-        """,
-        (limit,),
-    ).fetchall()
-    conn.close()
-    return [row[0] for row in rows]
-
-
-def ensure_seed_cache() -> bool:
-    snapshot, _ = get_latest_snapshot()
-    if snapshot:
-        return True
-
-    fallback_rows = load_json_fallback()
-    if not fallback_rows:
-        return False
-
-    upsert_campus_snapshot(fallback_rows, source_status="fallback_file")
-    return True
-
-
-def get_campus_data(force_refresh: bool = False) -> dict[str, Any]:
-    snapshot, collected_at = get_latest_snapshot()
-    now = utcnow()
-
-    if force_refresh:
-        result = refresh_cache_from_api()
-        snapshot, collected_at = get_latest_snapshot()
+def run_short_term_sync(force: bool = False) -> dict[str, Any]:
+    if not should_run("short_term_sync", SHORT_TERM_SYNC_INTERVAL, force=force):
         return {
-            "source_mode": result["source_mode"],
-            "cache_age_seconds": 0,
-            "data_timestamp": collected_at.isoformat() if collected_at else None,
-            "items": snapshot,
-        }
-
-    is_fresh = False
-    if collected_at:
-        age = (now - collected_at).total_seconds()
-        is_fresh = age <= CACHE_TTL_SECONDS
-    else:
-        age = None
-
-    if is_fresh and snapshot:
-        return {
+            "job_name": "short_term_sync",
+            "ran": False,
             "source_mode": "fresh_cache",
-            "cache_age_seconds": int(age) if age is not None else None,
-            "data_timestamp": collected_at.isoformat() if collected_at else None,
-            "items": snapshot,
         }
 
+    started_at = iso_now()
     try:
-        refresh_cache_from_api()
-        snapshot, collected_at = get_latest_snapshot()
+        result = sync_short_term_data(
+            db_path=DB_PATH,
+            config_path=CONFIG_PATH,
+            campus_id=PRIMARY_CAMPUS_ID,
+        )
+        log_refresh("short_term_sync", started_at, success=True)
         return {
+            "job_name": "short_term_sync",
+            "ran": True,
             "source_mode": "refreshed",
-            "cache_age_seconds": 0,
-            "data_timestamp": collected_at.isoformat() if collected_at else None,
-            "items": snapshot,
+            **result,
         }
-    except Exception:
-        if snapshot:
-            stale_age = int((now - collected_at).total_seconds()) if collected_at else None
-            return {
-                "source_mode": "stale_fallback",
-                "cache_age_seconds": stale_age,
-                "data_timestamp": collected_at.isoformat() if collected_at else None,
-                "items": snapshot,
-            }
-        raise HTTPException(
-            status_code=503,
-            detail="No cached campus data available and upstream API is unreachable",
-        )
+    except Exception as exc:
+        log_refresh("short_term_sync", started_at, success=False, error_summary=str(exc))
+        raise
 
 
-def get_campus_item(campus_id: int, force_refresh: bool = False) -> dict[str, Any]:
-    payload = get_campus_data(force_refresh=force_refresh)
-    for item in payload["items"]:
-        if item["id"] == campus_id:
-            return {
-                "source_mode": payload["source_mode"],
-                "cache_age_seconds": payload["cache_age_seconds"],
-                "data_timestamp": payload["data_timestamp"],
-                "campus": item,
-            }
-    raise HTTPException(status_code=404, detail=f"Campus {campus_id} not found in cache")
-
-
-def get_campus_history(campus_id: int, points: int = 30) -> dict[str, Any]:
-    if points < 1 or points > 1000:
-        raise HTTPException(status_code=400, detail="points must be between 1 and 1000")
-
-    payload = get_campus_data(force_refresh=False)
-    campus_name = None
-    for item in payload["items"]:
-        if item["id"] == campus_id:
-            campus_name = item["name"]
-            break
-
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    rows = conn.execute(
-        """
-        SELECT users_count, collected_at, source_status
-        FROM campus_metrics_snapshot
-        WHERE campus_id = ?
-        ORDER BY collected_at DESC
-        LIMIT ?
-        """,
-        (campus_id, points),
-    ).fetchall()
-    conn.close()
-
-    history_desc = [dict(row) for row in rows]
-    history = list(reversed(history_desc))
-
-    if campus_name is None and history:
-        campus_name = f"Campus {campus_id}"
-
-    if not history:
-        raise HTTPException(status_code=404, detail=f"No history found for campus {campus_id}")
-
+def run_due_syncs(force_long_term: bool = False, force_short_term: bool = False) -> dict[str, Any]:
+    long_term = run_long_term_sync(force=force_long_term)
+    short_term = run_short_term_sync(force=force_short_term)
     return {
-        "source_mode": payload["source_mode"],
-        "cache_age_seconds": payload["cache_age_seconds"],
-        "data_timestamp": payload["data_timestamp"],
-        "campus": {"id": campus_id, "name": campus_name},
-        "points": len(history),
-        "history": history,
-    }
-
-
-def build_highlights(campus_items: list[dict[str, Any]], top_n: int = 5) -> dict[str, Any]:
-    top_n = max(1, min(top_n, 20))
-    latest_top = campus_items[:top_n]
-
-    timestamps = get_recent_snapshot_timestamps(limit=2)
-    growth_map: dict[int, int] = {}
-    previous_ts = timestamps[1] if len(timestamps) > 1 else None
-
-    if previous_ts:
-        previous_snapshot = get_snapshot_by_timestamp(previous_ts)
-        previous_by_id = {item["id"]: item for item in previous_snapshot}
-        for item in latest_top:
-            prev = previous_by_id.get(item["id"])
-            growth_map[item["id"]] = item["users_count"] - prev["users_count"] if prev else 0
-    else:
-        for item in latest_top:
-            growth_map[item["id"]] = 0
-
-    highlight_cards = []
-    for item in latest_top:
-        highlight_cards.append(
-            {
-                "id": item["id"],
-                "name": item["name"],
-                "city": item["city"],
-                "country": item["country"],
-                "users_count": item["users_count"],
-                "users_delta_since_prev": growth_map[item["id"]],
-            }
-        )
-
-    return {
-        "top_count": top_n,
-        "items": highlight_cards,
+        "long_term": long_term,
+        "short_term": short_term,
+        "refreshed_at": iso_now(),
     }
 
 
 def auto_refresh_loop() -> None:
-    while not refresh_stop_event.wait(AUTO_REFRESH_SECONDS):
+    while not refresh_stop_event.wait(COORDINATOR_POLL_INTERVAL_SECONDS):
         try:
-            refresh_cache_from_api()
+            run_due_syncs()
         except Exception:
-            # Keep loop alive even when upstream API is unavailable.
             continue
 
 
-def build_summary(campus_items: list[dict[str, Any]]) -> dict[str, Any]:
-    total_campuses = len(campus_items)
-    total_users = sum(item["users_count"] for item in campus_items)
-    top = campus_items[0] if campus_items else None
-    return {
-        "total_campuses": total_campuses,
-        "total_users": total_users,
-        "top_campus": {
-            "id": top["id"],
-            "name": top["name"],
-            "users_count": top["users_count"],
-        }
-        if top
-        else None,
-    }
+def create_app() -> FastAPI:
+    app = FastAPI(title=APP_NAME)
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.state.app_name = APP_NAME
+    app.state.db_path = DB_PATH
+    app.state.primary_campus_id = PRIMARY_CAMPUS_ID
+    app.state.run_long_term_sync = run_long_term_sync
+    app.state.run_short_term_sync = run_short_term_sync
+    app.state.run_due_syncs = run_due_syncs
+    app.state.get_last_successful_refresh = get_last_successful_refresh
+    app.include_router(create_router())
+
+    @app.on_event("startup")
+    def startup() -> None:
+        global refresh_thread
+        init_db()
+        if refresh_thread is None or not refresh_thread.is_alive():
+            refresh_stop_event.clear()
+            refresh_thread = threading.Thread(target=auto_refresh_loop, name="sync-coordinator", daemon=True)
+            refresh_thread.start()
+        threading.Thread(target=run_due_syncs, name="startup-sync", daemon=True).start()
+
+    @app.on_event("shutdown")
+    def shutdown() -> None:
+        refresh_stop_event.set()
+
+    return app
 
 
-app = FastAPI(title=APP_NAME)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
-@app.on_event("startup")
-def startup() -> None:
-    global refresh_thread
-    init_db()
-    ensure_seed_cache()
-    if refresh_thread is None or not refresh_thread.is_alive():
-        refresh_stop_event.clear()
-        refresh_thread = threading.Thread(target=auto_refresh_loop, name="auto-refresh", daemon=True)
-        refresh_thread.start()
-
-
-@app.on_event("shutdown")
-def shutdown() -> None:
-    refresh_stop_event.set()
-
-
-@app.get("/health")
-def health() -> dict[str, Any]:
-    return {"status": "ok", "service": APP_NAME, "time": iso_now()}
-
-
-@app.get("/api/v1/campus")
-def campus(force_refresh: bool = Query(default=False)) -> dict[str, Any]:
-    payload = get_campus_data(force_refresh=force_refresh)
-    return payload
-
-
-@app.get("/api/v1/campus/{campus_id}")
-def campus_by_id(campus_id: int, force_refresh: bool = Query(default=False)) -> dict[str, Any]:
-    return get_campus_item(campus_id=campus_id, force_refresh=force_refresh)
-
-
-@app.get("/api/v1/campus/{campus_id}/history")
-def campus_history(campus_id: int, points: int = Query(default=30, ge=1, le=1000)) -> dict[str, Any]:
-    return get_campus_history(campus_id=campus_id, points=points)
-
-
-@app.get("/api/v1/summary")
-def summary(force_refresh: bool = Query(default=False)) -> dict[str, Any]:
-    payload = get_campus_data(force_refresh=force_refresh)
-    summary_payload = build_summary(payload["items"])
-    return {
-        "source_mode": payload["source_mode"],
-        "cache_age_seconds": payload["cache_age_seconds"],
-        "data_timestamp": payload["data_timestamp"],
-        "summary": summary_payload,
-    }
-
-
-@app.get("/api/v1/highlights")
-def highlights(
-    force_refresh: bool = Query(default=False),
-    top_n: int = Query(default=5, ge=1, le=20),
-) -> dict[str, Any]:
-    payload = get_campus_data(force_refresh=force_refresh)
-    highlight_payload = build_highlights(payload["items"], top_n=top_n)
-    return {
-        "source_mode": payload["source_mode"],
-        "cache_age_seconds": payload["cache_age_seconds"],
-        "data_timestamp": payload["data_timestamp"],
-        "highlights": highlight_payload,
-    }
-
-
-@app.post("/api/v1/refresh")
-def refresh() -> dict[str, Any]:
-    return refresh_cache_from_api()
+app = create_app()
