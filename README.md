@@ -5,9 +5,18 @@ A simple dashboard for community and student stats and celebrating the little th
 
 The backend now uses a cache-first design with a local SQLite database to reduce calls to the 42 API and survive upstream outages.
 
+### Backend structure
+
+- `backend/main.py`: coordinator, database setup, scheduling, and app bootstrap
+- `backend/long_term_sync.py`: long-term API calls for stable datasets
+- `backend/short_term_sync.py`: short-term API calls for faster-moving datasets
+- `backend/api_routes.py`: FastAPI route definitions and DB-backed reads
+- `backend/test.py`: restored scratch script for manual API experiments
+
 - Database file: `backend/data/dashboard_cache.db`
-- Cache TTL: `600` seconds
-- Auto refresh loop: every `600` seconds
+- Long-term sync cadence: `30 days`
+- Short-term sync cadence: `1 day`
+- Coordinator poll loop: every `3600` seconds
 - Fallback seed: `backend/data/campus.json` (used only if DB is empty)
 
 ### Run backend
@@ -25,9 +34,12 @@ uvicorn main:app --reload --port 8000
 - `GET /api/v1/campus?force_refresh=true`
 - `GET /api/v1/campus/{campus_id}`
 - `GET /api/v1/campus/{campus_id}/history?points=30`
+- `GET /api/v1/campus/{campus_id}/users`
+- `GET /api/v1/campus/{campus_id}/coalitions`
+- `GET /api/v1/campus/{campus_id}/short-term-metrics`
 - `GET /api/v1/summary`
 - `GET /api/v1/highlights?top_n=5`
-- `POST /api/v1/refresh`
+- `POST /api/v1/refresh?scope=all|long_term|short_term`
 
 Responses include freshness metadata:
 
