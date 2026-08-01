@@ -1,0 +1,272 @@
+[
+  {
+    "id": 199138,
+    "coalition_id": 459,
+    "user_id": 263801,
+    "score": 65,
+    "rank": 56,
+    "created_at": "2026-05-04T07:48:47.849Z",
+    "updated_at": "2026-07-27T15:03:21.541Z"
+  },
+  {
+    "id": 199133,
+    "coalition_id": 459,
+    "user_id": 263869,
+    "score": 277,
+    "rank": 33,
+    "created_at": "2026-05-04T09:44:35.233Z",
+    "updated_at": "2026-07-23T22:38:38.632Z"
+  },
+  {
+    "id": 199132,
+    "coalition_id": 459,
+    "user_id": 263181,
+    "score": 4972,
+    "rank": 2,
+    "created_at": "2026-04-24T13:05:16.512Z",
+    "updated_at": "2026-08-01T14:30:18.289Z"
+  },
+  {
+    "id": 199128,
+    "coalition_id": 459,
+    "user_id": 253250,
+    "score": 107,
+    "rank": 50,
+    "created_at": "2026-01-16T12:31:11.227Z",
+    "updated_at": "2026-07-30T17:47:39.932Z"
+  },
+  {
+    "id": 199124,
+    "coalition_id": 459,
+    "user_id": 263803,
+    "score": 443,
+    "rank": 26,
+    "created_at": "2026-05-04T07:49:12.552Z",
+    "updated_at": "2026-08-01T15:24:54.369Z"
+  },
+  {
+    "id": 199121,
+    "coalition_id": 459,
+    "user_id": 263151,
+    "score": 364,
+    "rank": 31,
+    "created_at": "2026-04-24T08:30:13.810Z",
+    "updated_at": "2026-08-01T16:14:41.066Z"
+  },
+  {
+    "id": 199119,
+    "coalition_id": 459,
+    "user_id": 263844,
+    "score": 65,
+    "rank": 56,
+    "created_at": "2026-05-04T08:46:38.218Z",
+    "updated_at": "2026-07-25T16:23:40.352Z"
+  },
+  {
+    "id": 199116,
+    "coalition_id": 459,
+    "user_id": 253648,
+    "score": 0,
+    "rank": 66,
+    "created_at": "2026-01-19T15:28:40.211Z",
+    "updated_at": "2026-07-15T16:53:43.539Z"
+  },
+  {
+    "id": 199113,
+    "coalition_id": 459,
+    "user_id": 258776,
+    "score": 233,
+    "rank": 37,
+    "created_at": "2026-02-27T14:38:10.668Z",
+    "updated_at": "2026-07-31T20:36:56.847Z"
+  },
+  {
+    "id": 199110,
+    "coalition_id": 459,
+    "user_id": 258963,
+    "score": 569,
+    "rank": 19,
+    "created_at": "2026-03-02T08:44:11.197Z",
+    "updated_at": "2026-08-01T16:32:14.423Z"
+  },
+  {
+    "id": 199108,
+    "coalition_id": 459,
+    "user_id": 263877,
+    "score": 0,
+    "rank": 66,
+    "created_at": "2026-05-04T09:55:28.258Z",
+    "updated_at": "2026-07-09T13:55:44.005Z"
+  },
+  {
+    "id": 199105,
+    "coalition_id": 459,
+    "user_id": 259071,
+    "score": 0,
+    "rank": 66,
+    "created_at": "2026-03-02T09:42:08.502Z",
+    "updated_at": "2026-07-17T11:20:59.921Z"
+  },
+  {
+    "id": 199100,
+    "coalition_id": 459,
+    "user_id": 253393,
+    "score": 0,
+    "rank": 66,
+    "created_at": "2026-01-19T08:52:22.973Z",
+    "updated_at": "2026-08-01T15:51:26.872Z"
+  },
+  {
+    "id": 199098,
+    "coalition_id": 459,
+    "user_id": 253630,
+    "score": 403,
+    "rank": 28,
+    "created_at": "2026-01-19T13:20:32.318Z",
+    "updated_at": "2026-08-01T12:17:38.707Z"
+  },
+  {
+    "id": 199094,
+    "coalition_id": 459,
+    "user_id": 253495,
+    "score": 474,
+    "rank": 25,
+    "created_at": "2026-01-19T09:42:30.611Z",
+    "updated_at": "2026-07-24T11:41:39.633Z"
+  },
+  {
+    "id": 199091,
+    "coalition_id": 459,
+    "user_id": 253239,
+    "score": 193,
+    "rank": 39,
+    "created_at": "2026-01-16T11:40:49.083Z",
+    "updated_at": "2026-07-29T16:26:40.709Z"
+  },
+  {
+    "id": 199088,
+    "coalition_id": 459,
+    "user_id": 259084,
+    "score": 193,
+    "rank": 39,
+    "created_at": "2026-03-02T10:02:47.535Z",
+    "updated_at": "2026-07-23T20:08:39.490Z"
+  },
+  {
+    "id": 199086,
+    "coalition_id": 459,
+    "user_id": 258732,
+    "score": 1770,
+    "rank": 7,
+    "created_at": "2026-02-27T12:17:28.451Z",
+    "updated_at": "2026-07-27T17:53:40.068Z"
+  },
+  {
+    "id": 199084,
+    "coalition_id": 459,
+    "user_id": 253238,
+    "score": 1375,
+    "rank": 10,
+    "created_at": "2026-01-16T11:39:58.403Z",
+    "updated_at": "2026-08-01T15:34:16.965Z"
+  },
+  {
+    "id": 199081,
+    "coalition_id": 459,
+    "user_id": 263185,
+    "score": 42,
+    "rank": 58,
+    "created_at": "2026-04-24T13:21:46.897Z",
+    "updated_at": "2026-08-01T14:30:18.329Z"
+  },
+  {
+    "id": 199078,
+    "coalition_id": 459,
+    "user_id": 253447,
+    "score": 0,
+    "rank": 66,
+    "created_at": "2026-01-19T09:08:10.807Z",
+    "updated_at": "2026-06-27T23:10:34.978Z"
+  },
+  {
+    "id": 199074,
+    "coalition_id": 459,
+    "user_id": 263807,
+    "score": 151,
+    "rank": 43,
+    "created_at": "2026-05-04T07:51:15.113Z",
+    "updated_at": "2026-08-01T16:23:39.197Z"
+  },
+  {
+    "id": 199070,
+    "coalition_id": 459,
+    "user_id": 263186,
+    "score": 84,
+    "rank": 53,
+    "created_at": "2026-04-24T13:24:52.893Z",
+    "updated_at": "2026-07-16T20:44:47.231Z"
+  },
+  {
+    "id": 199068,
+    "coalition_id": 459,
+    "user_id": 263149,
+    "score": 88,
+    "rank": 52,
+    "created_at": "2026-04-24T08:16:32.804Z",
+    "updated_at": "2026-07-27T13:30:34.828Z"
+  },
+  {
+    "id": 199065,
+    "coalition_id": 459,
+    "user_id": 253187,
+    "score": 119,
+    "rank": 49,
+    "created_at": "2026-01-16T10:00:47.780Z",
+    "updated_at": "2026-08-01T11:41:39.752Z"
+  },
+  {
+    "id": 199063,
+    "coalition_id": 459,
+    "user_id": 258678,
+    "score": 149,
+    "rank": 45,
+    "created_at": "2026-02-27T09:04:42.733Z",
+    "updated_at": "2026-07-31T21:05:00.227Z"
+  },
+  {
+    "id": 199059,
+    "coalition_id": 459,
+    "user_id": 258964,
+    "score": 840,
+    "rank": 15,
+    "created_at": "2026-03-02T08:45:41.692Z",
+    "updated_at": "2026-07-29T20:26:39.124Z"
+  },
+  {
+    "id": 199056,
+    "coalition_id": 459,
+    "user_id": 263187,
+    "score": 695,
+    "rank": 17,
+    "created_at": "2026-04-24T13:26:51.351Z",
+    "updated_at": "2026-07-30T20:02:39.317Z"
+  },
+  {
+    "id": 199052,
+    "coalition_id": 459,
+    "user_id": 253650,
+    "score": 151,
+    "rank": 43,
+    "created_at": "2026-01-19T15:34:01.460Z",
+    "updated_at": "2026-08-01T14:59:47.881Z"
+  },
+  {
+    "id": 199051,
+    "coalition_id": 459,
+    "user_id": 253623,
+    "score": 0,
+    "rank": 66,
+    "created_at": "2026-01-19T12:24:45.008Z",
+    "updated_at": "2026-06-15T10:57:35.698Z"
+  }
+]

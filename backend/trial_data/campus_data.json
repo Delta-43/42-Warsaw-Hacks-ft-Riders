@@ -1,0 +1,32 @@
+[
+  {
+    "id": 67,
+    "name": "Warsaw",
+    "time_zone": "Europe/Warsaw",
+    "language": {
+      "id": 2,
+      "name": "English",
+      "identifier": "en"
+    },
+    "users_count": 1554,
+    "vogsphere_id": 60,
+    "country": "Poland",
+    "address": "Spark - Aleja Solidarności 171, Warszawa",
+    "zip": "0",
+    "city": "Warsaw",
+    "website": "https://www.42.fr/",
+    "facebook": "",
+    "twitter": "",
+    "active": true,
+    "public": true,
+    "email_extension": "42warsaw.pl",
+    "default_hidden_phone": false,
+    "endpoint": {
+      "id": 57,
+      "url": "https://endpoint.42warsaw.pl:4000",
+      "description": "Endpoint 42 Warsaw",
+      "created_at": "2023-09-13T09:52:09.211Z",
+      "updated_at": "2023-09-13T10:26:26.528Z"
+    }
+  }
+]

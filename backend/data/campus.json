@@ -1,0 +1,212 @@
+[
+  {
+    "id": 76,
+    "name": "Al-Aïn",
+    "city": "Al-Aïn",
+    "country": "United Arab Emirates",
+    "users_count": 419
+  },
+  {
+    "id": 75,
+    "name": "Rabat",
+    "city": "Rabat",
+    "country": "Morocco",
+    "users_count": 1207
+  },
+  {
+    "id": 73,
+    "name": "IskandarPuteri",
+    "city": "Iskandar Puteri",
+    "country": "Malaysia",
+    "users_count": 1132
+  },
+  {
+    "id": 72,
+    "name": "Milano",
+    "city": "Milano MI",
+    "country": "Italy",
+    "users_count": 17
+  },
+  {
+    "id": 71,
+    "name": "Beirut",
+    "city": "Beirut",
+    "country": "Lebanon",
+    "users_count": 1198
+  },
+  {
+    "id": 70,
+    "name": "Nablus",
+    "city": "Nablus",
+    "country": "Palestine, State of",
+    "users_count": 2
+  },
+  {
+    "id": 69,
+    "name": "Gyeongsan",
+    "city": "Gyeongsan",
+    "country": "Korea, Republic of",
+    "users_count": 1581
+  },
+  {
+    "id": 68,
+    "name": "Luanda",
+    "city": "Luanda",
+    "country": "Angola",
+    "users_count": 2696
+  },
+  {
+    "id": 67,
+    "name": "Warsaw",
+    "city": "Warsaw",
+    "country": "Poland",
+    "users_count": 1554
+  },
+  {
+    "id": 65,
+    "name": "Antananarivo",
+    "city": "Antananarivo",
+    "country": "Madagascar",
+    "users_count": 3770
+  },
+  {
+    "id": 64,
+    "name": "Singapore",
+    "city": "Singapore",
+    "country": "Singapore",
+    "users_count": 1575
+  },
+  {
+    "id": 62,
+    "name": "Le Havre",
+    "city": "Le Havre",
+    "country": "France",
+    "users_count": 1434
+  },
+  {
+    "id": 61,
+    "name": "Belo Horizonte",
+    "city": "Belo Horizonte",
+    "country": "Brazil",
+    "users_count": 12
+  },
+  {
+    "id": 60,
+    "name": "Perpignan",
+    "city": "Perpignan",
+    "country": "France",
+    "users_count": 1621
+  },
+  {
+    "id": 59,
+    "name": "Luxembourg",
+    "city": "Esch-sur-Alzette",
+    "country": "Luxembourg",
+    "users_count": 1072
+  },
+  {
+    "id": 58,
+    "name": "Porto",
+    "city": "Porto",
+    "country": "Portugal",
+    "users_count": 2805
+  },
+  {
+    "id": 57,
+    "name": "London",
+    "city": "London",
+    "country": "United Kingdom",
+    "users_count": 1165
+  },
+  {
+    "id": 56,
+    "name": "Prague",
+    "city": "Prague",
+    "country": "Czech Republic",
+    "users_count": 2850
+  },
+  {
+    "id": 55,
+    "name": "Tétouan",
+    "city": "Tétouan",
+    "country": "Morocco",
+    "users_count": 1177
+  },
+  {
+    "id": 53,
+    "name": "Vienna",
+    "city": "Vienna",
+    "country": "Austria",
+    "users_count": 1919
+  },
+  {
+    "id": 52,
+    "name": "Florence",
+    "city": "Firenze",
+    "country": "Italy",
+    "users_count": 2331
+  },
+  {
+    "id": 51,
+    "name": "Berlin",
+    "city": "Berlin",
+    "country": "Germany",
+    "users_count": 3503
+  },
+  {
+    "id": 50,
+    "name": "Kocaeli",
+    "city": "Kocaeli",
+    "country": "Turkey",
+    "users_count": 3935
+  },
+  {
+    "id": 49,
+    "name": "Istanbul",
+    "city": "Istanbul",
+    "country": "Turkey",
+    "users_count": 6531
+  },
+  {
+    "id": 48,
+    "name": "Mulhouse",
+    "city": "Mulhouse",
+    "country": "France",
+    "users_count": 1219
+  },
+  {
+    "id": 47,
+    "name": "Lausanne",
+    "city": "Renens",
+    "country": "Switzerland",
+    "users_count": 2522
+  },
+  {
+    "id": 46,
+    "name": "Barcelona",
+    "city": "Barcelona",
+    "country": "Spain",
+    "users_count": 5566
+  },
+  {
+    "id": 44,
+    "name": "Wolfsburg",
+    "city": "Wolfsburg",
+    "country": "Germany",
+    "users_count": 3857
+  },
+  {
+    "id": 43,
+    "name": "Abu Dhabi",
+    "city": "Abu Dhabi",
+    "country": "United Arab Emirates",
+    "users_count": 5322
+  },
+  {
+    "id": 41,
+    "name": "Nice",
+    "city": "Nice",
+    "country": "France",
+    "users_count": 2005
+  }
+]

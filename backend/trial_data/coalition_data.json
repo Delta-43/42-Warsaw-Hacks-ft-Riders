@@ -1,0 +1,42 @@
+[
+  {
+    "id": 129,
+    "campus_id": 67,
+    "cursus_id": 21,
+    "squad_size": null,
+    "created_at": "2024-02-26T15:15:54.490Z",
+    "updated_at": "2025-09-11T13:26:55.445Z",
+    "coalitions": [
+      {
+        "id": 459,
+        "name": "Lunaria",
+        "slug": "lunaria",
+        "image_url": "https://cdn.intra.42.fr/coalition/image/459/Logo_LUNARIA.svg",
+        "cover_url": "https://cdn.intra.42.fr/coalition/cover/459/lunaria_right_size.jpg",
+        "color": "#52BDFF",
+        "score": 43043,
+        "user_id": 195564
+      },
+      {
+        "id": 458,
+        "name": "Orionis",
+        "slug": "orionis",
+        "image_url": "https://cdn.intra.42.fr/coalition/image/458/Logo_ORIONIS.svg",
+        "cover_url": "https://cdn.intra.42.fr/coalition/cover/458/orionis_right_size.jpg",
+        "color": "#BE2AD1",
+        "score": 35719,
+        "user_id": 170715
+      },
+      {
+        "id": 460,
+        "name": "Uniterrax",
+        "slug": "uniterrax",
+        "image_url": "https://cdn.intra.42.fr/coalition/image/460/Logo_UNITERRAX.svg",
+        "cover_url": "https://cdn.intra.42.fr/coalition/cover/460/uniterrax_right_size3.jpg",
+        "color": "#FFCD5A",
+        "score": 33361,
+        "user_id": 172593
+      }
+    ]
+  }
+]

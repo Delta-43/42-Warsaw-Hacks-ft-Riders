@@ -1,0 +1,80 @@
+:root {
+  --bg-base: #07111f;
+  --bg-deep: #020813;
+  --panel: rgba(10, 18, 30, 0.82);
+  --panel-strong: rgba(11, 18, 30, 0.96);
+  --border: rgba(183, 224, 255, 0.12);
+  --text-main: #f7f3ea;
+  --text-muted: #b7c5d6;
+  --text-faint: #7f95ad;
+  --accent-sun: #ffd166;
+  --accent-orange: #ff9f43;
+  --accent-mint: #4ecdc4;
+  --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.28);
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-display: 'Newsreader', serif;
+  color: var(--text-main);
+  background: var(--bg-base);
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255, 159, 67, 0.14), transparent 26%),
+    radial-gradient(circle at 85% 18%, rgba(78, 205, 196, 0.16), transparent 18%),
+    linear-gradient(180deg, var(--bg-base), var(--bg-deep));
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(circle at center, black, transparent 88%);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text-main);
+}
+
+a {
+  color: inherit;
+}
