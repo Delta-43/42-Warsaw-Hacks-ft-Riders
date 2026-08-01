@@ -1,0 +1,21 @@
+/* Section title formatting shared by Stories, Graphs, and Stats panel headers. */
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.55rem;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--brand-blue);
+  font-size: 0.76rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}

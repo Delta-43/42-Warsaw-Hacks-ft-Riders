@@ -15,12 +15,13 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { CarouselDots } from './CarouselDots'
-import { useCarousel } from '../hooks/useCarousel'
-import { mockMilestones, mockWeekdayHours } from '../mocks/dashboardData'
-import './GraphsPanel.css'
-
-const PIE_COLORS = ['#6FBBF9', '#8AA9F3', '#A597ED', '#AF38CA', '#C979C0', '#E0A93B', '#F7CF6E', '#FBE39A']
+import { PageDots } from '../Global/PageDots/PageDots'
+import { useCarousel } from '../Global/hooks/useCarousel'
+import { mockMilestones, mockWeekdayHours } from './graphs.mock'
+import { PIE_COLORS } from './pie_chart'
+import { BAR_FILL } from './bar_chart'
+import { LINE_STROKE } from './line_chart'
+import './graphs_main.css'
 
 type HistorySeriesPoint = {
   label: string
@@ -73,7 +74,7 @@ export function GraphsPanel({ historySeries }: GraphsPanelProps) {
             <XAxis dataKey="day" tickLine={false} axisLine={false} />
             <YAxis tickLine={false} axisLine={false} width={44} />
             <Tooltip />
-            <Bar dataKey="hours" radius={[10, 10, 0, 0]} fill="#6FBBF9" />
+            <Bar dataKey="hours" radius={[10, 10, 0, 0]} fill={BAR_FILL} />
           </BarChart>
         </ResponsiveContainer>
       ),
@@ -88,7 +89,7 @@ export function GraphsPanel({ historySeries }: GraphsPanelProps) {
             <XAxis dataKey="label" tickLine={false} axisLine={false} minTickGap={30} />
             <YAxis tickLine={false} axisLine={false} width={52} />
             <Tooltip />
-            <Line type="monotone" dataKey="users" stroke="#F7CF6E" strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+            <Line type="monotone" dataKey="users" stroke={LINE_STROKE} strokeWidth={3} dot={{ r: 3 }} activeDot={{ r: 5 }} />
           </LineChart>
         </ResponsiveContainer>
       ),
@@ -105,7 +106,7 @@ export function GraphsPanel({ historySeries }: GraphsPanelProps) {
           <p className="eyebrow">{active.eyebrow}</p>
           <h2>{active.title}</h2>
         </div>
-        <CarouselDots count={slides.length} activeIndex={index} onSelect={setIndex} ariaLabel="Graph views" />
+        <PageDots count={slides.length} activeIndex={index} onSelect={setIndex} ariaLabel="Graph views" />
       </header>
 
       <div className="graphs-chart-stage">

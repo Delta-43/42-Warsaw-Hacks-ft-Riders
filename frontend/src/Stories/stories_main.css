@@ -1,3 +1,5 @@
+/* Base structural layout of the Stories bar: the row and each avatar slot. */
+
 .stories-panel {
   display: flex;
   align-items: center;

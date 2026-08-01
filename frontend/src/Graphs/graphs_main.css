@@ -1,3 +1,5 @@
+/* Base structural layout of the Graphs panel and its chart stage. */
+
 .graphs-panel {
   display: flex;
   flex-direction: column;
@@ -14,4 +16,8 @@
 .graphs-chart-inner {
   width: 100%;
   height: 100%;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none;
 }

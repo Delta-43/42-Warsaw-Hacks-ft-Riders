@@ -1,9 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Avatar } from './Avatar'
-import { CarouselDots } from './CarouselDots'
-import { useCarousel } from '../hooks/useCarousel'
-import { mockHeroes } from '../mocks/dashboardData'
-import './StatsPanel.css'
+import { Avatar } from '../Global/Avatars/Avatar'
+import { PageDots } from '../Global/PageDots/PageDots'
+import { useCarousel } from '../Global/hooks/useCarousel'
+import { mockHeroes } from './heroes.mock'
+import './hero_of_the_week.css'
+import './stats.css'
+import './stats_main.css'
 
 export function StatsPanel() {
   const { index, setIndex } = useCarousel(mockHeroes.length, 6500)
@@ -16,7 +18,7 @@ export function StatsPanel() {
           <p className="eyebrow">Hero of the week</p>
           <h2>Community shoutouts</h2>
         </div>
-        <CarouselDots count={mockHeroes.length} activeIndex={index} onSelect={setIndex} ariaLabel="Hero categories" />
+        <PageDots count={mockHeroes.length} activeIndex={index} onSelect={setIndex} ariaLabel="Hero categories" />
       </header>
 
       <div className="stats-stage">

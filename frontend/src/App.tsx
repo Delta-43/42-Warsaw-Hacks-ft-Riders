@@ -1,10 +1,12 @@
 import { startTransition, useEffect, useEffectEvent, useMemo, useState } from 'react'
-import './App.css'
-import { StoriesPanel } from './components/StoriesPanel'
-import { GraphsPanel } from './components/GraphsPanel'
-import { StatsPanel } from './components/StatsPanel'
-import { useIsMobile } from './hooks/useIsMobile'
-import { mockDashboardData } from './mocks/dashboardData'
+import './Global/liquid_glass.css'
+import './Global/titles.css'
+import './Global/layout.css'
+import { StoriesPanel } from './Stories/stories_main'
+import { GraphsPanel } from './Graphs/graphs_main'
+import { StatsPanel } from './Stats/stats_main'
+import { useIsMobile } from './Global/hooks/useIsMobile'
+import { mockDashboardData } from './dashboardData.mock'
 
 const PRIMARY_CAMPUS_ID = Number(import.meta.env.VITE_PRIMARY_CAMPUS_ID ?? 67)
 const POLL_INTERVAL_MS = 60_000

@@ -1,18 +1,3 @@
-.stats-panel {
-  display: flex;
-  flex-direction: column;
-  padding: 30px 32px;
-}
-
-.stats-stage {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  min-height: 0;
-  margin-top: 8px;
-}
-
 .hero-card {
   display: flex;
   flex-direction: column;

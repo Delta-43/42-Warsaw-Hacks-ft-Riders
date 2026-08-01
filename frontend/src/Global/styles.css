@@ -1,3 +1,5 @@
+/* Fonts, sizes, colours, and avatar fade colours shared by every section. */
+
 :root {
   --bg-base: #38629e;
   --bg-deep: #325594;
@@ -16,6 +18,20 @@
   --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.28);
   --font-body: 'Space Grotesk', sans-serif;
   --font-display: 'Newsreader', serif;
+
+  /* Avatar ring + fade palette */
+  --avatar-ring-gradient: conic-gradient(from 180deg, #6fbbf9, #af38ca, #f7cf6e, #6fbbf9);
+  --avatar-blue-from: #6fbbf9;
+  --avatar-blue-to: #3e7fe0;
+  --avatar-purple-from: #af38ca;
+  --avatar-purple-to: #7a1fa8;
+  --avatar-yellow-from: #f7cf6e;
+  --avatar-yellow-to: #e0a93b;
+  --avatar-mint-from: #6fe0bb;
+  --avatar-mint-to: #2fa98a;
+  --avatar-red-from: #f98f8f;
+  --avatar-red-to: #d65c5c;
+
   color: var(--text-main);
   background: var(--bg-base);
   font-family: var(--font-body);

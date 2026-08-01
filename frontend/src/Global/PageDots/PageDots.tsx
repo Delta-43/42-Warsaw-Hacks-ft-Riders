@@ -1,11 +1,13 @@
-type CarouselDotsProps = {
+import '../page_dots.css'
+
+type PageDotsProps = {
   count: number
   activeIndex: number
   onSelect: (index: number) => void
   ariaLabel: string
 }
 
-export function CarouselDots({ count, activeIndex, onSelect, ariaLabel }: CarouselDotsProps) {
+export function PageDots({ count, activeIndex, onSelect, ariaLabel }: PageDotsProps) {
   return (
     <div className="carousel-dots" aria-label={ariaLabel}>
       {Array.from({ length: count }).map((_, dotIndex) => (

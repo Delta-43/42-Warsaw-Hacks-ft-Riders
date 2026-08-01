@@ -1,8 +1,5 @@
 import './Avatar.css'
 
-const RING_GRADIENT =
-  'conic-gradient(from 180deg, #6FBBF9, #AF38CA, #F7CF6E, #6FBBF9)'
-
 type AvatarProps = {
   name: string
   initials: string
@@ -27,7 +24,7 @@ export function Avatar({
       className="avatar-ring"
       role="img"
       aria-label={name}
-      style={{ width: size, height: size, padding: ringWidth, background: RING_GRADIENT }}
+      style={{ width: size, height: size, padding: ringWidth, background: 'var(--avatar-ring-gradient)' }}
     >
       <span className="avatar-gap" style={{ padding: gapWidth }}>
         <span

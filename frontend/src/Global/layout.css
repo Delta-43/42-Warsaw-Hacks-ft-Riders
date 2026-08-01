@@ -1,3 +1,5 @@
+/* Page shell: background stage and the 3-panel grid that positions Stories/Graphs/Stats. */
+
 .stage {
   position: relative;
   display: flex;
@@ -61,68 +63,6 @@
   text-decoration: none;
 }
 
-/* Liquid-glass panel language shared across Stories, Graphs, Stats */
-.glass-panel {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 32px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-}
-
-.glass-panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 15% 0%, rgba(255, 255, 255, 0.22), transparent 45%);
-  pointer-events: none;
-}
-
-.panel-float {
-  animation:
-    panelEnter 0.6s ease-out both,
-    panelFloat 9s ease-in-out 0.6s infinite;
-}
-
-.stories-panel.panel-float {
-  animation-delay: 0s, 0.6s;
-}
-
-.graphs-panel.panel-float {
-  animation-delay: 0.08s, 0.68s;
-}
-
-.stats-panel.panel-float {
-  animation-delay: 0.16s, 0.76s;
-}
-
-@keyframes panelEnter {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes panelFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
 .stories-panel {
   grid-column: 1 / -1;
   grid-row: 1;
@@ -136,52 +76,6 @@
 .stats-panel {
   grid-column: 2;
   grid-row: 2;
-}
-
-.panel-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.panel-header h2 {
-  margin: 0;
-  font-size: 1.55rem;
-}
-
-.eyebrow {
-  margin: 0 0 8px;
-  color: var(--brand-blue);
-  font-size: 0.76rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
-
-.carousel-dots {
-  display: flex;
-  flex-shrink: 0;
-  gap: 8px;
-  padding-top: 4px;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.22);
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.dot.active {
-  background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
-  transform: scale(1.2);
-}
-
-.recharts-tooltip-wrapper {
-  outline: none;
 }
 
 /* Mobile: collapse the fixed 1920x1080 stage into a stacked, scrollable 1-column layout */

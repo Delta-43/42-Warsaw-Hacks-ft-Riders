@@ -1,6 +1,8 @@
-import { Avatar } from './Avatar'
-import { mockStudents } from '../mocks/dashboardData'
-import './StoriesPanel.css'
+import { Avatar } from '../Global/Avatars/Avatar'
+import { mockStudents } from './students.mock'
+import './carousel.css'
+import './speech_bubbles.css'
+import './stories_main.css'
 
 export function StoriesPanel() {
   return (
