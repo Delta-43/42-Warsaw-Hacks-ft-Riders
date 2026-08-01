@@ -1,0 +1,51 @@
+.stats-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 32px;
+}
+
+.stats-stage {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  margin-top: 8px;
+}
+
+.hero-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.hero-category {
+  margin: 10px 0 0;
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-name {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.hero-value {
+  margin-top: 8px;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  line-height: 1;
+}
+
+.hero-unit {
+  margin: 0;
+  color: var(--text-muted);
+}
