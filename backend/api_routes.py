@@ -1,5 +1,6 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import sqlite3
+import threading
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, Request
@@ -109,7 +110,8 @@ def ensure_long_term_data(request: Request, force_refresh: bool = False) -> tupl
         items, collected_at = get_latest_snapshot(str(request.app.state.db_path))
         if not items:
             raise HTTPException(status_code=503, detail="No long-term data available in cache")
-        return items, collected_at, source_mode_label(sync_result.get("ran", False), force_refresh)
+        source_mode = str(sync_result.get("source_mode") or source_mode_label(sync_result.get("ran", False), force_refresh))
+        return items, collected_at, source_mode
     except Exception:
         if cached_items:
             return cached_items, cached_timestamp, "stale_fallback"
@@ -121,7 +123,7 @@ def ensure_short_term_data(request: Request, force_refresh: bool = False) -> str
         return "fresh_cache"
     try:
         sync_result = request.app.state.run_short_term_sync(force=force_refresh)
-        return source_mode_label(sync_result.get("ran", False), force_refresh)
+        return str(sync_result.get("source_mode") or source_mode_label(sync_result.get("ran", False), force_refresh))
     except Exception:
         return "stale_fallback"
 
@@ -307,32 +309,23 @@ def get_analytics_pills(db_path: str, campus_id: int) -> dict[str, Any]:
         """
         SELECT
             COUNT(*) AS total_users,
-            COALESCE(SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END), 0) AS active_users,
-            COALESCE(SUM(achievements_count), 0) AS total_achievements_earned,
-            COALESCE(AVG(CAST(achievements_count AS REAL)), 0.0) AS avg_achievements_per_user,
-            COALESCE(SUM(CASE WHEN achievements_count > 0 THEN 1 ELSE 0 END), 0) AS users_with_achievements
+            COALESCE(SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END), 0) AS active_users
         FROM campus_user
         WHERE campus_id = ?
         """,
         (campus_id,),
     ).fetchone()
 
-    latest_achievement_ts_row = conn.execute(
-        "SELECT MAX(collected_at) AS latest FROM achievement_metric_snapshot WHERE campus_id = ?",
-        (campus_id,),
-    ).fetchone()
-    latest_achievement_ts = latest_achievement_ts_row["latest"] if latest_achievement_ts_row else None
-
-    achievements_row = conn.execute(
+    weekly_achievements_row = conn.execute(
         """
-        SELECT
-            COUNT(*) AS achievements_total,
-            COALESCE(SUM(users_count), 0) AS total_achievement_unlocks,
-            COALESCE(AVG(CAST(users_count AS REAL)), 0.0) AS avg_users_per_achievement
-        FROM achievement_metric_snapshot
-        WHERE campus_id = ? AND collected_at = ?
+        SELECT metric_value, payload_json, collected_at
+        FROM short_term_metric_snapshot
+        WHERE campus_id = ?
+          AND metric_name = 'weekly_achievements_earned'
+        ORDER BY collected_at DESC
+        LIMIT 1
         """,
-        (campus_id, latest_achievement_ts),
+        (campus_id,),
     ).fetchone()
 
     latest_coalition_user_ts_row = conn.execute(
@@ -367,16 +360,7 @@ def get_analytics_pills(db_path: str, campus_id: int) -> dict[str, Any]:
             ),
         },
         "achievements": {
-            "catalog_total": int(achievements_row["achievements_total"]) if achievements_row else 0,
-            "total_unlocks": int(achievements_row["total_achievement_unlocks"]) if achievements_row else 0,
-            "avg_users_per_achievement": round(float(achievements_row["avg_users_per_achievement"]), 2)
-            if achievements_row
-            else 0.0,
-            "avg_achievements_per_user": round(float(totals_row["avg_achievements_per_user"]), 2)
-            if totals_row
-            else 0.0,
-            "users_with_achievements": int(totals_row["users_with_achievements"]) if totals_row else 0,
-            "total_achievements_earned": int(totals_row["total_achievements_earned"]) if totals_row else 0,
+            "earned_this_week": int(weekly_achievements_row["metric_value"]) if weekly_achievements_row else 0,
         },
         "coalition_scores": {
             "avg_user_score": round(float(coalition_user_row["avg_user_score"]), 2) if coalition_user_row else 0.0,
@@ -442,54 +426,219 @@ def get_coalition_rankings(db_path: str, campus_id: int, limit_per_coalition: in
     }
 
 
-def get_achievement_coverage(db_path: str, campus_id: int, limit: int) -> dict[str, Any]:
+def get_top_logged_users(db_path: str, campus_id: int, limit: int) -> dict[str, Any]:
     conn = get_db_connection(db_path)
-
-    latest_ts_row = conn.execute(
-        "SELECT MAX(collected_at) AS latest FROM achievement_metric_snapshot WHERE campus_id = ?",
+    latest_week_row = conn.execute(
+        "SELECT MAX(week_start_date) AS latest_week FROM weekly_user_logtime WHERE campus_id = ?",
         (campus_id,),
     ).fetchone()
-    latest_ts = latest_ts_row["latest"] if latest_ts_row else None
-    if latest_ts is None:
+    latest_week = latest_week_row["latest_week"] if latest_week_row else None
+    if latest_week is None:
         conn.close()
-        return {"campus_id": campus_id, "total": 0, "items": []}
+        return {"campus_id": campus_id, "week_start_date": None, "total": 0, "items": []}
 
     rows = conn.execute(
         """
         SELECT
-            m.achievement_id,
-            ref.name,
-            ref.kind,
-            ref.tier,
-            ref.visible,
-            m.users_count,
-            m.collected_at
-        FROM achievement_metric_snapshot m
-        JOIN achievement_reference ref ON ref.achievement_id = m.achievement_id
-        WHERE m.campus_id = ?
-          AND m.collected_at = ?
-        ORDER BY m.users_count DESC, ref.name ASC
+            w.user_id,
+            w.seconds_logged,
+            w.sessions_count,
+            w.week_start_date,
+            w.collected_at,
+            usr.login,
+            usr.first_name,
+            usr.last_name,
+            usr.image
+        FROM weekly_user_logtime w
+        LEFT JOIN campus_user usr ON usr.campus_id = w.campus_id AND usr.user_id = w.user_id
+        WHERE w.campus_id = ?
+          AND w.week_start_date = ?
+        ORDER BY w.seconds_logged DESC, w.sessions_count DESC, w.user_id ASC
         LIMIT ?
         """,
-        (campus_id, latest_ts, limit),
+        (campus_id, latest_week, limit),
     ).fetchall()
+    conn.close()
 
-    total_row = conn.execute(
+    items: list[dict[str, Any]] = []
+    for row in rows:
+        item = dict(row)
+        image_payload = item.get("image")
+        if isinstance(image_payload, str):
+            try:
+                import json
+
+                image_obj = json.loads(image_payload)
+                item["image_url"] = image_obj.get("link") if isinstance(image_obj, dict) else None
+            except (json.JSONDecodeError, TypeError):
+                item["image_url"] = None
+        else:
+            item["image_url"] = None
+        item["hours_logged"] = round(float(item["seconds_logged"]) / 3600.0, 2)
+        items.append(item)
+
+    return {
+        "campus_id": campus_id,
+        "week_start_date": latest_week,
+        "total": len(items),
+        "items": items,
+    }
+
+
+def get_recent_project_passes(db_path: str, campus_id: int, hours: int, limit: int) -> dict[str, Any]:
+    conn = get_db_connection(db_path)
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+
+    rows = conn.execute(
         """
-        SELECT COUNT(*) AS total
-        FROM achievement_metric_snapshot
+        SELECT
+            user_id,
+            project_id,
+            project_name,
+            projects_user_id,
+            marked_at,
+            user_login,
+            user_image_url,
+            user_profile_url,
+            collected_at
+        FROM project_pass_event
         WHERE campus_id = ?
-          AND collected_at = ?
+          AND datetime(replace(marked_at, 'Z', '+00:00')) >= datetime(?)
+        ORDER BY datetime(replace(marked_at, 'Z', '+00:00')) DESC
+        LIMIT ?
         """,
-        (campus_id, latest_ts),
-    ).fetchone()
+        (campus_id, cutoff.isoformat(), limit),
+    ).fetchall()
     conn.close()
 
     return {
         "campus_id": campus_id,
-        "total": int(total_row["total"]) if total_row else 0,
+        "window_hours": hours,
+        "total": len(rows),
         "items": [dict(row) for row in rows],
     }
+
+
+def get_cursus_active_counts_latest(db_path: str, campus_id: int) -> dict[str, Any]:
+    conn = get_db_connection(db_path)
+    latest_row = conn.execute(
+        "SELECT MAX(collected_at) AS latest FROM cursus_active_counts WHERE campus_id = ?",
+        (campus_id,),
+    ).fetchone()
+    latest = latest_row["latest"] if latest_row else None
+    if latest is None:
+        conn.close()
+        return {"campus_id": campus_id, "total": 0, "items": [], "collected_at": None}
+
+    rows = conn.execute(
+        """
+        SELECT cursus_id, cursus_name, active_users_count, collected_at
+        FROM cursus_active_counts
+        WHERE campus_id = ?
+          AND collected_at = ?
+        ORDER BY active_users_count DESC, cursus_name ASC
+        """,
+        (campus_id, latest),
+    ).fetchall()
+    conn.close()
+
+    return {
+        "campus_id": campus_id,
+        "total": len(rows),
+        "collected_at": latest,
+        "items": [dict(row) for row in rows],
+    }
+
+
+def get_latest_weekly_attendance(db_path: str, campus_id: int) -> dict[str, Any]:
+    conn = get_db_connection(db_path)
+    row = conn.execute(
+        """
+        SELECT week_start_date, unique_students_count, collected_at
+        FROM weekly_campus_attendance
+        WHERE campus_id = ?
+        ORDER BY week_start_date DESC
+        LIMIT 1
+        """,
+        (campus_id,),
+    ).fetchone()
+    conn.close()
+    if row is None:
+        return {
+            "campus_id": campus_id,
+            "week_start_date": None,
+            "unique_students_count": 0,
+            "collected_at": None,
+        }
+    return dict(row)
+
+
+def get_latest_weekly_project_activity(db_path: str, campus_id: int) -> dict[str, Any]:
+    conn = get_db_connection(db_path)
+    row = conn.execute(
+        """
+        SELECT
+            week_start_date,
+            active_or_started_projects_count,
+            created_events_count,
+            updated_events_count,
+            collected_at
+        FROM weekly_project_activity_counts
+        WHERE campus_id = ?
+        ORDER BY week_start_date DESC
+        LIMIT 1
+        """,
+        (campus_id,),
+    ).fetchone()
+    conn.close()
+    if row is None:
+        return {
+            "campus_id": campus_id,
+            "week_start_date": None,
+            "active_or_started_projects_count": 0,
+            "created_events_count": 0,
+            "updated_events_count": 0,
+            "collected_at": None,
+        }
+    return dict(row)
+
+
+def get_latest_short_term_metric(db_path: str, campus_id: int, metric_name: str) -> dict[str, Any]:
+    conn = get_db_connection(db_path)
+    row = conn.execute(
+        """
+        SELECT metric_name, metric_value, payload_json, collected_at, source_status
+        FROM short_term_metric_snapshot
+        WHERE campus_id = ? AND metric_name = ?
+        ORDER BY collected_at DESC
+        LIMIT 1
+        """,
+        (campus_id, metric_name),
+    ).fetchone()
+    conn.close()
+
+    if row is None:
+        return {
+            "campus_id": campus_id,
+            "metric_name": metric_name,
+            "metric_value": 0,
+            "payload": None,
+            "collected_at": None,
+            "source_status": None,
+        }
+
+    item = dict(row)
+    payload_json = item.pop("payload_json", None)
+    if isinstance(payload_json, str):
+        try:
+            import json
+
+            item["payload"] = json.loads(payload_json)
+        except (json.JSONDecodeError, TypeError):
+            item["payload"] = None
+    else:
+        item["payload"] = None
+    return item
 
 
 def create_router() -> APIRouter:
@@ -629,20 +778,140 @@ def create_router() -> APIRouter:
             "rankings": payload,
         }
 
-    @router.get("/api/v1/campus/{campus_id}/achievements/coverage")
-    def campus_achievement_coverage(
+    @router.get("/api/v1/campus/{campus_id}/coalitions/top-scorers")
+    def campus_coalition_top_scorers(
         request: Request,
         campus_id: int,
-        limit: int = Query(default=100, ge=1, le=500),
+        limit_per_coalition: int = Query(default=10, ge=1, le=50),
         force_refresh: bool = Query(default=False),
     ) -> dict[str, Any]:
-        ensure_long_term_data(request, force_refresh=force_refresh)
-        payload = get_achievement_coverage(str(request.app.state.db_path), campus_id, limit)
-        refreshed_at = request.app.state.get_last_successful_refresh("long_term_sync")
+        ensure_long_term_data(request, force_refresh=False)
+        source_mode = ensure_short_term_data(request, force_refresh=force_refresh)
+        payload = get_coalition_rankings(str(request.app.state.db_path), campus_id, limit_per_coalition)
+        refreshed_at = request.app.state.get_last_successful_refresh("short_term_sync")
         return {
-            "source_mode": "db_cache",
+            "source_mode": source_mode,
             "data_timestamp": refreshed_at.isoformat() if refreshed_at else None,
-            "achievements": payload,
+            "top_scorers": payload,
+        }
+
+    @router.get("/api/v1/campus/{campus_id}/coalitions/standings")
+    def campus_coalition_standings(
+        request: Request,
+        campus_id: int,
+        force_refresh: bool = Query(default=False),
+    ) -> dict[str, Any]:
+        ensure_long_term_data(request, force_refresh=False)
+        source_mode = ensure_short_term_data(request, force_refresh=force_refresh)
+        payload = get_campus_coalitions(str(request.app.state.db_path), campus_id)
+        refreshed_at = request.app.state.get_last_successful_refresh("short_term_sync")
+        return {
+            "source_mode": source_mode,
+            "data_timestamp": refreshed_at.isoformat() if refreshed_at else None,
+            "standings": payload,
+        }
+
+    @router.get("/api/v1/campus/{campus_id}/users/logtime-top")
+    def campus_top_logged_users(
+        request: Request,
+        campus_id: int,
+        limit: int = Query(default=10, ge=1, le=100),
+        force_refresh: bool = Query(default=False),
+    ) -> dict[str, Any]:
+        source_mode = ensure_short_term_data(request, force_refresh=force_refresh)
+        payload = get_top_logged_users(str(request.app.state.db_path), campus_id, limit)
+        refreshed_at = request.app.state.get_last_successful_refresh("short_term_sync")
+        return {
+            "source_mode": source_mode,
+            "data_timestamp": refreshed_at.isoformat() if refreshed_at else None,
+            "logtime_rankings": payload,
+        }
+
+    @router.get("/api/v1/campus/{campus_id}/projects/passed-recent")
+    def campus_recent_project_passes(
+        request: Request,
+        campus_id: int,
+        hours: int = Query(default=24, ge=1, le=168),
+        limit: int = Query(default=200, ge=1, le=1000),
+        force_refresh: bool = Query(default=False),
+        include_started_after_pass: bool = Query(default=False),
+    ) -> dict[str, Any]:
+        source_mode = ensure_short_term_data(request, force_refresh=force_refresh)
+        payload = get_recent_project_passes(str(request.app.state.db_path), campus_id, hours, limit)
+        refreshed_at = request.app.state.get_last_successful_refresh("short_term_sync")
+        return {
+            "source_mode": source_mode,
+            "data_timestamp": refreshed_at.isoformat() if refreshed_at else None,
+            "future_capability": {
+                "include_started_after_pass": include_started_after_pass,
+                "implemented": False,
+                "note": "Planned: correlate pass events with project_activity_event by user_id and activity_at > marked_at.",
+            },
+            "projects_passed_recent": payload,
+        }
+
+    @router.get("/api/v1/campus/{campus_id}/cursus/active-counts")
+    def campus_active_cursus_counts(
+        request: Request,
+        campus_id: int,
+        force_refresh: bool = Query(default=False),
+    ) -> dict[str, Any]:
+        source_mode = ensure_short_term_data(request, force_refresh=force_refresh)
+        payload = get_cursus_active_counts_latest(str(request.app.state.db_path), campus_id)
+        refreshed_at = request.app.state.get_last_successful_refresh("short_term_sync")
+        return {
+            "source_mode": source_mode,
+            "data_timestamp": refreshed_at.isoformat() if refreshed_at else None,
+            "active_cursus_counts": payload,
+        }
+
+    @router.get("/api/v1/campus/{campus_id}/attendance/weekly")
+    def campus_weekly_attendance(
+        request: Request,
+        campus_id: int,
+        force_refresh: bool = Query(default=False),
+    ) -> dict[str, Any]:
+        source_mode = ensure_short_term_data(request, force_refresh=force_refresh)
+        payload = get_latest_weekly_attendance(str(request.app.state.db_path), campus_id)
+        refreshed_at = request.app.state.get_last_successful_refresh("short_term_sync")
+        return {
+            "source_mode": source_mode,
+            "data_timestamp": refreshed_at.isoformat() if refreshed_at else None,
+            "attendance": payload,
+        }
+
+    @router.get("/api/v1/campus/{campus_id}/projects/activity-weekly")
+    def campus_weekly_project_activity(
+        request: Request,
+        campus_id: int,
+        force_refresh: bool = Query(default=False),
+    ) -> dict[str, Any]:
+        source_mode = ensure_short_term_data(request, force_refresh=force_refresh)
+        payload = get_latest_weekly_project_activity(str(request.app.state.db_path), campus_id)
+        refreshed_at = request.app.state.get_last_successful_refresh("short_term_sync")
+        return {
+            "source_mode": source_mode,
+            "data_timestamp": refreshed_at.isoformat() if refreshed_at else None,
+            "project_activity": payload,
+        }
+
+    @router.get("/api/v1/campus/{campus_id}/achievements/earned-weekly")
+    def campus_weekly_achievements_earned(
+        request: Request,
+        campus_id: int,
+        force_refresh: bool = Query(default=False),
+    ) -> dict[str, Any]:
+        source_mode = ensure_short_term_data(request, force_refresh=force_refresh)
+        payload = get_latest_short_term_metric(
+            str(request.app.state.db_path),
+            campus_id,
+            "weekly_achievements_earned",
+        )
+        refreshed_at = request.app.state.get_last_successful_refresh("short_term_sync")
+        return {
+            "source_mode": source_mode,
+            "data_timestamp": refreshed_at.isoformat() if refreshed_at else None,
+            "weekly_achievements_earned": payload,
         }
 
     @router.get("/api/v1/summary")
@@ -675,7 +944,44 @@ def create_router() -> APIRouter:
     def refresh(
         request: Request,
         scope: str = Query(default="all"),
+        async_run: bool = Query(default=False),
     ) -> dict[str, Any]:
+        def launch(target: Any) -> None:
+            def run_safe() -> None:
+                try:
+                    target()
+                except Exception:
+                    return
+
+            threading.Thread(target=run_safe, daemon=True).start()
+
+        if async_run:
+            if scope == "all":
+                launch(lambda: request.app.state.run_due_syncs(force_long_term=True, force_short_term=True))
+                return {
+                    "scope": "all",
+                    "accepted": True,
+                    "mode": "async",
+                    "queued_at": utcnow().isoformat(),
+                }
+            if scope == "long_term":
+                launch(lambda: request.app.state.run_long_term_sync(force=True))
+                return {
+                    "scope": "long_term",
+                    "accepted": True,
+                    "mode": "async",
+                    "queued_at": utcnow().isoformat(),
+                }
+            if scope == "short_term":
+                launch(lambda: request.app.state.run_short_term_sync(force=True))
+                return {
+                    "scope": "short_term",
+                    "accepted": True,
+                    "mode": "async",
+                    "queued_at": utcnow().isoformat(),
+                }
+            raise HTTPException(status_code=400, detail="scope must be one of: all, long_term, short_term")
+
         if scope == "all":
             return request.app.state.run_due_syncs(force_long_term=True, force_short_term=True)
         if scope == "long_term":
@@ -683,5 +989,38 @@ def create_router() -> APIRouter:
         if scope == "short_term":
             return {"short_term": request.app.state.run_short_term_sync(force=True)}
         raise HTTPException(status_code=400, detail="scope must be one of: all, long_term, short_term")
+
+    @router.get("/api/v1/refresh/status")
+    def refresh_status(request: Request) -> dict[str, Any]:
+        long_term_last = request.app.state.get_last_successful_refresh("long_term_sync")
+        short_term_last = request.app.state.get_last_successful_refresh("short_term_sync")
+        long_term_status = request.app.state.get_long_term_sync_status()
+        short_term_status = request.app.state.get_short_term_sync_status()
+        return {
+            "checked_at": utcnow().isoformat(),
+            "jobs": {
+                "long_term": {
+                    "in_progress": bool(request.app.state.is_long_term_sync_running()),
+                    "last_successful_refresh": long_term_last.isoformat() if long_term_last else None,
+                    "state": long_term_status.get("state"),
+                    "stage": long_term_status.get("stage"),
+                    "started_at": long_term_status.get("started_at"),
+                    "finished_at": long_term_status.get("finished_at"),
+                    "processed": long_term_status.get("processed"),
+                    "total": long_term_status.get("total"),
+                    "failures": long_term_status.get("failures"),
+                    "last_error": long_term_status.get("last_error"),
+                },
+                "short_term": {
+                    "in_progress": bool(request.app.state.is_short_term_sync_running()),
+                    "last_successful_refresh": short_term_last.isoformat() if short_term_last else None,
+                    "state": short_term_status.get("state"),
+                    "stage": short_term_status.get("stage"),
+                    "started_at": short_term_status.get("started_at"),
+                    "finished_at": short_term_status.get("finished_at"),
+                    "last_error": short_term_status.get("last_error"),
+                },
+            },
+        }
 
     return router

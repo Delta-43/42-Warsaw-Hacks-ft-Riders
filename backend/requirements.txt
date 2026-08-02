@@ -1,5 +1,5 @@
-fastapi
-uvicorn[standard]
-httpx
-pytest
-api42lib
+fastapi==0.141.1
+uvicorn[standard]==0.52.0
+httpx==0.28.1
+pytest==9.1.1
+api42lib==0.1.10
