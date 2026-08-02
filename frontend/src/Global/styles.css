@@ -58,6 +58,29 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Widescreen/kiosk scaling: above the mobile breakpoint, root font-size
+   tracks the viewport instead of staying pinned to the browser default.
+   Everything sized in rem (text, avatar photos, chart dots — see Avatars/
+   PageDots/graphs/stats module CSS) scales together as the window resizes.
+   Pure CSS, no transform — the grid stays exactly as fluid as it already
+   is; only the *content* scale changes.
+
+   0.9375vw and 1.6667vh both equal 18px exactly at a 1920x1080 (16:9)
+   reference size (18px = 16px reference bumped up ~12.5% — "slightly
+   bigger" — keep these two in sync if that base ever changes again).
+   min() picks whichever axis is more constrained, so a window
+   narrower-than-16:9-for-its-height shrinks by width (no horizontal
+   overflow) and one shorter-than-16:9-for-its-width shrinks by height (no
+   vertical overflow), without stretching anything non-uniformly. Circles
+   (avatars, swatches) stay circles either way, since it's one factor, not
+   independent x/y. Below 761px this is skipped — mobile already has its
+   own stacked layout and doesn't need kiosk-style scaling. */
+@media (min-width: 761px) {
+  html {
+    font-size: clamp(12.38px, min(0.9375vw, 1.6667vh), 38.25px);
+  }
+}
+
 body {
   margin: 0;
   min-width: 320px;

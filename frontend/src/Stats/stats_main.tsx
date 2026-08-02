@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import type { AnalyticsPillsResponse, CoalitionTopScorer } from '../App'
 import { Avatar } from '../Global/Avatars/Avatar'
 import { PageDots } from '../Global/PageDots/PageDots'
+import { Watermark } from '../Global/Watermark/Watermark'
 import { useCarousel } from '../Global/hooks/useCarousel'
 import { groupTopScorersByCoalition } from '../Global/coalitionScorers'
 import { colorForCoalition } from '../Global/coalitionPalette'
@@ -128,6 +129,7 @@ export function StatsPanel({ heroes, coalitionTopScorers, analytics }: StatsPane
           </div>
         </header>
         <p className={styles.statsEmpty}>No leaderboard data yet</p>
+        <Watermark variant="corner" />
       </section>
     )
   }
@@ -158,6 +160,7 @@ export function StatsPanel({ heroes, coalitionTopScorers, analytics }: StatsPane
           </motion.div>
         </AnimatePresence>
       </div>
+      <Watermark variant="corner" />
     </section>
   )
 }

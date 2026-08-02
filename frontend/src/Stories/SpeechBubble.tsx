@@ -46,7 +46,7 @@ export function SpeechBubble({ event }: SpeechBubbleProps) {
         initial="hidden"
         animate="visible"
       >
-        @{event.login}
+        {event.name}
       </motion.p>
       <motion.p
         className={`${styles.speechBubbleLine} ${styles.speechBubbleProject}`}

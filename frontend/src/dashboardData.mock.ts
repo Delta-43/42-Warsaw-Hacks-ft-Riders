@@ -66,17 +66,22 @@ export const mockProjectsPassedRecent: ProjectsPassedRecentResponse = {
     campus_id: 67,
     window_hours: 168,
     total: RECENT_PROJECTS.length,
-    items: RECENT_PROJECTS.map((projectName, index) => ({
-      user_id: 2000 + index,
-      project_id: 100 + index,
-      project_name: projectName,
-      projects_user_id: 5000 + index,
-      marked_at: hoursAgoIso(index * 6),
-      user_login: LOGTIME_USERS[index % LOGTIME_USERS.length].login,
-      user_image_url: null,
-      user_profile_url: `https://api.intra.42.fr/v2/users/${LOGTIME_USERS[index % LOGTIME_USERS.length].login}`,
-      collected_at: hoursAgoIso(index * 6),
-    })),
+    items: RECENT_PROJECTS.map((projectName, index) => {
+      const user = LOGTIME_USERS[index % LOGTIME_USERS.length]
+      return {
+        user_id: 2000 + index,
+        project_id: 100 + index,
+        project_name: projectName,
+        projects_user_id: 5000 + index,
+        marked_at: hoursAgoIso(index * 6),
+        user_login: user.login,
+        first_name: user.first,
+        last_name: user.last,
+        user_image_url: null,
+        user_profile_url: `https://api.intra.42.fr/v2/users/${user.login}`,
+        collected_at: hoursAgoIso(index * 6),
+      }
+    }),
   },
 }
 

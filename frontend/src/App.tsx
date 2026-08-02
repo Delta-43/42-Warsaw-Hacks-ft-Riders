@@ -53,6 +53,8 @@ export type ProjectPass = {
   projects_user_id: number
   marked_at: string
   user_login: string
+  first_name: string | null
+  last_name: string | null
   user_image_url: string | null
   user_profile_url: string
   collected_at: string
@@ -359,7 +361,6 @@ function App() {
   return (
     <main className={stageClassName}>
       <Background />
-      <Watermark />
       <div className={shellClassName}>
         <StoriesPanel events={storyEvents} />
         <MetricsStrip

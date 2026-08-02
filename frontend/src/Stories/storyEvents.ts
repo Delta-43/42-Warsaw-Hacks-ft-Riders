@@ -34,6 +34,13 @@ function initialsFor(login: string, firstName?: string | null, lastName?: string
   return login.slice(0, 2).toUpperCase()
 }
 
+function fullNameFor(login: string, firstName?: string | null, lastName?: string | null): string {
+  if (firstName && lastName) {
+    return `${firstName} ${lastName}`
+  }
+  return firstName ?? login
+}
+
 export function buildStoryEvents(
   logtimeTop: LogtimeTopResponse,
   projectsPassedRecent: ProjectsPassedRecentResponse,
@@ -56,8 +63,8 @@ export function buildStoryEvents(
     events.push({
       id: `pass-${pass.user_id}-${pass.project_id}`,
       login: pass.user_login,
-      name: pass.user_login,
-      initials: pass.user_login.slice(0, 2).toUpperCase(),
+      name: fullNameFor(pass.user_login, pass.first_name, pass.last_name),
+      initials: initialsFor(pass.user_login, pass.first_name, pass.last_name),
       photoUrl: pass.user_image_url,
       kind: 'project_pass',
       projectName: pass.project_name,
@@ -73,7 +80,7 @@ export function buildStoryEvents(
     events.push({
       id: `logtime-${user.user_id}`,
       login: user.login,
-      name: user.first_name ?? user.login,
+      name: fullNameFor(user.login, user.first_name, user.last_name),
       initials: initialsFor(user.login, user.first_name, user.last_name),
       photoUrl: user.image_url,
       kind: 'logtime',

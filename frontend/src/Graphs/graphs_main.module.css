@@ -31,8 +31,8 @@
 
 .coalitionLeaderSwatch {
   display: inline-block;
-  width: 12px;
-  height: 12px;
+  width: 0.75rem;
+  height: 0.75rem;
   margin-right: 10px;
   border-radius: 50%;
   vertical-align: middle;
@@ -75,8 +75,8 @@
 
 .chartLegendSwatch {
   display: inline-block;
-  width: 9px;
-  height: 9px;
+  width: 0.5625rem;
+  height: 0.5625rem;
   border-radius: 50%;
 }
 
