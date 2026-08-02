@@ -225,3 +225,6 @@ __marimo__/
 backend/config.yml
 backend/config.*.yml
 !backend/config.sample.yml
+
+# Runtime SQLite cache — generated at startup, never commit
+backend/data/*.db

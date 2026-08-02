@@ -16,6 +16,9 @@ import { mockDashboardData } from './dashboardData.mock'
 const PRIMARY_CAMPUS_ID = Number(import.meta.env.VITE_PRIMARY_CAMPUS_ID ?? 67)
 const POLL_INTERVAL_MS = 60_000
 const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true'
+// In dev the Vite proxy forwards /api/* to the backend, so base is empty.
+// In a static build (GitHub Pages) set VITE_API_BASE_URL to the Railway backend URL.
+const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
 
 export type SourceMode = 'fresh_cache' | 'refreshed' | 'stale_fallback'
 
@@ -186,7 +189,7 @@ type DashboardData = {
 }
 
 async function readJson<T>(path: string): Promise<T> {
-  const response = await fetch(path)
+  const response = await fetch(`${API_BASE}${path}`)
   if (!response.ok) {
     throw new Error(`Request failed for ${path} with status ${response.status}`)
   }
@@ -335,7 +338,7 @@ function App() {
           <p className="eyebrow eyebrow-on-color">Frontend can reach Vite, but data is missing</p>
           <h1>Dashboard data request failed.</h1>
           <p>{error ?? 'Unknown error'}</p>
-          <a className="inline-link" href="http://127.0.0.1:8000/health" target="_blank" rel="noreferrer">
+          <a className="inline-link" href={`${API_BASE || 'http://127.0.0.1:8000'}/health`} target="_blank" rel="noreferrer">
             Check backend health endpoint
           </a>
         </section>
