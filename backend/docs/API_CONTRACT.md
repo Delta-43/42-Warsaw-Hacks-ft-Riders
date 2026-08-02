@@ -26,6 +26,22 @@ Response shape:
 }
 ```
 
+## Config
+
+### `GET /api/v1/config`
+
+Lets the frontend discover the primary campus id at runtime instead of baking it
+into the static build. Call this once on load and use the returned id for the
+`{campus_id}` path segments below.
+
+Response shape:
+
+```json
+{
+  "primary_campus_id": 67
+}
+```
+
 ## Refresh Status
 
 ### `GET /api/v1/refresh/status`

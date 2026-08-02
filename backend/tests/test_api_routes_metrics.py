@@ -148,6 +148,15 @@ def _build_app_with_temp_db(tmp_path):
     return main.create_app(enable_background_sync=False)
 
 
+def test_config_endpoint_returns_primary_campus_id(tmp_path) -> None:
+    app = _build_app_with_temp_db(tmp_path)
+    with TestClient(app) as client:
+        response = client.get("/api/v1/config")
+
+    assert response.status_code == 200
+    assert response.json() == {"primary_campus_id": main.PRIMARY_CAMPUS_ID}
+
+
 def test_logtime_top_endpoint_returns_ranked_rows(tmp_path) -> None:
     app = _build_app_with_temp_db(tmp_path)
     with TestClient(app) as client:

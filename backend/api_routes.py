@@ -648,6 +648,10 @@ def create_router() -> APIRouter:
     def health(request: Request) -> dict[str, Any]:
         return {"status": "ok", "service": request.app.state.app_name, "time": utcnow().isoformat()}
 
+    @router.get("/api/v1/config")
+    def config(request: Request) -> dict[str, Any]:
+        return {"primary_campus_id": request.app.state.primary_campus_id}
+
     @router.get("/api/v1/campus")
     def campus(request: Request, force_refresh: bool = Query(default=False)) -> dict[str, Any]:
         items, collected_at, source_mode = ensure_long_term_data(request, force_refresh=force_refresh)

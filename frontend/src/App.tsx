@@ -13,7 +13,7 @@ import { buildHeroes } from './Stats/heroes'
 import { useIsMobile } from './Global/hooks/useIsMobile'
 import { mockDashboardData } from './dashboardData.mock'
 
-const PRIMARY_CAMPUS_ID = Number(import.meta.env.VITE_PRIMARY_CAMPUS_ID || 67)
+const DEFAULT_CAMPUS_ID = Number(import.meta.env.VITE_PRIMARY_CAMPUS_ID || 67)
 const POLL_INTERVAL_MS = 60_000
 const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true'
 // In dev the Vite proxy forwards /api/* to the backend, so base is empty.
@@ -196,6 +196,15 @@ async function readJson<T>(path: string): Promise<T> {
   return (await response.json()) as T
 }
 
+async function resolvePrimaryCampusId(): Promise<number> {
+  try {
+    const { primary_campus_id } = await readJson<{ primary_campus_id: number }>('/api/v1/config')
+    return primary_campus_id
+  } catch {
+    return DEFAULT_CAMPUS_ID
+  }
+}
+
 function App() {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
@@ -204,6 +213,7 @@ function App() {
   const isMobile = useIsMobile(760)
 
   const fetchDashboard = useEffectEvent(async () => {
+    const campusId = USE_MOCK_DATA ? DEFAULT_CAMPUS_ID : await resolvePrimaryCampusId()
     const [
       logtimeTop,
       projectsPassedRecent,
@@ -242,18 +252,18 @@ function App() {
           )
         })
       : await Promise.all([
-          readJson<LogtimeTopResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/users/logtime-top?limit=10`),
+          readJson<LogtimeTopResponse>(`/api/v1/campus/${campusId}/users/logtime-top?limit=10`),
           readJson<ProjectsPassedRecentResponse>(
-            `/api/v1/campus/${PRIMARY_CAMPUS_ID}/projects/passed-recent?hours=168&limit=50`,
+            `/api/v1/campus/${campusId}/projects/passed-recent?hours=168&limit=50`,
           ),
-          readJson<CoalitionStandingsResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/coalitions/standings`),
+          readJson<CoalitionStandingsResponse>(`/api/v1/campus/${campusId}/coalitions/standings`),
           readJson<CoalitionTopScorersResponse>(
-            `/api/v1/campus/${PRIMARY_CAMPUS_ID}/coalitions/top-scorers?limit_per_coalition=10`,
+            `/api/v1/campus/${campusId}/coalitions/top-scorers?limit_per_coalition=10`,
           ),
-          readJson<AttendanceWeeklyResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/attendance/weekly`),
-          readJson<ProjectActivityWeeklyResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/projects/activity-weekly`),
-          readJson<AchievementsEarnedWeeklyResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/achievements/earned-weekly`),
-          readJson<AnalyticsPillsResponse>(`/api/v1/campus/${PRIMARY_CAMPUS_ID}/analytics/pills`),
+          readJson<AttendanceWeeklyResponse>(`/api/v1/campus/${campusId}/attendance/weekly`),
+          readJson<ProjectActivityWeeklyResponse>(`/api/v1/campus/${campusId}/projects/activity-weekly`),
+          readJson<AchievementsEarnedWeeklyResponse>(`/api/v1/campus/${campusId}/achievements/earned-weekly`),
+          readJson<AnalyticsPillsResponse>(`/api/v1/campus/${campusId}/analytics/pills`),
         ])
 
     startTransition(() => {
