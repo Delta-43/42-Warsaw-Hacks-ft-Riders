@@ -143,16 +143,16 @@ print(f"Campus ID for Warsaw: {campus_id}")
 # print(f"Saved projects passed data to {output_path}")
 
 
-end_date = date.today()
-start_date = end_date - timedelta(days=7)
-params = {
-    "range[user_id]": f"{user_data[0]['id']},{user_data[-1]['id']}",
-    "range[created_at]": f"{start_date.isoformat()},{end_date.isoformat()}",
-}
-achievements_rewarded = ft_api.get(f"/achievements_users", params=params)
-achievements_rewarded_data = achievements_rewarded.json()
-print(len(achievements_rewarded_data))
-output_path = output_dir / "achievements_rewarded_data.json"
-with output_path.open("w", encoding="utf-8") as fh:
-    json.dump(achievements_rewarded_data, fh, indent=2, ensure_ascii=False)
-print(f"Saved achievements rewarded data to {output_path}")
+# end_date = date.today()
+# start_date = end_date - timedelta(days=7)
+# params = {
+#     "range[user_id]": f"{user_data[0]['id']},{user_data[-1]['id']}",
+#     "range[created_at]": f"{start_date.isoformat()},{end_date.isoformat()}",
+# }
+# achievements_rewarded = ft_api.get(f"/achievements_users", params=params)
+# achievements_rewarded_data = achievements_rewarded.json()
+# print(len(achievements_rewarded_data))
+# output_path = output_dir / "achievements_rewarded_data.json"
+# with output_path.open("w", encoding="utf-8") as fh:
+#     json.dump(achievements_rewarded_data, fh, indent=2, ensure_ascii=False)
+# print(f"Saved achievements rewarded data to {output_path}")

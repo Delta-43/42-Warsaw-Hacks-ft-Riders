@@ -1,0 +1,302 @@
+[
+  {
+    "id": 3189683,
+    "achievement_id": 77,
+    "user_id": 219502,
+    "login": "csilva-s",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/csilva-s",
+    "created_at": "2026-08-01T23:59:10.963Z",
+    "updated_at": "2026-08-01T23:59:10.963Z"
+  },
+  {
+    "id": 3189682,
+    "achievement_id": 788,
+    "user_id": 253964,
+    "login": "npaulo",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/npaulo",
+    "created_at": "2026-08-01T22:51:52.396Z",
+    "updated_at": "2026-08-01T22:51:52.396Z"
+  },
+  {
+    "id": 3189681,
+    "achievement_id": 48,
+    "user_id": 270694,
+    "login": "mohaalho",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/mohaalho",
+    "created_at": "2026-08-01T22:24:09.036Z",
+    "updated_at": "2026-08-01T22:24:09.091Z"
+  },
+  {
+    "id": 3189680,
+    "achievement_id": 49,
+    "user_id": 270694,
+    "login": "mohaalho",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/mohaalho",
+    "created_at": "2026-08-01T22:24:08.887Z",
+    "updated_at": "2026-08-01T22:24:08.941Z"
+  },
+  {
+    "id": 3189679,
+    "achievement_id": 50,
+    "user_id": 270694,
+    "login": "mohaalho",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/mohaalho",
+    "created_at": "2026-08-01T22:24:08.806Z",
+    "updated_at": "2026-08-01T22:24:08.857Z"
+  },
+  {
+    "id": 3189678,
+    "achievement_id": 47,
+    "user_id": 270694,
+    "login": "mohaalho",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/mohaalho",
+    "created_at": "2026-08-01T22:24:08.724Z",
+    "updated_at": "2026-08-01T22:24:08.777Z"
+  },
+  {
+    "id": 3189677,
+    "achievement_id": 46,
+    "user_id": 270694,
+    "login": "mohaalho",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/mohaalho",
+    "created_at": "2026-08-01T22:24:08.553Z",
+    "updated_at": "2026-08-01T22:24:08.664Z"
+  },
+  {
+    "id": 3189676,
+    "achievement_id": 39,
+    "user_id": 193574,
+    "login": "adeestev",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/adeestev",
+    "created_at": "2026-08-01T22:21:02.080Z",
+    "updated_at": "2026-08-01T22:21:02.080Z"
+  },
+  {
+    "id": 3189675,
+    "achievement_id": 40,
+    "user_id": 193574,
+    "login": "adeestev",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/adeestev",
+    "created_at": "2026-08-01T22:21:02.044Z",
+    "updated_at": "2026-08-01T22:21:02.044Z"
+  },
+  {
+    "id": 3189674,
+    "achievement_id": 1442,
+    "user_id": 254117,
+    "login": "ammirzae",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/ammirzae",
+    "created_at": "2026-08-01T22:03:20.805Z",
+    "updated_at": "2026-08-01T22:03:20.805Z"
+  },
+  {
+    "id": 3189673,
+    "achievement_id": 790,
+    "user_id": 217144,
+    "login": "vde-maga",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/vde-maga",
+    "created_at": "2026-08-01T21:28:45.052Z",
+    "updated_at": "2026-08-01T21:28:45.052Z"
+  },
+  {
+    "id": 3189672,
+    "achievement_id": 789,
+    "user_id": 218358,
+    "login": "malpache",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/malpache",
+    "created_at": "2026-08-01T20:57:23.633Z",
+    "updated_at": "2026-08-01T20:57:23.633Z"
+  },
+  {
+    "id": 3189671,
+    "achievement_id": 787,
+    "user_id": 254295,
+    "login": "mariade-",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/mariade-",
+    "created_at": "2026-08-01T19:55:18.058Z",
+    "updated_at": "2026-08-01T19:55:18.058Z"
+  },
+  {
+    "id": 3189670,
+    "achievement_id": 787,
+    "user_id": 254133,
+    "login": "bduffey",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/bduffey",
+    "created_at": "2026-08-01T19:55:14.411Z",
+    "updated_at": "2026-08-01T19:55:14.411Z"
+  },
+  {
+    "id": 3189669,
+    "achievement_id": 1,
+    "user_id": 267854,
+    "login": "adorofei",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/adorofei",
+    "created_at": "2026-08-01T19:35:12.291Z",
+    "updated_at": "2026-08-01T19:35:12.291Z"
+  },
+  {
+    "id": 3189668,
+    "achievement_id": 1,
+    "user_id": 267835,
+    "login": "dibrayev",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/dibrayev",
+    "created_at": "2026-08-01T18:24:03.347Z",
+    "updated_at": "2026-08-01T18:24:03.347Z"
+  },
+  {
+    "id": 3189667,
+    "achievement_id": 1641,
+    "user_id": 253333,
+    "login": "slim",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/slim",
+    "created_at": "2026-08-01T18:20:31.872Z",
+    "updated_at": "2026-08-01T18:20:31.872Z"
+  },
+  {
+    "id": 3189666,
+    "achievement_id": 1156,
+    "user_id": 176364,
+    "login": "leiamart",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/leiamart",
+    "created_at": "2026-08-01T18:06:22.753Z",
+    "updated_at": "2026-08-01T18:06:22.753Z"
+  },
+  {
+    "id": 3189665,
+    "achievement_id": 1157,
+    "user_id": 169794,
+    "login": "nocaross",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/nocaross",
+    "created_at": "2026-08-01T18:05:03.969Z",
+    "updated_at": "2026-08-01T18:05:03.969Z"
+  },
+  {
+    "id": 3189664,
+    "achievement_id": 788,
+    "user_id": 253986,
+    "login": "vivozzo-",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/vivozzo-",
+    "created_at": "2026-08-01T17:59:07.854Z",
+    "updated_at": "2026-08-01T17:59:07.854Z"
+  },
+  {
+    "id": 3189663,
+    "achievement_id": 84,
+    "user_id": 263837,
+    "login": "dswietoc",
+    "nbr_of_success": 21,
+    "url": "https://api.intra.42.fr/v2/users/dswietoc",
+    "created_at": "2026-08-01T17:57:25.906Z",
+    "updated_at": "2026-08-01T17:57:25.931Z"
+  },
+  {
+    "id": 3189662,
+    "achievement_id": 83,
+    "user_id": 263837,
+    "login": "dswietoc",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/dswietoc",
+    "created_at": "2026-08-01T17:57:25.845Z",
+    "updated_at": "2026-08-01T17:57:25.876Z"
+  },
+  {
+    "id": 3189661,
+    "achievement_id": 82,
+    "user_id": 263837,
+    "login": "dswietoc",
+    "nbr_of_success": null,
+    "url": "https://api.intra.42.fr/v2/users/dswietoc",
+    "created_at": "2026-08-01T17:57:25.787Z",
+    "updated_at": "2026-08-01T17:57:25.787Z"
+  },
+  {
+    "id": 3189660,
+    "achievement_id": 792,
+    "user_id": 175742,
+    "login": "hbourlot",
+    "nbr_of_success": 1,
+    "url": "https://api.intra.42.fr/v2/users/hbourlot",
+    "created_at": "2026-08-01T17:43:59.583Z",
+    "updated_at": "2026-08-01T17:43:59.583Z"
+  },
+  {
+    "id": 3189659,
+    "achievement_id": 6,
+    "user_id": 252865,
+    "login": "dd-alo",
+    "nbr_of_success": 0,
+    "url": "https://api.intra.42.fr/v2/users/dd-alo",
+    "created_at": "2026-08-01T17:05:13.061Z",
+    "updated_at": "2026-08-01T17:05:13.135Z"
+  },
+  {
+    "id": 3189658,
+    "achievement_id": 5,
+    "user_id": 252865,
+    "login": "dd-alo",
+    "nbr_of_success": 0,
+    "url": "https://api.intra.42.fr/v2/users/dd-alo",
+    "created_at": "2026-08-01T17:05:12.988Z",
+    "updated_at": "2026-08-01T17:05:13.029Z"
+  },
+  {
+    "id": 3189657,
+    "achievement_id": 19,
+    "user_id": 252865,
+    "login": "dd-alo",
+    "nbr_of_success": 0,
+    "url": "https://api.intra.42.fr/v2/users/dd-alo",
+    "created_at": "2026-08-01T17:05:09.251Z",
+    "updated_at": "2026-08-01T17:05:09.312Z"
+  },
+  {
+    "id": 3189656,
+    "achievement_id": 16,
+    "user_id": 252865,
+    "login": "dd-alo",
+    "nbr_of_success": 0,
+    "url": "https://api.intra.42.fr/v2/users/dd-alo",
+    "created_at": "2026-08-01T17:05:09.197Z",
+    "updated_at": "2026-08-01T17:05:09.220Z"
+  },
+  {
+    "id": 3189655,
+    "achievement_id": 13,
+    "user_id": 252865,
+    "login": "dd-alo",
+    "nbr_of_success": 0,
+    "url": "https://api.intra.42.fr/v2/users/dd-alo",
+    "created_at": "2026-08-01T17:05:09.111Z",
+    "updated_at": "2026-08-01T17:05:09.135Z"
+  },
+  {
+    "id": 3189654,
+    "achievement_id": 14,
+    "user_id": 252865,
+    "login": "dd-alo",
+    "nbr_of_success": 0,
+    "url": "https://api.intra.42.fr/v2/users/dd-alo",
+    "created_at": "2026-08-01T17:05:09.064Z",
+    "updated_at": "2026-08-01T17:05:09.088Z"
+  }
+]
