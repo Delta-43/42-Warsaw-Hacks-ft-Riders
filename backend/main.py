@@ -65,8 +65,8 @@ load_env_file(BASE_DIR.parent / ".env")
 load_env_file(BASE_DIR / ".env")
 PRIMARY_CAMPUS_ID = resolve_primary_campus_id()
 
-DATA_DIR = BASE_DIR / "data"
-DATA_DIR.mkdir(exist_ok=True)
+DATA_DIR = Path(os.environ.get("RAILWAY_VOLUME_MOUNT_PATH") or (BASE_DIR / "data"))
+DATA_DIR.mkdir(parents=True, exist_ok=True)
 DB_PATH = DATA_DIR / "dashboard_cache.db"
 CONFIG_PATH = BASE_DIR / "config.yml"
 
