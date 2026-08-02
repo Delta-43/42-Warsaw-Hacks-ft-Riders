@@ -13,7 +13,7 @@ import { buildHeroes } from './Stats/heroes'
 import { useIsMobile } from './Global/hooks/useIsMobile'
 import { mockDashboardData } from './dashboardData.mock'
 
-const PRIMARY_CAMPUS_ID = Number(import.meta.env.VITE_PRIMARY_CAMPUS_ID ?? 67)
+const PRIMARY_CAMPUS_ID = Number(import.meta.env.VITE_PRIMARY_CAMPUS_ID || 67)
 const POLL_INTERVAL_MS = 60_000
 const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true'
 // In dev the Vite proxy forwards /api/* to the backend, so base is empty.
