@@ -1,8 +1,61 @@
-/*
- * NOT YET IMPLEMENTED — flagged for Philip.
- *
- * Intended to hold the "opening up" animation for a per-avatar speech
- * bubble. No such interaction exists in the current Stories panel, so
- * there is nothing here to relocate yet. This file is a placeholder
- * reserved for that feature once it's designed.
- */
+/* Liquid-glass speech bubble that surfaces beside the active story avatar,
+   vertically centered on the avatar circle. */
+
+.speech-bubble {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 20px 16px;
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.74));
+  border: 1px solid rgba(20, 30, 45, 0.08);
+  box-shadow:
+    0 18px 32px rgba(28, 36, 48, 0.14),
+    0 2px 6px rgba(28, 36, 48, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  white-space: nowrap;
+}
+
+.speech-bubble-tail {
+  position: absolute;
+  top: 50%;
+  left: -8px;
+  width: 16px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.86);
+  border-radius: 4px;
+  border-bottom: 1px solid rgba(20, 30, 45, 0.08);
+  border-left: 1px solid rgba(20, 30, 45, 0.08);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.speech-bubble-line {
+  margin: 0;
+}
+
+.speech-bubble-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1c2430;
+}
+
+.speech-bubble-divider {
+  color: rgba(28, 36, 48, 0.3);
+  font-weight: 400;
+}
+
+.speech-bubble-project {
+  font-size: 0.85rem;
+  color: rgba(28, 36, 48, 0.62);
+}
+
+.speech-bubble-project strong {
+  color: #1c2430;
+  font-weight: 600;
+}

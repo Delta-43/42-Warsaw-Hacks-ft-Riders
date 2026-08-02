@@ -103,7 +103,7 @@ export function GraphsPanel({ historySeries }: GraphsPanelProps) {
     <section className="panel glass-panel panel-float graphs-panel">
       <header className="panel-header">
         <div>
-          <p className="eyebrow">{active.eyebrow}</p>
+          <p className="eyebrow eyebrow-on-color">{active.eyebrow}</p>
           <h2>{active.title}</h2>
         </div>
         <PageDots count={slides.length} activeIndex={index} onSelect={setIndex} ariaLabel="Graph views" />

@@ -12,10 +12,22 @@
   font-size: 1.55rem;
 }
 
+/* Shared by every eyebrow header regardless of background — only color
+   differs, and it differs by which of the two variants below is applied. */
 .eyebrow {
   margin: 0 0 8px;
-  color: var(--brand-blue);
   font-size: 0.76rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
+}
+
+/* For panels on the dark/colourful liquid-glass background (Graphs, Stats). */
+.eyebrow-on-color {
+  color: var(--brand-blue);
+}
+
+/* For panels on a light/white background (Stories) — matches the story
+   name text color exactly. */
+.eyebrow-on-light {
+  color: #1c2430;
 }

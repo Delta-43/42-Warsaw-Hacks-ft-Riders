@@ -15,7 +15,7 @@ export function StatsPanel() {
     <section className="panel glass-panel panel-float stats-panel">
       <header className="panel-header">
         <div>
-          <p className="eyebrow">Hero of the week</p>
+          <p className="eyebrow eyebrow-on-color">Hero of the week</p>
           <h2>Community shoutouts</h2>
         </div>
         <PageDots count={mockHeroes.length} activeIndex={index} onSelect={setIndex} ariaLabel="Hero categories" />
@@ -37,8 +37,6 @@ export function StatsPanel() {
               colorFrom={hero.colorFrom}
               colorTo={hero.colorTo}
               size={140}
-              ringWidth={10}
-              gapWidth={8}
             />
             <p className="hero-category">{hero.category}</p>
             <h3 className="hero-name">{hero.name}</h3>

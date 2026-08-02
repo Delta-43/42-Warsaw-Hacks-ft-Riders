@@ -2,6 +2,7 @@ import { startTransition, useEffect, useEffectEvent, useMemo, useState } from 'r
 import './Global/liquid_glass.css'
 import './Global/titles.css'
 import './Global/layout.css'
+import { Background } from './Global/Background/Background'
 import { StoriesPanel } from './Stories/stories_main'
 import { GraphsPanel } from './Graphs/graphs_main'
 import { StatsPanel } from './Stats/stats_main'
@@ -179,8 +180,9 @@ function App() {
   if (loading) {
     return (
       <main className="stage loading-state">
+        <Background />
         <section className="loading-card glass-panel">
-          <p className="eyebrow">Booting dashboard</p>
+          <p className="eyebrow eyebrow-on-color">Booting dashboard</p>
           <h1>Preparing the first 42Warsaw community view.</h1>
           <p>Fetching campus history from the FastAPI cache.</p>
         </section>
@@ -191,8 +193,9 @@ function App() {
   if (error || !dashboard) {
     return (
       <main className="stage loading-state">
+        <Background />
         <section className="loading-card error-card glass-panel">
-          <p className="eyebrow">Frontend can reach Vite, but data is missing</p>
+          <p className="eyebrow eyebrow-on-color">Frontend can reach Vite, but data is missing</p>
           <h1>Dashboard data request failed.</h1>
           <p>{error ?? 'Unknown error'}</p>
           <a className="inline-link" href="http://127.0.0.1:8000/api/v1/summary" target="_blank" rel="noreferrer">
@@ -205,6 +208,7 @@ function App() {
 
   return (
     <main className={stageClassName}>
+      <Background />
       <div className={shellClassName}>
         <StoriesPanel />
         <GraphsPanel historySeries={historySeries} />

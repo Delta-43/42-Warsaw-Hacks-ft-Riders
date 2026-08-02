@@ -29,7 +29,10 @@
 }
 
 .stories-panel.panel-float {
-  animation-delay: 0s, 0.6s;
+  /* Stories content must stay perfectly top-to-bottom centered, so this
+     panel skips the infinite vertical float bob that the other two keep —
+     only the one-time entrance settles here. */
+  animation: panelEnter 0.6s ease-out both;
 }
 
 .graphs-panel.panel-float {

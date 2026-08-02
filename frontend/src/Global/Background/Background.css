@@ -1,0 +1,179 @@
+/* ============================================================
+   Background — the single rear-most layer behind the entire app.
+
+   Two enormous, ultra-slow "wave" bands of pastel color, inspired by
+   the macOS Big Sur / Monterey wallpapers. The motion should be almost
+   imperceptible at a glance and only obvious if you stare at it for a
+   while — keep durations long and movement subtle when tweaking.
+
+   HOW IT LOOPS (read this before touching blob positions)
+   Each wave is a strip rendered at 200vw (twice the screen width) and
+   holds every color blob TWICE: once at its authored `left` position,
+   and again exactly 100vw further right via the ".bg-blob-repeat"
+   copies. Animating the strip's transform between translateX(-100vw)
+   and translateX(0) therefore loops with no visible seam — the instant
+   one copy has fully scrolled past, its twin is sitting in exactly the
+   position the first one started in. If you add/move a blob, only ever
+   edit the base blob's `left` — the matching `.bg-blob-repeat` element
+   picks it up automatically by adding 100vw on top.
+
+   WHAT TO TWEAK
+   - Colors               -> the --color-* variables below
+   - Speed                -> --wave-top-duration / --wave-bottom-duration
+                              (bigger number = slower; unit is seconds)
+   - Direction            -> the `reverse` keyword on .bg-wave-top's
+                              animation (remove it to make both waves
+                              drift the same way)
+   - Height / position    -> --wave-top-height / --wave-bottom-height,
+                              and the `top` / `bottom` offsets on
+                              .bg-wave-top / .bg-wave-bottom
+   - Softness (blur)      -> --wave-blur
+   - Intensity            -> --wave-top-opacity / --wave-bottom-opacity
+   - Blob size / spread   -> --blob-size, and each blob's `left` in the
+                              "wave blobs" sections below
+   ============================================================ */
+
+.bg-root {
+  /* No z-index here on purpose — <body> has its own opaque background
+     (styles.css), and as a non-positioned element that always paints
+     above anything with a NEGATIVE z-index in the same stacking context,
+     a negative z-index here would put this entire layer permanently
+     behind body's background, fully hidden, no matter its own colors or
+     opacity. Leaving z-index unset (auto) plus rendering <Background />
+     before the panels in App.tsx's JSX is what keeps this behind the
+     panels but above body's background. */
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg-deep);
+
+  /* ---- tuning knobs ---- */
+  --wave-blur: 90px;
+  --blob-size: 68vw;
+
+  /* Heights are deliberately generous enough that the top and bottom
+     waves overlap in the middle of the screen (see the `top`/`bottom`
+     offsets below) — without that overlap there's a dead band of flat
+     --bg-deep color across the vertical center with no pastel in it at
+     all, which is where most of the panels sit. */
+  --wave-top-height: 70vh;
+  --wave-top-duration: 420s;
+  --wave-top-opacity: 0.6;
+
+  --wave-bottom-height: 70vh;
+  --wave-bottom-duration: 260s;
+  --wave-bottom-opacity: 0.7;
+
+  /* Pastel-ified pulls from the Big Sur / Monterey reference wallpapers. */
+  --color-sky: #a9d4f2;
+  --color-periwinkle: #b9b9ef;
+  --color-lilac: #d3b7e6;
+  --color-pink: #f3b8cf;
+  --color-coral: #f6c3a4;
+  --color-amber: #f8dfa0;
+}
+
+.bg-wave {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  filter: blur(var(--wave-blur));
+}
+
+.bg-wave-top {
+  top: -15vh;
+  height: var(--wave-top-height);
+  opacity: var(--wave-top-opacity);
+}
+
+.bg-wave-bottom {
+  bottom: -15vh;
+  height: var(--wave-bottom-height);
+  opacity: var(--wave-bottom-opacity);
+}
+
+.bg-wave-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200vw;
+  height: 100%;
+  will-change: transform;
+}
+
+.bg-wave-bottom .bg-wave-strip {
+  animation: bgWavePan var(--wave-bottom-duration) linear infinite;
+}
+
+/* Top wave drifts the opposite direction, and slower — reusing the same
+   keyframe played backwards keeps the two waves' motion mathematically
+   tied together instead of two hand-authored keyframes drifting out of
+   sync from each other over time. */
+.bg-wave-top .bg-wave-strip {
+  animation: bgWavePan var(--wave-top-duration) linear infinite reverse;
+}
+
+@keyframes bgWavePan {
+  from {
+    transform: translateX(-100vw);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.bg-blob {
+  position: absolute;
+  top: 50%;
+  width: var(--blob-size);
+  height: var(--blob-size);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.bg-blob-repeat {
+  transform: translateY(-50%) translateX(100vw);
+}
+
+/* ---- Top wave blobs: cool sky blues/periwinkle, echoing the upper
+   portion of the reference wallpapers ---- */
+.bg-blob-top-a {
+  left: 5vw;
+  background: radial-gradient(circle, var(--color-sky), transparent 70%);
+}
+.bg-blob-top-b {
+  left: 38vw;
+  background: radial-gradient(circle, var(--color-periwinkle), transparent 70%);
+}
+.bg-blob-top-c {
+  left: 68vw;
+  background: radial-gradient(circle, var(--color-sky), transparent 70%);
+}
+
+/* ---- Bottom wave blobs: warm pinks/corals/ambers/lilac, echoing the
+   lower, more saturated bands of the reference wallpapers ---- */
+.bg-blob-bottom-a {
+  left: -5vw;
+  background: radial-gradient(circle, var(--color-pink), transparent 70%);
+}
+.bg-blob-bottom-b {
+  left: 25vw;
+  background: radial-gradient(circle, var(--color-coral), transparent 70%);
+}
+.bg-blob-bottom-c {
+  left: 55vw;
+  background: radial-gradient(circle, var(--color-lilac), transparent 70%);
+}
+.bg-blob-bottom-d {
+  left: 82vw;
+  background: radial-gradient(circle, var(--color-amber), transparent 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-wave-bottom .bg-wave-strip,
+  .bg-wave-top .bg-wave-strip {
+    animation: none;
+  }
+}

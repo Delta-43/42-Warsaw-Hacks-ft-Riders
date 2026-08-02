@@ -1,5 +1,12 @@
 import './Avatar.css'
 
+// Ring/gap thickness as a fraction of avatar size. Every avatar in the app
+// goes through this one formula by default, so the border reads the same
+// visual weight at any size instead of each call site guessing its own
+// absolute px value.
+const RING_RATIO = 0.045
+const GAP_RATIO = 0.045
+
 type AvatarProps = {
   name: string
   initials: string
@@ -16,17 +23,20 @@ export function Avatar({
   colorFrom,
   colorTo,
   size = 96,
-  ringWidth = 12,
-  gapWidth = 12,
+  ringWidth,
+  gapWidth,
 }: AvatarProps) {
+  const resolvedRingWidth = ringWidth ?? size * RING_RATIO
+  const resolvedGapWidth = gapWidth ?? size * GAP_RATIO
+
   return (
     <span
       className="avatar-ring"
       role="img"
       aria-label={name}
-      style={{ width: size, height: size, padding: ringWidth, background: 'var(--avatar-ring-gradient)' }}
+      style={{ width: size, height: size, padding: resolvedRingWidth, background: 'var(--avatar-ring-gradient)' }}
     >
-      <span className="avatar-gap" style={{ padding: gapWidth }}>
+      <span className="avatar-gap" style={{ padding: resolvedGapWidth }}>
         <span
           className="avatar-photo"
           style={{
