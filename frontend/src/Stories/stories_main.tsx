@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Avatar } from '../Global/Avatars/Avatar'
 import { SpeechBubble } from './SpeechBubble'
-import { mockStudents, type Student } from './students.mock'
+import type { StoryEvent } from './storyEvents'
 import { useStoryCycle } from './useStoryCycle'
 import './carousel.css'
 import './speech_bubbles.css'
@@ -25,11 +25,11 @@ const BUBBLE_LEFT = POINT_ZERO_LEFT + ITEM_WIDTH
 // Nudge the waiting point left/right from the bar's exact horizontal
 // center (0 = dead center). Every slot beyond it (next-next, etc.) is
 // still spaced off this value by SLOT_STEP.
-const WAITING_POINT_OFFSET = - 250
+const WAITING_POINT_OFFSET = -250
 
-function visibleWindow(students: Student[], start: number, size: number): Student[] {
-  const count = Math.min(size, students.length)
-  return Array.from({ length: count }, (_, offset) => students[(start + offset) % students.length])
+function visibleWindow(events: StoryEvent[], start: number, size: number): StoryEvent[] {
+  const count = Math.min(size, events.length)
+  return Array.from({ length: count }, (_, offset) => events[(start + offset) % events.length])
 }
 
 function leftForPosition(position: number): string {
@@ -40,20 +40,34 @@ function leftForPosition(position: number): string {
   return `calc(50% - ${ITEM_HALF}px + ${offset}px)`
 }
 
-export function StoriesPanel() {
-  const { activeIndex, bubbleOpen } = useStoryCycle(mockStudents.length)
-  const activeStudent = mockStudents[activeIndex]
-  const visibleStudents = visibleWindow(mockStudents, activeIndex, WINDOW_SIZE)
+type StoriesPanelProps = {
+  events: StoryEvent[]
+}
+
+export function StoriesPanel({ events }: StoriesPanelProps) {
+  const { activeIndex, bubbleOpen } = useStoryCycle(events.length)
+
+  if (events.length === 0) {
+    return (
+      <section className="panel glass-panel panel-float stories-panel">
+        <p className="eyebrow eyebrow-on-light stories-eyebrow">Stories</p>
+        <p className="stories-empty">No recent campus activity yet</p>
+      </section>
+    )
+  }
+
+  const activeEvent = events[activeIndex]
+  const visibleEvents = visibleWindow(events, activeIndex, WINDOW_SIZE)
 
   return (
     <section className="panel glass-panel panel-float stories-panel">
       <p className="eyebrow eyebrow-on-light stories-eyebrow">Stories</p>
       <div className="stories-row">
         <AnimatePresence initial={false} mode="popLayout">
-          {visibleStudents.map((student, position) => (
+          {visibleEvents.map((event, position) => (
             <motion.div
               layout
-              key={student.id}
+              key={event.id}
               className={`story-item${position === 0 ? ' is-active' : ''}`}
               style={{ left: leftForPosition(position) }}
               initial={{ opacity: 0, x: 60 }}
@@ -62,19 +76,20 @@ export function StoriesPanel() {
               transition={{ type: 'spring', stiffness: 260, damping: 28 }}
             >
               <Avatar
-                name={student.name}
-                initials={student.initials}
-                colorFrom={student.colorFrom}
-                colorTo={student.colorTo}
+                name={event.name}
+                initials={event.initials}
+                colorFrom={event.colorFrom}
+                colorTo={event.colorTo}
+                photoUrl={event.photoUrl}
                 size={110}
               />
-              <span className="story-name">{student.name.split(' ')[0]}</span>
+              <span className="story-name">{event.name.split(' ')[0]}</span>
             </motion.div>
           ))}
         </AnimatePresence>
 
         <div className="story-bubble-slot" style={{ left: `${BUBBLE_LEFT}px` }}>
-          <AnimatePresence>{bubbleOpen && <SpeechBubble key={activeStudent.id} student={activeStudent} />}</AnimatePresence>
+          <AnimatePresence>{bubbleOpen && <SpeechBubble key={activeEvent.id} event={activeEvent} />}</AnimatePresence>
         </div>
       </div>
     </section>

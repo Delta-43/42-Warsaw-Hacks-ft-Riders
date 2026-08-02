@@ -12,6 +12,7 @@ type AvatarProps = {
   initials: string
   colorFrom: string
   colorTo: string
+  photoUrl?: string | null
   size?: number
   ringWidth?: number
   gapWidth?: number
@@ -22,6 +23,7 @@ export function Avatar({
   initials,
   colorFrom,
   colorTo,
+  photoUrl,
   size = 96,
   ringWidth,
   gapWidth,
@@ -45,6 +47,21 @@ export function Avatar({
           }}
         >
           {initials}
+          {photoUrl && (
+            <img
+              className="avatar-photo-img"
+              src={photoUrl}
+              alt=""
+              loading="lazy"
+              // Real 42 profile photos are hotlinked from intra's CDN and
+              // occasionally 404/expire — on failure just hide the image so
+              // the initials underneath (already rendered) show through
+              // instead of a broken-image icon. No component state needed.
+              onError={(event) => {
+                event.currentTarget.style.display = 'none'
+              }}
+            />
+          )}
         </span>
       </span>
     </span>

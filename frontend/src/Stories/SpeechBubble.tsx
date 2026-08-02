@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
-import { formatXp, type Student } from './students.mock'
+import type { StoryEvent } from './storyEvents'
 
 type SpeechBubbleProps = {
-  student: Student
+  event: StoryEvent
 }
 
 // Horizontal motion only — no y offsets, so the bubble never drifts off the
@@ -29,7 +29,7 @@ const textVariants = {
   visible: { opacity: 1, transition: { duration: 0.3, delay: 0.2, ease: 'easeOut' as const } },
 }
 
-export function SpeechBubble({ student }: SpeechBubbleProps) {
+export function SpeechBubble({ event }: SpeechBubbleProps) {
   return (
     <motion.div
       className="speech-bubble"
@@ -40,14 +40,18 @@ export function SpeechBubble({ student }: SpeechBubbleProps) {
       exit="exit"
     >
       <motion.p className="speech-bubble-line speech-bubble-meta" variants={textVariants} initial="hidden" animate="visible">
-        <span>@{student.intraLogin}</span>
-        <span className="speech-bubble-divider">|</span>
-        <span>{formatXp(student.xp)} XP</span>
-        <span className="speech-bubble-divider">|</span>
-        <span>{student.wallet}$</span>
+        @{event.login}
       </motion.p>
       <motion.p className="speech-bubble-line speech-bubble-project" variants={textVariants} initial="hidden" animate="visible">
-        Recently completed <strong>{student.lastProject}</strong>
+        {event.kind === 'project_pass' ? (
+          <>
+            Recently completed <strong>{event.projectName}</strong>
+          </>
+        ) : (
+          <>
+            <strong>{event.hoursLogged?.toFixed(1)}h</strong> logged this week
+          </>
+        )}
       </motion.p>
       <span className="speech-bubble-tail" />
     </motion.div>

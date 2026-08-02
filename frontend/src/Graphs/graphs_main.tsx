@@ -15,10 +15,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import type { CoalitionStanding, LogtimeUser } from '../App'
 import { PageDots } from '../Global/PageDots/PageDots'
 import { useCarousel } from '../Global/hooks/useCarousel'
-import { mockMilestones, mockWeekdayHours } from './graphs.mock'
-import { PIE_COLORS } from './pie_chart'
 import { BAR_FILL } from './bar_chart'
 import { LINE_STROKE } from './line_chart'
 import './graphs_main.css'
@@ -36,26 +35,36 @@ type GraphSlide = {
 
 type GraphsPanelProps = {
   historySeries: HistorySeriesPoint[]
+  logtimeLeaders: LogtimeUser[]
+  coalitionStandings: CoalitionStanding[]
 }
 
-export function GraphsPanel({ historySeries }: GraphsPanelProps) {
+export function GraphsPanel({ historySeries, logtimeLeaders, coalitionStandings }: GraphsPanelProps) {
+  const standingsWithScore = coalitionStandings.filter(
+    (coalition): coalition is CoalitionStanding & { score: number } => coalition.score !== null,
+  )
+  const logtimeSeries = logtimeLeaders.map((user) => ({
+    login: user.first_name ?? user.login,
+    hours: Math.round(user.hours_logged * 10) / 10,
+  }))
+
   const slides: GraphSlide[] = [
     {
-      eyebrow: 'Progress',
-      title: 'Students per milestone',
+      eyebrow: 'Standings',
+      title: 'Coalition scores',
       chart: (
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={mockMilestones}
-              dataKey="students"
-              nameKey="milestone"
+              data={standingsWithScore}
+              dataKey="score"
+              nameKey="coalition_name"
               innerRadius="52%"
               outerRadius="88%"
               paddingAngle={3}
             >
-              {mockMilestones.map((entry, index) => (
-                <Cell key={entry.milestone} fill={PIE_COLORS[index % PIE_COLORS.length]} stroke="none" />
+              {standingsWithScore.map((coalition) => (
+                <Cell key={coalition.coalition_id} fill={coalition.color} stroke="none" />
               ))}
             </Pie>
             <Legend verticalAlign="bottom" height={36} iconType="circle" />
@@ -66,12 +75,12 @@ export function GraphsPanel({ historySeries }: GraphsPanelProps) {
     },
     {
       eyebrow: 'Momentum',
-      title: 'Hours logged this week',
+      title: 'Logtime leaders this week',
       chart: (
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={mockWeekdayHours}>
+          <BarChart data={logtimeSeries}>
             <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-            <XAxis dataKey="day" tickLine={false} axisLine={false} />
+            <XAxis dataKey="login" tickLine={false} axisLine={false} />
             <YAxis tickLine={false} axisLine={false} width={44} />
             <Tooltip />
             <Bar dataKey="hours" radius={[10, 10, 0, 0]} fill={BAR_FILL} />

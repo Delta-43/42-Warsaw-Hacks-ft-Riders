@@ -25,6 +25,14 @@
   margin: 0;
 }
 
+.stories-empty {
+  margin: 0;
+  align-self: center;
+  color: #1c2430;
+  opacity: 0.5;
+  font-size: 1.1rem;
+}
+
 .stories-row {
   position: relative;
   width: 100%;

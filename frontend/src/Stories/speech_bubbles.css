@@ -37,17 +37,9 @@
 }
 
 .speech-bubble-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   font-weight: 600;
   font-size: 0.95rem;
   color: #1c2430;
-}
-
-.speech-bubble-divider {
-  color: rgba(28, 36, 48, 0.3);
-  font-weight: 400;
 }
 
 .speech-bubble-project {
