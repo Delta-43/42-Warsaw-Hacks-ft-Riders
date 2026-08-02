@@ -38,12 +38,27 @@ def load_env_file(env_path: Path) -> None:
             os.environ[key] = value
 
 
+CAMPUS_NAME_TO_ID: dict[str, int] = {
+    "warsaw": 67,
+    "paris": 1,
+    "amsterdam": 14,
+    "berlin": 22,
+    "tokyo": 26,
+    "seoul": 29,
+    "madrid": 41,
+    "barcelona": 36,
+    "rome": 45,
+    "london": 5,
+}
+
+
 def resolve_primary_campus_id(default: int = 67) -> int:
     raw_value = os.getenv("CAMPUS", str(default)).strip()
     try:
         return int(raw_value)
     except ValueError:
-        return default
+        # Allow campus names like "Warsaw" in addition to numeric IDs
+        return CAMPUS_NAME_TO_ID.get(raw_value.lower(), default)
 
 
 load_env_file(BASE_DIR.parent / ".env")
