@@ -30,6 +30,20 @@ cd backend
 
 This script only reads cache-backed endpoints. It does not force refreshes.
 
+## Sharing A Local Server Via ngrok
+
+To expose your local backend on a public URL (e.g. for demoing without deploying):
+
+```bash
+cd backend
+./.venv/bin/pip install -r requirements-dev.txt
+./.venv/bin/uvicorn main:app --port 8000          # in one terminal
+./.venv/bin/python scripts/serve_with_ngrok.py --port 8000   # in another
+```
+
+Requires a free ngrok authtoken (https://dashboard.ngrok.com/get-started/your-authtoken),
+set via `NGROK_AUTHTOKEN` or `ngrok config add-authtoken <token>`.
+
 ## API Documentation
 
 Frontend endpoint contract:
@@ -45,6 +59,7 @@ Planning notes:
 
 - Python `3.10+` recommended
 - Uses a local SQLite cache at `backend/data/dashboard_cache.db`
+- On Railway, attach a persistent Volume to the service (any mount path) or the DB resets on every deploy/restart — the app reads `RAILWAY_VOLUME_MOUNT_PATH` automatically and falls back to `backend/data` if unset
 - `requirements.txt` is pinned for reproducible installs
 - `scripts/setup_backend.sh` creates `.venv`, installs dependencies, and scaffolds missing local config files
 - Background sync is coordinated by the FastAPI app process itself

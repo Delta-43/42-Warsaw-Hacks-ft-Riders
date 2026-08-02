@@ -1,0 +1,2 @@
+-r requirements.txt
+pyngrok==8.1.2
