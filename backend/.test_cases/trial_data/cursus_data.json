@@ -1,0 +1,2040 @@
+[
+  {
+    "id": 382323,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 2.89,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 3.5
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 2.46
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 1.51
+      },
+      {
+        "id": 4,
+        "name": "Unix",
+        "level": 1.4
+      },
+      {
+        "id": 17,
+        "name": "Object-oriented programming",
+        "level": 1.1
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2027-03-10T09:42:00.000Z",
+    "created_at": "2026-06-10T11:53:51.332Z",
+    "updated_at": "2026-06-16T10:16:16.464Z",
+    "user": {
+      "id": 263881,
+      "email": "smilch@student.42warsaw.pl",
+      "login": "smilch",
+      "first_name": "Sonia",
+      "last_name": "Milch",
+      "usual_full_name": "Sonia Milch",
+      "usual_first_name": "Sonia",
+      "url": "https://api.intra.42.fr/v2/users/smilch",
+      "phone": "hidden",
+      "displayname": "Sonia Milch",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/4db44c42c18b7780491d84555c24ff92/smilch.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/70ed2dfb3ae75952a21d5f24de58218a/large_smilch.jpg",
+          "medium": "https://cdn.intra.42.fr/users/3d859d6cdb14890b547b3b8cb4805d84/medium_smilch.jpg",
+          "small": "https://cdn.intra.42.fr/users/b29e583d55e4ab4e0a94e1ba0cee69aa/small_smilch.jpg",
+          "micro": "https://cdn.intra.42.fr/users/9f60e2aed182f6a4360b7f15fc1aafa6/micro_smilch.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 10,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 185,
+      "anonymize_date": "2029-07-31T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-31T00:00:00.000+02:00",
+      "created_at": "2026-05-04T10:02:36.048Z",
+      "updated_at": "2026-08-01T17:50:38.668Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 382128,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-09T09:42:00.000Z",
+    "created_at": "2026-06-05T12:03:04.068Z",
+    "updated_at": "2026-06-16T10:16:14.343Z",
+    "user": {
+      "id": 263838,
+      "email": "skovlekj@student.42warsaw.pl",
+      "login": "skovlekj",
+      "first_name": "Sarkis",
+      "last_name": "Kovlekjian",
+      "usual_full_name": "Sarkis Kovlekjian",
+      "usual_first_name": "Sarkis",
+      "url": "https://api.intra.42.fr/v2/users/skovlekj",
+      "phone": "hidden",
+      "displayname": "Sarkis Kovlekjian",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/690fb74590a341b51ace211f2a3fe455/skovlekj.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/7ca1be6696f1de4abf797c1e3885402b/large_skovlekj.jpg",
+          "medium": "https://cdn.intra.42.fr/users/9d28958b60704611c074d774265d352e/medium_skovlekj.jpg",
+          "small": "https://cdn.intra.42.fr/users/21c191edc5b09f0c7035d8f77997b933/small_skovlekj.jpg",
+          "micro": "https://cdn.intra.42.fr/users/630ae90407aa5b5bb0b4d72f2d50e571/micro_skovlekj.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 2,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 40,
+      "anonymize_date": "2029-08-02T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-02T00:00:00.000+02:00",
+      "created_at": "2026-05-04T08:28:17.390Z",
+      "updated_at": "2026-07-30T23:14:40.009Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 382060,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 0.0,
+    "skills": [],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-09-11T08:42:00.000Z",
+    "created_at": "2026-06-04T20:42:33.637Z",
+    "updated_at": "2026-06-16T10:16:09.807Z",
+    "user": {
+      "id": 263149,
+      "email": "ryakubov@student.42warsaw.pl",
+      "login": "ryakubov",
+      "first_name": "Roman",
+      "last_name": "Yakubovskyi",
+      "usual_full_name": "Roman Yakubovskyi",
+      "usual_first_name": "Roman",
+      "url": "https://api.intra.42.fr/v2/users/ryakubov",
+      "phone": "hidden",
+      "displayname": "Roman Yakubovskyi",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/c6c798f2a3621ac8be206e0edf7fc83a/ryakubov.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/4b21a66bc40b071c928260ce59f01e14/large_ryakubov.jpg",
+          "medium": "https://cdn.intra.42.fr/users/f36c221c654906be6c560fea6be4bd32/medium_ryakubov.jpg",
+          "small": "https://cdn.intra.42.fr/users/0453cedc845f4831d1375474c8b167cf/small_ryakubov.jpg",
+          "micro": "https://cdn.intra.42.fr/users/d06c632a72bf9e66b245a0973b4a4a7c/micro_ryakubov.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 3,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 40,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-04-24T08:16:32.804Z",
+      "updated_at": "2026-07-27T13:30:34.828Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 382059,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-05T09:42:00.000Z",
+    "created_at": "2026-06-04T19:11:20.894Z",
+    "updated_at": "2026-06-16T10:07:52.980Z",
+    "user": {
+      "id": 263154,
+      "email": "gbekur@student.42warsaw.pl",
+      "login": "gbekur",
+      "first_name": "Gedion",
+      "last_name": "Bekur",
+      "usual_full_name": "Gedion Bekur",
+      "usual_first_name": "Gedion",
+      "url": "https://api.intra.42.fr/v2/users/gbekur",
+      "phone": "hidden",
+      "displayname": "Gedion Bekur",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/17703f377c727e36be4c200c4648b5ba/gbekur.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/25e9f86aaa4c420d4e45db3557c72cb8/large_gbekur.jpg",
+          "medium": "https://cdn.intra.42.fr/users/d4ae4802e57c74840d0ec04cdc38e149/medium_gbekur.jpg",
+          "small": "https://cdn.intra.42.fr/users/0909891c15c3e61a13b01e0d2ce679a4/small_gbekur.jpg",
+          "micro": "https://cdn.intra.42.fr/users/0ae69ea6f08b1379380490d1e519dfd1/micro_gbekur.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 4,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": "c1r7s3",
+      "wallet": 10,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-04-24T08:52:31.123Z",
+      "updated_at": "2026-08-01T18:53:38.344Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 382058,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-04T09:42:00.000Z",
+    "created_at": "2026-06-04T18:50:07.360Z",
+    "updated_at": "2026-06-16T10:07:38.995Z",
+    "user": {
+      "id": 263837,
+      "email": "dswietoc@student.42warsaw.pl",
+      "login": "dswietoc",
+      "first_name": "Dominik",
+      "last_name": "Świętochowski",
+      "usual_full_name": "Dominik Świętochowski",
+      "usual_first_name": "Dominik",
+      "url": "https://api.intra.42.fr/v2/users/dswietoc",
+      "phone": "hidden",
+      "displayname": "Dominik Świętochowski",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/8213847e2a0ff1f3599df5b6a1fadab8/dswietoc.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/f587ec6f6ed5e382286dcb1c9ce448cb/large_dswietoc.jpg",
+          "medium": "https://cdn.intra.42.fr/users/28cdfaaf2f0e4d2adb0851043342d405/medium_dswietoc.jpg",
+          "small": "https://cdn.intra.42.fr/users/66a65e6d3e41d08cca12f4976ec54c21/small_dswietoc.jpg",
+          "micro": "https://cdn.intra.42.fr/users/6704efae402a2a1db2d9f733c285733d/micro_dswietoc.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 3,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 15,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T08:26:56.445Z",
+      "updated_at": "2026-08-01T18:17:39.237Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 382056,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 0.0,
+    "skills": [],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-09-07T08:42:00.000Z",
+    "created_at": "2026-06-04T16:31:30.617Z",
+    "updated_at": "2026-06-16T10:15:09.386Z",
+    "user": {
+      "id": 263855,
+      "email": "migrzesi@student.42warsaw.pl",
+      "login": "migrzesi",
+      "first_name": "Anastasia",
+      "last_name": "Grzesiak",
+      "usual_full_name": "Anastasia Grzesiak",
+      "usual_first_name": "Anastasia",
+      "url": "https://api.intra.42.fr/v2/users/migrzesi",
+      "phone": "hidden",
+      "displayname": "Anastasia Grzesiak",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/672fb0383e3e0335b7af4449030492de/migrzesi.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/05b95706c71109f90058960780294cd8/large_migrzesi.jpg",
+          "medium": "https://cdn.intra.42.fr/users/68ffc3224cdfcdf03859dc28fdcfad8a/medium_migrzesi.jpg",
+          "small": "https://cdn.intra.42.fr/users/aaddd33b50a378f5486130e92eb42b19/small_migrzesi.jpg",
+          "micro": "https://cdn.intra.42.fr/users/0ad8101b915f86e1a67f9debd1580eab/micro_migrzesi.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 5,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 0,
+      "anonymize_date": "2029-07-21T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-21T00:00:00.000+02:00",
+      "created_at": "2026-05-04T09:04:53.655Z",
+      "updated_at": "2026-06-15T11:10:44.380Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 382053,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 0.0,
+    "skills": [],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-09-07T08:42:00.000Z",
+    "created_at": "2026-06-04T12:40:45.614Z",
+    "updated_at": "2026-06-16T10:15:47.267Z",
+    "user": {
+      "id": 263875,
+      "email": "paukowal@student.42warsaw.pl",
+      "login": "paukowal",
+      "first_name": "Paulina",
+      "last_name": "Kowalska-Soto",
+      "usual_full_name": "Paulina Kowalska Soto",
+      "usual_first_name": "Paulina",
+      "url": "https://api.intra.42.fr/v2/users/paukowal",
+      "phone": "hidden",
+      "displayname": "Paulina Kowalska Soto",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/0e0ce3d4d67319a01cf90aa1de7c9a39/paukowal.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/d21f62440ae8454d5f0715e0cc600be8/large_paukowal.jpg",
+          "medium": "https://cdn.intra.42.fr/users/a51fb1fdb8a9b8f4e09bd84267902e57/medium_paukowal.jpg",
+          "small": "https://cdn.intra.42.fr/users/162660c492f14fc061f48aa927e9884e/small_paukowal.jpg",
+          "micro": "https://cdn.intra.42.fr/users/0413f299fab25ff63955b51b987e70c0/micro_paukowal.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 6,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": "c3r4s1",
+      "wallet": 5,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T09:54:47.565Z",
+      "updated_at": "2026-08-01T20:56:51.850Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 382001,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.9
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.59
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-05T09:42:00.000Z",
+    "created_at": "2026-06-04T08:09:28.920Z",
+    "updated_at": "2026-06-16T10:07:02.971Z",
+    "user": {
+      "id": 263903,
+      "email": "anakloch@student.42warsaw.pl",
+      "login": "anakloch",
+      "first_name": "Anastasiia",
+      "last_name": "Klochko",
+      "usual_full_name": "Anastasiia Klochko",
+      "usual_first_name": "Anastasiia",
+      "url": "https://api.intra.42.fr/v2/users/anakloch",
+      "phone": "hidden",
+      "displayname": "Anastasiia Klochko",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/0d2d08735789a21a05607a3e2cbf3be9/anakloch.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/d76ee824d0dedeecd793b094fca19437/large_anakloch.jpg",
+          "medium": "https://cdn.intra.42.fr/users/5beff96fc00f325d8d6d8af03ab44426/medium_anakloch.jpg",
+          "small": "https://cdn.intra.42.fr/users/89fbb1104ce5921086c322f13a2198d3/small_anakloch.jpg",
+          "micro": "https://cdn.intra.42.fr/users/d7e1a9f08b956e740312144af11099fd/micro_anakloch.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 9,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 10,
+      "anonymize_date": "2029-07-28T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-28T00:00:00.000+02:00",
+      "created_at": "2026-05-04T13:32:43.603Z",
+      "updated_at": "2026-07-15T11:44:39.334Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381998,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 0.0,
+    "skills": [],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-09-07T08:42:00.000Z",
+    "created_at": "2026-06-04T07:37:35.613Z",
+    "updated_at": "2026-06-16T10:16:24.966Z",
+    "user": {
+      "id": 263157,
+      "email": "tjankows@student.42warsaw.pl",
+      "login": "tjankows",
+      "first_name": "Tadeusz",
+      "last_name": "Jankowski",
+      "usual_full_name": "Tadeusz Jankowski",
+      "usual_first_name": "Tadeusz",
+      "url": "https://api.intra.42.fr/v2/users/tjankows",
+      "phone": "hidden",
+      "displayname": "Tadeusz Jankowski",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/229c2877701fac651c0e138467fa8e82/tjankows.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/28dc0ee768b8b3f6e447c06be35c42c0/large_tjankows.jpg",
+          "medium": "https://cdn.intra.42.fr/users/80a74c1a851c2b9b320cdc76d0c27caf/medium_tjankows.jpg",
+          "small": "https://cdn.intra.42.fr/users/3252be01c55e16e1df3ed3c7f02af499/small_tjankows.jpg",
+          "micro": "https://cdn.intra.42.fr/users/4a43c0a4e6991225e988907f4541db71/micro_tjankows.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 5,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 5,
+      "anonymize_date": "2029-06-19T00:00:00.000+02:00",
+      "data_erasure_date": "2029-06-19T00:00:00.000+02:00",
+      "created_at": "2026-04-24T09:19:28.967Z",
+      "updated_at": "2026-07-01T14:00:17.397Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381997,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-08T09:42:00.000Z",
+    "created_at": "2026-06-04T07:10:21.870Z",
+    "updated_at": "2026-06-16T10:14:26.624Z",
+    "user": {
+      "id": 263797,
+      "email": "kbartosz@student.42warsaw.pl",
+      "login": "kbartosz",
+      "first_name": "Krzysztof",
+      "last_name": "Bartoszewski",
+      "usual_full_name": "Krzysztof Bartoszewski",
+      "usual_first_name": "Krzysztof",
+      "url": "https://api.intra.42.fr/v2/users/kbartosz",
+      "phone": "hidden",
+      "displayname": "Krzysztof Bartoszewski",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/f6ffa51f8156222ff119d3f869f33ae6/kbartosz.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/4857a94f76c3b0f21c384aecbccd6a12/large_kbartosz.jpg",
+          "medium": "https://cdn.intra.42.fr/users/3273fdff748e79b458fc5882f493ce25/medium_kbartosz.jpg",
+          "small": "https://cdn.intra.42.fr/users/2c899c7756dad2cdd819bf2d86517dad/small_kbartosz.jpg",
+          "micro": "https://cdn.intra.42.fr/users/e412c909e932a091fdc8990ec83e9b03/micro_kbartosz.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 7,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 50,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T07:47:19.115Z",
+      "updated_at": "2026-08-01T17:29:39.671Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381994,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.42,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.73
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 1.6
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.62
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-12-14T09:42:00.000Z",
+    "created_at": "2026-06-03T19:46:19.665Z",
+    "updated_at": "2026-06-16T10:16:01.420Z",
+    "user": {
+      "id": 263181,
+      "email": "pwarda@student.42warsaw.pl",
+      "login": "pwarda",
+      "first_name": "Philip",
+      "last_name": "Warda",
+      "usual_full_name": "Philip Warda",
+      "usual_first_name": "Philip",
+      "url": "https://api.intra.42.fr/v2/users/pwarda",
+      "phone": "hidden",
+      "displayname": "Philip Warda",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/907c4af924950deab1b4d1b13055ee2b/pwarda.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/0ec18d50cede74f6e6537c30dd6e1c4a/large_pwarda.jpg",
+          "medium": "https://cdn.intra.42.fr/users/6dcce1e8f49ab8a8678fb34391014625/medium_pwarda.jpg",
+          "small": "https://cdn.intra.42.fr/users/3b2c26bc2011c0ce7d38a8b8f2c3ed7d/small_pwarda.jpg",
+          "micro": "https://cdn.intra.42.fr/users/5c26b01f33966d88033cc25f439483ab/micro_pwarda.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 14,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 185,
+      "anonymize_date": "2029-08-02T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-02T00:00:00.000+02:00",
+      "created_at": "2026-04-24T13:05:16.512Z",
+      "updated_at": "2026-08-01T21:05:43.437Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381992,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-08T09:42:00.000Z",
+    "created_at": "2026-06-03T18:29:49.842Z",
+    "updated_at": "2026-06-16T10:16:30.934Z",
+    "user": {
+      "id": 263845,
+      "email": "tzydorow@student.42warsaw.pl",
+      "login": "tzydorow",
+      "first_name": "Tomasz",
+      "last_name": "Zydorowicz",
+      "usual_full_name": "Tomasz Zydorowicz",
+      "usual_first_name": "Tomasz",
+      "url": "https://api.intra.42.fr/v2/users/tzydorow",
+      "phone": "hidden",
+      "displayname": "Tomasz Zydorowicz",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/f5ce47cd2e16b97e85682a426555f756/tzydorow.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/b20b3efc429730aadc2e95e7a97cfa2f/large_tzydorow.jpg",
+          "medium": "https://cdn.intra.42.fr/users/1680f149dc9d476320b3c9b66591cafa/medium_tzydorow.jpg",
+          "small": "https://cdn.intra.42.fr/users/f45e9b730c7579ddf08dc54f025936dc/small_tzydorow.jpg",
+          "micro": "https://cdn.intra.42.fr/users/1473d6284362d797e3c99fa4d0eaa09b/micro_tzydorow.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 3,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 10,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T08:49:30.285Z",
+      "updated_at": "2026-08-01T15:49:37.136Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381988,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.11
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.92
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.62
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-09T09:42:00.000Z",
+    "created_at": "2026-06-03T14:58:31.933Z",
+    "updated_at": "2026-06-16T10:15:44.828Z",
+    "user": {
+      "id": 263803,
+      "email": "paugusty@student.42warsaw.pl",
+      "login": "paugusty",
+      "first_name": "Przemysław",
+      "last_name": "Augustyniak",
+      "usual_full_name": "Przemysław Augustyniak",
+      "usual_first_name": "Przemysław",
+      "url": "https://api.intra.42.fr/v2/users/paugusty",
+      "phone": "hidden",
+      "displayname": "Przemysław Augustyniak",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/e583faaed0270268ade24cbc115cb19d/paugusty.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/d327291971ac98e2755e4495c10c3c42/large_paugusty.jpg",
+          "medium": "https://cdn.intra.42.fr/users/a0d5ec445cb93edfe5d35a420059fd1f/medium_paugusty.jpg",
+          "small": "https://cdn.intra.42.fr/users/02a4209805508b9f9299ab22e1e2a9fc/small_paugusty.jpg",
+          "micro": "https://cdn.intra.42.fr/users/7f1254bcb478a413ac3ddbc080ac22cf/micro_paugusty.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 13,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 10,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T07:49:12.552Z",
+      "updated_at": "2026-08-01T16:56:38.475Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381986,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.11
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.92
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.62
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-05T09:42:00.000Z",
+    "created_at": "2026-06-03T14:42:03.802Z",
+    "updated_at": "2026-06-16T10:15:23.017Z",
+    "user": {
+      "id": 263187,
+      "email": "mniwinsk@student.42warsaw.pl",
+      "login": "mniwinsk",
+      "first_name": "Maciej",
+      "last_name": "Niwiński",
+      "usual_full_name": "Maciej Niwiński",
+      "usual_first_name": "Maciej",
+      "url": "https://api.intra.42.fr/v2/users/mniwinsk",
+      "phone": "hidden",
+      "displayname": "Maciej Niwiński",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/96b7af3b4ffcb0d181bc7d384d5d1a02/mniwinsk.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/7c0c3441aa3501b5e1684e2059e5dbc5/large_mniwinsk.jpg",
+          "medium": "https://cdn.intra.42.fr/users/c3a8bb33800b685aff2b743071686cfd/medium_mniwinsk.jpg",
+          "small": "https://cdn.intra.42.fr/users/d12592c4d26f6cb32e515f405ca41242/small_mniwinsk.jpg",
+          "micro": "https://cdn.intra.42.fr/users/38f92650d1c33baa938b6da2bf6befbf/micro_mniwinsk.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 11,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 10,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-04-24T13:26:51.351Z",
+      "updated_at": "2026-07-30T20:02:39.317Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381978,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-04T09:42:00.000Z",
+    "created_at": "2026-06-03T13:35:27.972Z",
+    "updated_at": "2026-06-16T10:14:59.745Z",
+    "user": {
+      "id": 263894,
+      "email": "magrabsk@student.42warsaw.pl",
+      "login": "magrabsk",
+      "first_name": "Maciej",
+      "last_name": "Grabski",
+      "usual_full_name": "Maciej Grabski",
+      "usual_first_name": "Maciej",
+      "url": "https://api.intra.42.fr/v2/users/magrabsk",
+      "phone": "hidden",
+      "displayname": "Maciej Grabski",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/c3f6d6301453f2e20036a2e5baf51b1e/magrabsk.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/5f0e4f40c7d29b0874b3cd91263fb1ec/large_magrabsk.jpg",
+          "medium": "https://cdn.intra.42.fr/users/b6abacd8b77802d1c13df4f9dd0647f5/medium_magrabsk.jpg",
+          "small": "https://cdn.intra.42.fr/users/664e43223d0a2c814787ee9b47c04d35/small_magrabsk.jpg",
+          "micro": "https://cdn.intra.42.fr/users/1b524dd3665c1a43cbcdc34ea7897a7f/micro_magrabsk.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 5,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 15,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T11:46:47.982Z",
+      "updated_at": "2026-08-01T09:56:39.087Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381963,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.42,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.73
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 1.6
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.62
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-12-10T09:42:00.000Z",
+    "created_at": "2026-06-03T13:06:50.884Z",
+    "updated_at": "2026-06-16T10:07:24.334Z",
+    "user": {
+      "id": 263869,
+      "email": "brechied@student.42warsaw.pl",
+      "login": "brechied",
+      "first_name": "Bruno",
+      "last_name": "Rechiedei",
+      "usual_full_name": "Bruno Rechiedei",
+      "usual_first_name": "Bruno",
+      "url": "https://api.intra.42.fr/v2/users/brechied",
+      "phone": "hidden",
+      "displayname": "Bruno Rechiedei",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/1f4ad0822e04e4ee3b208fcb03e2214a/brechied.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/ca67b82c76e447b38175864acf657d8a/large_brechied.jpg",
+          "medium": "https://cdn.intra.42.fr/users/f8746e431a8498d1a8b2ae606907ae23/medium_brechied.jpg",
+          "small": "https://cdn.intra.42.fr/users/7ad956570948a6da6304e6ad4f3c5b4a/small_brechied.jpg",
+          "micro": "https://cdn.intra.42.fr/users/e4dcda20eb7bf923fa42ccab3c1a48a3/micro_brechied.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 4,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 15,
+      "anonymize_date": "2029-07-26T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-26T00:00:00.000+02:00",
+      "created_at": "2026-05-04T09:44:35.233Z",
+      "updated_at": "2026-07-23T22:38:38.632Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381962,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-09T09:42:00.000Z",
+    "created_at": "2026-06-03T12:28:09.568Z",
+    "updated_at": "2026-06-16T10:15:53.602Z",
+    "user": {
+      "id": 263810,
+      "email": "pkruszyn@student.42warsaw.pl",
+      "login": "pkruszyn",
+      "first_name": "Piotr",
+      "last_name": "Kruszyński",
+      "usual_full_name": "Piotr Kruszyński",
+      "usual_first_name": "Piotr",
+      "url": "https://api.intra.42.fr/v2/users/pkruszyn",
+      "phone": "hidden",
+      "displayname": "Piotr Kruszyński",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/3eb084f5f8384f3025b1f336f0ec4350/pkruszyn.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/4a5e1100911338ea5ed7e4f1c83ef567/large_pkruszyn.jpg",
+          "medium": "https://cdn.intra.42.fr/users/eb6621387e1f12a51df042b8b6ffb068/medium_pkruszyn.jpg",
+          "small": "https://cdn.intra.42.fr/users/0d40f2426678604d90f1fb96db855d83/small_pkruszyn.jpg",
+          "micro": "https://cdn.intra.42.fr/users/41c0408435ab9cc506243c07882abd32/micro_pkruszyn.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 8,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 15,
+      "anonymize_date": "2029-07-31T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-31T00:00:00.000+02:00",
+      "created_at": "2026-05-04T07:52:22.303Z",
+      "updated_at": "2026-07-31T13:05:05.036Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381961,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.8,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 2.22
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 1.94
+      },
+      {
+        "id": 4,
+        "name": "Unix",
+        "level": 1.03
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2027-01-05T09:42:00.000Z",
+    "created_at": "2026-06-03T12:04:38.934Z",
+    "updated_at": "2026-06-16T10:07:22.405Z",
+    "user": {
+      "id": 263183,
+      "email": "bkeldibe@student.42warsaw.pl",
+      "login": "bkeldibe",
+      "first_name": "Bakdoolot",
+      "last_name": "Keldibekova",
+      "usual_full_name": "Bakdoolot Keldibekova",
+      "usual_first_name": "Bakdoolot",
+      "url": "https://api.intra.42.fr/v2/users/bkeldibe",
+      "phone": "hidden",
+      "displayname": "Bakdoolot Keldibekova",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/488836de0d623cba47a3f1e4a6af5ea2/bkeldibe.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/48a47976614f8f71288dfd523ec5116e/large_bkeldibe.jpg",
+          "medium": "https://cdn.intra.42.fr/users/2b4f63cdf61079b8ffdd949358e7a36f/medium_bkeldibe.jpg",
+          "small": "https://cdn.intra.42.fr/users/09e4e0098937f3870e3e2d1a1040eba6/small_bkeldibe.jpg",
+          "micro": "https://cdn.intra.42.fr/users/d1699620645e33cb44c64b97db347b71/micro_bkeldibe.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 1,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 10,
+      "anonymize_date": "2029-07-27T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-27T00:00:00.000+02:00",
+      "created_at": "2026-04-24T13:14:46.384Z",
+      "updated_at": "2026-07-22T14:26:40.123Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381960,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 0.0,
+    "skills": [],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-09-06T08:42:00.000Z",
+    "created_at": "2026-06-03T10:31:18.104Z",
+    "updated_at": "2026-06-16T10:15:12.026Z",
+    "user": {
+      "id": 263877,
+      "email": "mikromov@student.42warsaw.pl",
+      "login": "mikromov",
+      "first_name": "Muhammadkarim",
+      "last_name": "Ikromov",
+      "usual_full_name": "Muhammadkarim Ikromov",
+      "usual_first_name": "Muhammadkarim",
+      "url": "https://api.intra.42.fr/v2/users/mikromov",
+      "phone": "hidden",
+      "displayname": "Muhammadkarim Ikromov",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/51b0d1d16fef01c778dc6b6b3898b455/mikromov.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/75941353496d258c05f46906ae9954f2/large_mikromov.jpg",
+          "medium": "https://cdn.intra.42.fr/users/8f119e9495a14734b2ee5d915bb912e6/medium_mikromov.jpg",
+          "small": "https://cdn.intra.42.fr/users/09b7568790bed2a9a270be106d686af9/small_mikromov.jpg",
+          "micro": "https://cdn.intra.42.fr/users/d64133f85239fce787f7b7a8f99d4119/micro_mikromov.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 5,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 0,
+      "anonymize_date": "2029-07-16T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-16T00:00:00.000+02:00",
+      "created_at": "2026-05-04T09:55:28.258Z",
+      "updated_at": "2026-07-09T13:55:44.005Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381959,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-05T09:42:00.000Z",
+    "created_at": "2026-06-03T10:22:30.984Z",
+    "updated_at": "2026-06-16T10:07:00.698Z",
+    "user": {
+      "id": 263818,
+      "email": "aloiko@student.42warsaw.pl",
+      "login": "aloiko",
+      "first_name": "Andrii",
+      "last_name": "Loiko",
+      "usual_full_name": "Andrii Loiko",
+      "usual_first_name": "Andrii",
+      "url": "https://api.intra.42.fr/v2/users/aloiko",
+      "phone": "hidden",
+      "displayname": "Andrii Loiko",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/af4085638d14e4feeab8949dd699e2ad/aloiko.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/05104eb2ce0524e373483c74767f4866/large_aloiko.jpg",
+          "medium": "https://cdn.intra.42.fr/users/e394723717768a13bf620c89eb92e07f/medium_aloiko.jpg",
+          "small": "https://cdn.intra.42.fr/users/4b7105ecb735983b1f9998f54d61c3cc/small_aloiko.jpg",
+          "micro": "https://cdn.intra.42.fr/users/a06d215639444b786601f061862024ef/micro_aloiko.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 12,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 145,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T07:57:15.345Z",
+      "updated_at": "2026-08-01T19:08:39.694Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381958,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 0.0,
+    "skills": [],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-09-07T08:42:00.000Z",
+    "created_at": "2026-06-03T10:20:16.491Z",
+    "updated_at": "2026-06-16T10:07:46.198Z",
+    "user": {
+      "id": 263185,
+      "email": "emkapcov@student.42warsaw.pl",
+      "login": "emkapcov",
+      "first_name": "Ema",
+      "last_name": "Kapcova",
+      "usual_full_name": "Ema Kapcova",
+      "usual_first_name": "Ema",
+      "url": "https://api.intra.42.fr/v2/users/emkapcov",
+      "phone": "hidden",
+      "displayname": "Ema Kapcova",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/ad47508ec95b2853fa3868ccbbc3b164/emkapcov.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/55889aaac4a5b4baaf7e3ff33a42d9f5/large_emkapcov.jpg",
+          "medium": "https://cdn.intra.42.fr/users/19271eabbd48396fa5b1a0840e66d384/medium_emkapcov.jpg",
+          "small": "https://cdn.intra.42.fr/users/2d1c7071762bf0cfe7a34a573638c9aa/small_emkapcov.jpg",
+          "micro": "https://cdn.intra.42.fr/users/08b7069e534be4fcaaae0609d84a98e0/micro_emkapcov.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 6,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 0,
+      "anonymize_date": "2029-07-21T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-21T00:00:00.000+02:00",
+      "created_at": "2026-04-24T13:21:46.897Z",
+      "updated_at": "2026-08-01T14:30:18.329Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381957,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-09T09:42:00.000Z",
+    "created_at": "2026-06-03T10:16:11.262Z",
+    "updated_at": "2026-06-16T10:15:49.730Z",
+    "user": {
+      "id": 263806,
+      "email": "pausulzy@student.42warsaw.pl",
+      "login": "pausulzy",
+      "first_name": "Paul",
+      "last_name": "Sulżycki",
+      "usual_full_name": "Paul Sulżycki",
+      "usual_first_name": "Paul",
+      "url": "https://api.intra.42.fr/v2/users/pausulzy",
+      "phone": "hidden",
+      "displayname": "Paul Sulżycki",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/bc52d33ff083f497f710acd9e1892ea6/pausulzy.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/9a70a6007d8611c164fcbc92f5f360d2/large_pausulzy.jpg",
+          "medium": "https://cdn.intra.42.fr/users/2dd0009dd35bf4f211ee305d5acf291a/medium_pausulzy.jpg",
+          "small": "https://cdn.intra.42.fr/users/5eaa93b997b6e279d85bae11f8cc91e6/small_pausulzy.jpg",
+          "micro": "https://cdn.intra.42.fr/users/6381af9e0b5134c47afc3599353da92b/micro_pausulzy.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 4,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 10,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T07:50:03.962Z",
+      "updated_at": "2026-08-01T09:23:40.636Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381956,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 0.0,
+    "skills": [],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-09-07T08:42:00.000Z",
+    "created_at": "2026-06-03T10:14:49.662Z",
+    "updated_at": "2026-06-16T10:07:05.161Z",
+    "user": {
+      "id": 263186,
+      "email": "anazari@student.42warsaw.pl",
+      "login": "anazari",
+      "first_name": "Ahmad Sahil",
+      "last_name": "Nazari",
+      "usual_full_name": "Ahmad Sahil Nazari",
+      "usual_first_name": "Ahmad Sahil",
+      "url": "https://api.intra.42.fr/v2/users/anazari",
+      "phone": "hidden",
+      "displayname": "Ahmad Sahil Nazari",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/2e5847745eda4f3787447d8b7f68b100/anazari.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/1bb3a68cf3ae83da7383610b6a63b208/large_anazari.jpg",
+          "medium": "https://cdn.intra.42.fr/users/8078c98a7f626d153e6cdbd37c804d19/medium_anazari.jpg",
+          "small": "https://cdn.intra.42.fr/users/f5a260d3e993182368f5308196ee42f2/small_anazari.jpg",
+          "micro": "https://cdn.intra.42.fr/users/2b7bf97b7256f173b4a8c4f81b389014/micro_anazari.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 7,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 10,
+      "anonymize_date": "2029-07-24T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-24T00:00:00.000+02:00",
+      "created_at": "2026-04-24T13:24:52.893Z",
+      "updated_at": "2026-07-16T20:44:47.231Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381955,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.11
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.92
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.62
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-05T09:42:00.000Z",
+    "created_at": "2026-06-03T10:11:51.788Z",
+    "updated_at": "2026-06-16T10:14:00.336Z",
+    "user": {
+      "id": 263801,
+      "email": "hcherif@student.42warsaw.pl",
+      "login": "hcherif",
+      "first_name": "Hafid",
+      "last_name": "Cherif",
+      "usual_full_name": "Hafid Cherif",
+      "usual_first_name": "Hafid",
+      "url": "https://api.intra.42.fr/v2/users/hcherif",
+      "phone": "hidden",
+      "displayname": "Hafid Cherif",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/f991b040043c0ddeb922f659833530ab/hcherif.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/0e7214a0d9dcfe8172ed1b3326c709db/large_hcherif.jpg",
+          "medium": "https://cdn.intra.42.fr/users/7b9c9e03c53005a8c6d6e5b02f41ea16/medium_hcherif.jpg",
+          "small": "https://cdn.intra.42.fr/users/9d09a8774ed8247477f685c10d3b30c4/small_hcherif.jpg",
+          "micro": "https://cdn.intra.42.fr/users/db1ed2783bf87bbf4cb7a5af2e8930e8/micro_hcherif.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 7,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 15,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T07:48:47.849Z",
+      "updated_at": "2026-07-27T15:03:21.541Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381954,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.11
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.92
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.62
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-05T09:42:00.000Z",
+    "created_at": "2026-06-03T10:07:18.765Z",
+    "updated_at": "2026-06-16T10:14:50.496Z",
+    "user": {
+      "id": 263146,
+      "email": "llinda@student.42warsaw.pl",
+      "login": "llinda",
+      "first_name": "Łukasz",
+      "last_name": "Linda",
+      "usual_full_name": "Łukasz Linda",
+      "usual_first_name": "Łukasz",
+      "url": "https://api.intra.42.fr/v2/users/llinda",
+      "phone": "hidden",
+      "displayname": "Łukasz Linda",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/22533b87011aa9dcc48217ae7f09ebd4/llinda.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/517da8d15f45f821ee3729ef3a859884/large_llinda.jpg",
+          "medium": "https://cdn.intra.42.fr/users/bde8b1505bce1b1388fe47437106882d/medium_llinda.jpg",
+          "small": "https://cdn.intra.42.fr/users/9931e5ab0326888d9e1c662011a54121/small_llinda.jpg",
+          "micro": "https://cdn.intra.42.fr/users/1be424ce1141e221f5337bee5593a281/micro_llinda.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 7,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 5,
+      "anonymize_date": "2029-07-26T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-26T00:00:00.000+02:00",
+      "created_at": "2026-04-24T07:45:28.050Z",
+      "updated_at": "2026-07-16T20:09:10.001Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381953,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.3900000000000001,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.69
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 1.5699999999999998
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-12-11T09:42:00.000Z",
+    "created_at": "2026-06-03T10:05:39.497Z",
+    "updated_at": "2026-06-16T10:15:35.629Z",
+    "user": {
+      "id": 263864,
+      "email": "nfil@student.42warsaw.pl",
+      "login": "nfil",
+      "first_name": "Nicola",
+      "last_name": "Fil",
+      "usual_full_name": "Nicola Fil",
+      "usual_first_name": "Nicola",
+      "url": "https://api.intra.42.fr/v2/users/nfil",
+      "phone": "hidden",
+      "displayname": "Nicola Fil",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/e17ddda250cb73706c128a1d2f1d79f2/nfil.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/e9da089085bf4ad1248db8bad95b0854/large_nfil.jpg",
+          "medium": "https://cdn.intra.42.fr/users/3604f5213d2557435f706ada27c74f38/medium_nfil.jpg",
+          "small": "https://cdn.intra.42.fr/users/90acf8b9aaa43ef7fe4fef98f10db3a7/small_nfil.jpg",
+          "micro": "https://cdn.intra.42.fr/users/1e6a6ce23d1b843a3120c3d422622773/micro_nfil.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 8,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 10,
+      "anonymize_date": "2029-07-31T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-31T00:00:00.000+02:00",
+      "created_at": "2026-05-04T09:40:31.092Z",
+      "updated_at": "2026-08-01T21:35:40.221Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381952,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-08T09:42:00.000Z",
+    "created_at": "2026-06-03T10:00:39.049Z",
+    "updated_at": "2026-06-16T10:17:05.387Z",
+    "user": {
+      "id": 263826,
+      "email": "wikszymc@student.42warsaw.pl",
+      "login": "wikszymc",
+      "first_name": "Wiktoria",
+      "last_name": "Szymczyk",
+      "usual_full_name": "Wiktoria Szymczyk",
+      "usual_first_name": "Wiktoria",
+      "url": "https://api.intra.42.fr/v2/users/wikszymc",
+      "phone": "hidden",
+      "displayname": "Wiktoria Szymczyk",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/a728f99c5c95b27d0feec57cc34e845e/wikszymc.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/fbd823145e84d31d2828dd3c0dd614c4/large_wikszymc.jpg",
+          "medium": "https://cdn.intra.42.fr/users/680deeceec07034e9d03c67e99972adf/medium_wikszymc.jpg",
+          "small": "https://cdn.intra.42.fr/users/b87238d1d3feb2f29c8e0e0f558edfad/small_wikszymc.jpg",
+          "micro": "https://cdn.intra.42.fr/users/f7da2aa0d376643e8878d61530db944d/micro_wikszymc.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 3,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 15,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T08:04:48.339Z",
+      "updated_at": "2026-07-31T16:03:17.147Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381951,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.8399999999999999,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 2.25
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 1.98
+      },
+      {
+        "id": 4,
+        "name": "Unix",
+        "level": 1.04
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.62
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2027-01-05T09:42:00.000Z",
+    "created_at": "2026-06-03T09:59:59.902Z",
+    "updated_at": "2026-06-16T10:15:32.887Z",
+    "user": {
+      "id": 263151,
+      "email": "mwisniew@student.42warsaw.pl",
+      "login": "mwisniew",
+      "first_name": "Maksym",
+      "last_name": "Wiśniewski",
+      "usual_full_name": "Maksym Wiśniewski",
+      "usual_first_name": "Maksym",
+      "url": "https://api.intra.42.fr/v2/users/mwisniew",
+      "phone": "hidden",
+      "displayname": "Maksym Wiśniewski",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/3d5fb1f4c31d7d9dc83f77d21f3be4b7/mwisniew.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/a2a70e50c79e39cc4b88b693cce42f34/large_mwisniew.jpg",
+          "medium": "https://cdn.intra.42.fr/users/2c51a7e7b6b187d4e00be80190351ba7/medium_mwisniew.jpg",
+          "small": "https://cdn.intra.42.fr/users/e5df4259b4a97b2dd1654c7ff20543e1/small_mwisniew.jpg",
+          "micro": "https://cdn.intra.42.fr/users/204773dc4a3dad9b6f4c1f5c96474ad8/micro_mwisniew.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 2,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": "c3r5s1",
+      "wallet": 10,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-04-24T08:30:13.810Z",
+      "updated_at": "2026-08-01T20:45:11.759Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381950,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.42,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.73
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 1.6
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.62
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-12-11T09:42:00.000Z",
+    "created_at": "2026-06-03T09:57:58.920Z",
+    "updated_at": "2026-06-16T10:07:33.008Z",
+    "user": {
+      "id": 263807,
+      "email": "djuja@student.42warsaw.pl",
+      "login": "djuja",
+      "first_name": "Dawid",
+      "last_name": "Juja",
+      "usual_full_name": "Dawid Juja",
+      "usual_first_name": "Dawid",
+      "url": "https://api.intra.42.fr/v2/users/djuja",
+      "phone": "hidden",
+      "displayname": "Dawid Juja",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/2bc9ed36d93083775312adcfdae68a15/djuja.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/49cb0ce01aa38bfde9b80822e49f38aa/large_djuja.jpg",
+          "medium": "https://cdn.intra.42.fr/users/41c7f0afe7761c28c34d82eef475daaa/medium_djuja.jpg",
+          "small": "https://cdn.intra.42.fr/users/6a41514d0c1c37f1a7201e1c3da09ce1/small_djuja.jpg",
+          "micro": "https://cdn.intra.42.fr/users/a76ce107fa586ef60189a358ae3c6dc0/micro_djuja.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 1,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": "c3r6s1",
+      "wallet": 10,
+      "anonymize_date": "2029-08-01T00:00:00.000+02:00",
+      "data_erasure_date": "2029-08-01T00:00:00.000+02:00",
+      "created_at": "2026-05-04T07:51:15.113Z",
+      "updated_at": "2026-08-01T16:23:39.197Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  },
+  {
+    "id": 381949,
+    "begin_at": "2026-06-15T08:42:00.000Z",
+    "end_at": null,
+    "grade": "Cadet",
+    "level": 1.0,
+    "skills": [
+      {
+        "id": 1,
+        "name": "Algorithms & AI",
+        "level": 1.1
+      },
+      {
+        "id": 3,
+        "name": "Rigor",
+        "level": 0.89
+      },
+      {
+        "id": 2,
+        "name": "Imperative programming",
+        "level": 0.6
+      }
+    ],
+    "cursus_id": 21,
+    "has_coalition": true,
+    "blackholed_at": "2026-11-05T09:42:00.000Z",
+    "created_at": "2026-06-03T09:51:37.747Z",
+    "updated_at": "2026-06-16T10:14:16.942Z",
+    "user": {
+      "id": 263167,
+      "email": "jsienkie@student.42warsaw.pl",
+      "login": "jsienkie",
+      "first_name": "Julia",
+      "last_name": "Sienkiewicz",
+      "usual_full_name": "Julia Sienkiewicz",
+      "usual_first_name": "Julia",
+      "url": "https://api.intra.42.fr/v2/users/jsienkie",
+      "phone": "hidden",
+      "displayname": "Julia Sienkiewicz",
+      "kind": "student",
+      "image": {
+        "link": "https://cdn.intra.42.fr/users/c94c6312cacc5e5ae719283dc1395f74/jsienkie.jpg",
+        "versions": {
+          "large": "https://cdn.intra.42.fr/users/a438349920737dfbd9caa97a5e2ba63d/large_jsienkie.jpg",
+          "medium": "https://cdn.intra.42.fr/users/ec54d94b470f4261cb7ab5d2cf6f06af/medium_jsienkie.jpg",
+          "small": "https://cdn.intra.42.fr/users/c3e11adfbc0f57b7a0d7b98ab7161a0e/small_jsienkie.jpg",
+          "micro": "https://cdn.intra.42.fr/users/d1abe413e39844716b19d72722730081/micro_jsienkie.jpg"
+        }
+      },
+      "staff?": false,
+      "correction_point": 3,
+      "pool_month": "may",
+      "pool_year": "2026",
+      "location": null,
+      "wallet": 5,
+      "anonymize_date": "2029-07-28T00:00:00.000+02:00",
+      "data_erasure_date": "2029-07-28T00:00:00.000+02:00",
+      "created_at": "2026-04-24T11:17:15.936Z",
+      "updated_at": "2026-07-22T13:53:40.206Z",
+      "alumnized_at": null,
+      "alumni?": false,
+      "active?": true
+    },
+    "cursus": {
+      "id": 21,
+      "created_at": "2019-07-29T08:45:17.896Z",
+      "name": "42cursus",
+      "slug": "42cursus",
+      "kind": "main"
+    }
+  }
+]

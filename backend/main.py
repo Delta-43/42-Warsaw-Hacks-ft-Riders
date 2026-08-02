@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from datetime import datetime, timedelta, timezone
 import os
 from pathlib import Path
@@ -11,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api_routes import create_router
 from long_term_sync import sync_long_term_data
 from short_term_sync import sync_short_term_data
+from sync_support import ApiBudgetExceeded
 
 
 APP_NAME = "42 Warsaw Campus Dashboard API"
@@ -55,6 +57,28 @@ CONFIG_PATH = BASE_DIR / "config.yml"
 
 refresh_stop_event = threading.Event()
 refresh_thread: threading.Thread | None = None
+long_term_sync_lock = threading.Lock()
+short_term_sync_lock = threading.Lock()
+sync_status_lock = threading.Lock()
+long_term_sync_status: dict[str, Any] = {
+    "state": "idle",
+    "stage": None,
+    "started_at": None,
+    "finished_at": None,
+    "processed": 0,
+    "total": 0,
+    "failures": 0,
+    "last_error": None,
+    "last_result": None,
+}
+short_term_sync_status: dict[str, Any] = {
+    "state": "idle",
+    "stage": None,
+    "started_at": None,
+    "finished_at": None,
+    "last_error": None,
+    "last_result": None,
+}
 
 
 def utcnow() -> datetime:
@@ -271,6 +295,143 @@ def init_db() -> None:
 
     conn.execute(
         """
+        CREATE TABLE IF NOT EXISTS project_pass_event (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            campus_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            project_id INTEGER NOT NULL,
+            project_name TEXT NOT NULL,
+            projects_user_id INTEGER,
+            marked_at TEXT NOT NULL,
+            user_login TEXT,
+            user_image_url TEXT,
+            user_profile_url TEXT,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL,
+            UNIQUE(campus_id, user_id, project_id, marked_at)
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS project_activity_event (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            campus_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            project_id INTEGER NOT NULL,
+            project_name TEXT NOT NULL,
+            projects_user_id INTEGER,
+            activity_type TEXT NOT NULL,
+            activity_at TEXT NOT NULL,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL,
+            UNIQUE(campus_id, projects_user_id, activity_type, activity_at)
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS location_event (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            campus_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            begin_at TEXT NOT NULL,
+            end_at TEXT,
+            host TEXT,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS cursus_user_snapshot (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            campus_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            cursus_id INTEGER NOT NULL,
+            cursus_name TEXT,
+            is_active INTEGER NOT NULL,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS weekly_user_logtime (
+            campus_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            week_start_date TEXT NOT NULL,
+            seconds_logged INTEGER NOT NULL,
+            sessions_count INTEGER NOT NULL,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL,
+            PRIMARY KEY (campus_id, user_id, week_start_date)
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS weekly_campus_attendance (
+            campus_id INTEGER NOT NULL,
+            week_start_date TEXT NOT NULL,
+            unique_students_count INTEGER NOT NULL,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL,
+            PRIMARY KEY (campus_id, week_start_date)
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS cursus_active_counts (
+            campus_id INTEGER NOT NULL,
+            cursus_id INTEGER NOT NULL,
+            cursus_name TEXT,
+            active_users_count INTEGER NOT NULL,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL,
+            PRIMARY KEY (campus_id, cursus_id, collected_at)
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS weekly_project_activity_counts (
+            campus_id INTEGER NOT NULL,
+            week_start_date TEXT NOT NULL,
+            active_or_started_projects_count INTEGER NOT NULL,
+            created_events_count INTEGER NOT NULL,
+            updated_events_count INTEGER NOT NULL,
+            collected_at TEXT NOT NULL,
+            source_status TEXT NOT NULL,
+            PRIMARY KEY (campus_id, week_start_date)
+        )
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS sync_cursor (
+            job_name TEXT NOT NULL,
+            cursor_key TEXT NOT NULL,
+            cursor_value TEXT,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (job_name, cursor_key)
+        )
+        """
+    )
+
+    conn.execute(
+        """
         CREATE INDEX IF NOT EXISTS idx_snapshots_campus_time
         ON campus_metrics_snapshot(campus_id, collected_at)
         """
@@ -346,6 +507,90 @@ def init_db() -> None:
         """
     )
 
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_project_pass_event_campus_marked
+        ON project_pass_event(campus_id, marked_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_project_pass_event_user
+        ON project_pass_event(campus_id, user_id, marked_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_project_activity_event_campus_activity
+        ON project_activity_event(campus_id, activity_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_project_activity_event_user
+        ON project_activity_event(campus_id, user_id, activity_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_location_event_campus_begin
+        ON location_event(campus_id, begin_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_location_event_user_begin
+        ON location_event(campus_id, user_id, begin_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_location_event_dedupe
+        ON location_event(campus_id, user_id, begin_at, ifnull(end_at, ''))
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_cursus_user_snapshot_active
+        ON cursus_user_snapshot(campus_id, is_active, collected_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_weekly_user_logtime_top
+        ON weekly_user_logtime(campus_id, week_start_date, seconds_logged)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_weekly_attendance_latest
+        ON weekly_campus_attendance(campus_id, week_start_date)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_cursus_active_counts_latest
+        ON cursus_active_counts(campus_id, collected_at)
+        """
+    )
+
+    conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_weekly_project_activity_latest
+        ON weekly_project_activity_counts(campus_id, week_start_date)
+        """
+    )
+
     conn.commit()
     conn.close()
 
@@ -395,7 +640,16 @@ def should_run(job_name: str, interval: timedelta, force: bool = False) -> bool:
 
 
 def run_long_term_sync(force: bool = False) -> dict[str, Any]:
+    if not long_term_sync_lock.acquire(blocking=False):
+        return {
+            "job_name": "long_term_sync",
+            "ran": False,
+            "in_progress": True,
+            "source_mode": "in_progress",
+        }
+
     if not should_run("long_term_sync", LONG_TERM_SYNC_INTERVAL, force=force):
+        long_term_sync_lock.release()
         return {
             "job_name": "long_term_sync",
             "ran": False,
@@ -403,26 +657,96 @@ def run_long_term_sync(force: bool = False) -> dict[str, Any]:
         }
 
     started_at = iso_now()
+
+    with sync_status_lock:
+        long_term_sync_status.update(
+            {
+                "state": "running",
+                "stage": "starting",
+                "started_at": started_at,
+                "finished_at": None,
+                "processed": 0,
+                "total": 0,
+                "failures": 0,
+                "last_error": None,
+            }
+        )
+
+    def progress_callback(payload: dict[str, Any]) -> None:
+        with sync_status_lock:
+            for key in ("stage", "processed", "total", "failures", "achievement_id"):
+                if key in payload:
+                    long_term_sync_status[key] = payload[key]
+
     try:
         result = sync_long_term_data(
             db_path=DB_PATH,
             config_path=CONFIG_PATH,
             campus_id=PRIMARY_CAMPUS_ID,
+            progress_callback=progress_callback,
         )
         log_refresh("long_term_sync", started_at, success=True)
+        with sync_status_lock:
+            long_term_sync_status.update(
+                {
+                    "state": "completed",
+                    "stage": "completed",
+                    "finished_at": iso_now(),
+                    "last_result": result,
+                    "last_error": None,
+                }
+            )
         return {
             "job_name": "long_term_sync",
             "ran": True,
             "source_mode": "refreshed",
             **result,
         }
+    except ApiBudgetExceeded as exc:
+        log_refresh("long_term_sync", started_at, success=False, error_summary=str(exc))
+        with sync_status_lock:
+            long_term_sync_status.update(
+                {
+                    "state": "deferred",
+                    "stage": "budget_limited",
+                    "finished_at": iso_now(),
+                    "last_error": str(exc),
+                }
+            )
+        return {
+            "job_name": "long_term_sync",
+            "ran": False,
+            "source_mode": "budget_limited",
+            "budget_exhausted": True,
+            "error": str(exc),
+        }
     except Exception as exc:
         log_refresh("long_term_sync", started_at, success=False, error_summary=str(exc))
+        with sync_status_lock:
+            long_term_sync_status.update(
+                {
+                    "state": "failed",
+                    "stage": "failed",
+                    "finished_at": iso_now(),
+                    "last_error": str(exc),
+                }
+            )
         raise
+    finally:
+        long_term_sync_lock.release()
 
 
 def run_short_term_sync(force: bool = False) -> dict[str, Any]:
+    if not short_term_sync_lock.acquire(blocking=False):
+        return {
+            "job_name": "short_term_sync",
+            "ran": False,
+            "in_progress": True,
+            "source_mode": "in_progress",
+        }
+
     if not should_run("short_term_sync", SHORT_TERM_SYNC_INTERVAL, force=force):
+        short_term_sync_lock.release()
         return {
             "job_name": "short_term_sync",
             "ran": False,
@@ -430,22 +754,94 @@ def run_short_term_sync(force: bool = False) -> dict[str, Any]:
         }
 
     started_at = iso_now()
+
+    with sync_status_lock:
+        short_term_sync_status.update(
+            {
+                "state": "running",
+                "stage": "starting",
+                "started_at": started_at,
+                "finished_at": None,
+                "last_error": None,
+            }
+        )
+
     try:
         result = sync_short_term_data(
             db_path=DB_PATH,
             config_path=CONFIG_PATH,
             campus_id=PRIMARY_CAMPUS_ID,
+            force=force,
         )
+        source_mode = str(result.get("source_mode") or "refreshed")
+        ran = source_mode != "budget_limited"
         log_refresh("short_term_sync", started_at, success=True)
+        with sync_status_lock:
+            short_term_sync_status.update(
+                {
+                    "state": "deferred" if source_mode == "budget_limited" else "completed",
+                    "stage": source_mode,
+                    "finished_at": iso_now(),
+                    "last_error": None,
+                    "last_result": result,
+                }
+            )
         return {
             "job_name": "short_term_sync",
-            "ran": True,
-            "source_mode": "refreshed",
+            "ran": ran,
+            "source_mode": source_mode,
             **result,
+        }
+    except ApiBudgetExceeded as exc:
+        log_refresh("short_term_sync", started_at, success=False, error_summary=str(exc))
+        with sync_status_lock:
+            short_term_sync_status.update(
+                {
+                    "state": "deferred",
+                    "stage": "budget_limited",
+                    "finished_at": iso_now(),
+                    "last_error": str(exc),
+                }
+            )
+        return {
+            "job_name": "short_term_sync",
+            "ran": False,
+            "source_mode": "budget_limited",
+            "budget_exhausted": True,
+            "error": str(exc),
         }
     except Exception as exc:
         log_refresh("short_term_sync", started_at, success=False, error_summary=str(exc))
+        with sync_status_lock:
+            short_term_sync_status.update(
+                {
+                    "state": "failed",
+                    "stage": "failed",
+                    "finished_at": iso_now(),
+                    "last_error": str(exc),
+                }
+            )
         raise
+    finally:
+        short_term_sync_lock.release()
+
+
+def is_long_term_sync_running() -> bool:
+    return long_term_sync_lock.locked()
+
+
+def is_short_term_sync_running() -> bool:
+    return short_term_sync_lock.locked()
+
+
+def get_long_term_sync_status() -> dict[str, Any]:
+    with sync_status_lock:
+        return dict(long_term_sync_status)
+
+
+def get_short_term_sync_status() -> dict[str, Any]:
+    with sync_status_lock:
+        return dict(short_term_sync_status)
 
 
 def run_due_syncs(force_long_term: bool = False, force_short_term: bool = False) -> dict[str, Any]:
@@ -466,8 +862,31 @@ def auto_refresh_loop() -> None:
             continue
 
 
-def create_app() -> FastAPI:
-    app = FastAPI(title=APP_NAME)
+@asynccontextmanager
+async def app_lifespan(_: FastAPI):
+    global refresh_thread
+    init_db()
+    if refresh_thread is None or not refresh_thread.is_alive():
+        refresh_stop_event.clear()
+        refresh_thread = threading.Thread(target=auto_refresh_loop, name="sync-coordinator", daemon=True)
+        refresh_thread.start()
+    threading.Thread(target=run_due_syncs, name="startup-sync", daemon=True).start()
+
+    try:
+        yield
+    finally:
+        refresh_stop_event.set()
+
+
+@asynccontextmanager
+async def app_lifespan_no_background(_: FastAPI):
+    init_db()
+    yield
+
+
+def create_app(enable_background_sync: bool = True) -> FastAPI:
+    lifespan_handler = app_lifespan if enable_background_sync else app_lifespan_no_background
+    app = FastAPI(title=APP_NAME, lifespan=lifespan_handler)
 
     app.add_middleware(
         CORSMiddleware,
@@ -484,21 +903,11 @@ def create_app() -> FastAPI:
     app.state.run_short_term_sync = run_short_term_sync
     app.state.run_due_syncs = run_due_syncs
     app.state.get_last_successful_refresh = get_last_successful_refresh
+    app.state.is_long_term_sync_running = is_long_term_sync_running
+    app.state.is_short_term_sync_running = is_short_term_sync_running
+    app.state.get_long_term_sync_status = get_long_term_sync_status
+    app.state.get_short_term_sync_status = get_short_term_sync_status
     app.include_router(create_router())
-
-    @app.on_event("startup")
-    def startup() -> None:
-        global refresh_thread
-        init_db()
-        if refresh_thread is None or not refresh_thread.is_alive():
-            refresh_stop_event.clear()
-            refresh_thread = threading.Thread(target=auto_refresh_loop, name="sync-coordinator", daemon=True)
-            refresh_thread.start()
-        threading.Thread(target=run_due_syncs, name="startup-sync", daemon=True).start()
-
-    @app.on_event("shutdown")
-    def shutdown() -> None:
-        refresh_stop_event.set()
 
     return app
 

@@ -1,0 +1,17 @@
+Long term data requests - Once per month
+/campus - to get the details for current campus as set in .env
+/campus/{campus_id}/users - to filter for all users in the set campus based on the campus id from the previous call
+/blocs - to get coalitions in a particular campus using the filter for "campus_id"
+
+Long term data requests - Once per week
+/coalitions/{coalition_id}/coalitions_users - to get users in each of the coalitions defined by coalition_ids from the previous call
+/projects_users - to get number of projects active or started in the last seven days like both project_info = ft_api.get(f"/projects_users", params = {"filter[campus]": campus_id, "range[created_at]": f"{start_date.isoformat()},{end_date.isoformat()}",}) &
+                            project_info = ft_api.get(f"/projects_users", params = {"filter[campus]": campus_id, "range[updated_at]": f"{start_date.isoformat()},{end_date.isoformat()}",})
+
+/cursus_users - like ft_api.get(f"/cursus_users", params={"filter[campus_id]": campus_id, "filter[active]": "true"})
+
+/campus/{campus_id}/locations - to get login times over last 7 days like locations_info = ft_api.get(f"/campus/{campus_id}/locations", params = {"range[begin_at]": f"{start_date.isoformat()},{end_date.isoformat()}"})
+
+Short term data requests -
+/projects_users - to get users who passed a project in the last 24hrs like ft_api.get(f"/projects_users","filter[campus]": campus_id,
+          "range[marked_at]": f"{start_date.isoformat()},{end_date.isoformat()}")
