@@ -35,6 +35,7 @@ jobs:
         env:
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
           VITE_PRIMARY_CAMPUS_ID: ${{ vars.VITE_PRIMARY_CAMPUS_ID }}
+          VITE_BASE_PATH: /42-Warsaw-Hacks-ft-Riders/
         run: npm run build
 
       - name: Upload Pages artifact
