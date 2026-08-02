@@ -1,7 +1,0 @@
-intra:
-  v2:
-    client: "u-s4t2ud-8c037c325dd641479fefafca994319e876cecb38aafcd396f54c217dbdea0f26"   # <- insert your v2 app’s UID here
-    secret: "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"   # <- insert your app’s SECRET here
-    uri: "https://api.intra.42.fr/v2/oauth/token"
-    endpoint: "https://api.intra.42.fr/v2"
-    scopes: "public"

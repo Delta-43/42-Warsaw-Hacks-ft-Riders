@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project secret backend config
+backend/config.yml
+backend/config.*.yml
+!backend/config.sample.yml
