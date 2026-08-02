@@ -1,121 +1,87 @@
-# 42-Warsaw-Hacks-ft-Riders
-A simple dashboard for community and student stats and celebrating the little things.
+<div align="center">
 
-## Backend (FastAPI + SQLite cache)
+<img src="frontend/public/favicon.svg" width="64" height="61" alt="" />
 
-The backend now uses a cache-first design with a local SQLite database to reduce calls to the 42 API and survive upstream outages.
+# ft_WarsawStories
 
-Detailed backend docs now live in:
+**A live community dashboard for 42 Warsaw** — student activity, coalition
+standings, and project momentum, celebrated instead of buried in a spreadsheet.
 
-- `backend/README.md`
-- `backend/docs/API_CONTRACT.md`
+[![Deploy frontend](https://github.com/Delta-43/42-Warsaw-Hacks-ft-Riders/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/Delta-43/42-Warsaw-Hacks-ft-Riders/actions/workflows/deploy-frontend.yml)
+[![License: AGPL v3](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
+[![FastAPI](https://img.shields.io/badge/backend-FastAPI-009688)](backend/README.md)
+[![React 19](https://img.shields.io/badge/frontend-React%2019-61dafb)](frontend/README.md)
 
-### Backend structure
+**[View the live dashboard →](https://delta-43.github.io/42-Warsaw-Hacks-ft-Riders/)**
 
-- `backend/main.py`: coordinator, database setup, scheduling, and app bootstrap
-- `backend/long_term_sync.py`: long-term API calls for stable datasets
-- `backend/short_term_sync.py`: short-term API calls for faster-moving datasets
-- `backend/api_routes.py`: FastAPI route definitions and DB-backed reads
-- `backend/sync_support.py`: shared API throttling, retries, and sync cursor helpers
-- `backend/scripts/`: setup and smoke-test helpers
-- `backend/docs/`: API contract and planning notes
-- `backend/tests/`: automated backend tests
-- `backend/.test_cases/`: manual API experiment scripts
+</div>
 
-- Database file: `backend/data/dashboard_cache.db`
-- Long-term sync cadence: `30 days`
-- Short-term sync cadence: `1 day`
-- Coordinator poll loop: every `3600` seconds
-- Primary campus source: `CAMPUS` environment variable (from `.env`)
+<!--
+  TODO: drop a real capture at docs/screenshot.png (16:9 works best), then
+  uncomment the block below so it renders here.
 
-### Run backend
+<p align="center">
+  <img src="docs/screenshot.png" alt="ft_WarsawStories dashboard screenshot" width="100%" />
+</p>
+-->
 
-From `backend/`:
+## What is this
 
-```bash
-chmod +x scripts/setup_backend.sh
-./scripts/setup_backend.sh
+A 16:9 dashboard, built to run on a lobby screen or a browser tab, that
+turns the 42 Intra API into something people actually want to look at:
+who's on a hot streak, which coalition is winning, who just passed a
+project. It polls a FastAPI + SQLite cache every minute so it stays live
+without hammering the 42 API.
+
+## Features
+
+- **Stories carousel** — animated speech-bubble callouts for recent wins (project passes, logtime streaks)
+- **Metrics island** — students on campus, achievements earned, and projects worked this week, at a glance
+- **Momentum & standings charts** — logtime leaders and top-10-per-coalition rankings (Recharts)
+- **Hero of the week / community shoutouts** — rotating spotlight on top performers and coalition standings
+- **Cache-first backend** — every dashboard request is served from SQLite; the 42 API is only ever touched by scheduled background sync jobs, on monthly/weekly/daily cadences
+- **Resilient to outages** — falls back to the last good cache (`stale_fallback`) if the upstream API is unreachable
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A["42 Intra API"] -- "scheduled sync<br/>(monthly / weekly / daily)" --> B[("FastAPI + SQLite<br/>Railway, persistent volume")]
+    B -- "REST, cache-only reads" --> C["React + Vite dashboard<br/>GitHub Pages"]
+    B -. "optional" .-> D["ngrok tunnel<br/>local demo"]
 ```
 
-Then start the server:
+| Layer | Stack | Hosting |
+| --- | --- | --- |
+| Frontend | React 19, TypeScript, Vite, Recharts, Framer Motion | GitHub Pages |
+| Backend | FastAPI, SQLite (cache-first), scheduled sync jobs | Railway (persistent volume) |
+| Data source | [42 Intra API](backend/docs/API_Research.md) | — |
+
+## Getting started
 
 ```bash
+# Backend — from backend/
+chmod +x scripts/setup_backend.sh && ./scripts/setup_backend.sh
 uvicorn main:app --reload --port 8000
+
+# Frontend — from frontend/, in another terminal
+npm install && npm run dev
 ```
 
-Expose backend on LAN (for teammates on same network):
+Full setup (config, env vars, deployment, ngrok tunneling for demos) is in:
 
-```bash
-uvicorn main:app --host 0.0.0.0 --port 8025
-```
+- [`backend/README.md`](backend/README.md) — backend setup, endpoints, deployment notes
+- [`frontend/README.md`](frontend/README.md) — frontend setup and environment variables
 
-### Endpoints
+## Docs
 
-- `GET /health`
-- `GET /api/v1/campus`
-- `GET /api/v1/campus?force_refresh=true`
-- `GET /api/v1/campus/{campus_id}`
-- `GET /api/v1/campus/{campus_id}/history?points=30`
-- `GET /api/v1/campus/{campus_id}/users`
-- `GET /api/v1/campus/{campus_id}/coalitions`
-- `GET /api/v1/campus/{campus_id}/coalitions/rankings?limit_per_coalition=10`
-- `GET /api/v1/campus/{campus_id}/coalitions/top-scorers?limit_per_coalition=10`
-- `GET /api/v1/campus/{campus_id}/coalitions/standings`
-- `GET /api/v1/campus/{campus_id}/short-term-metrics`
-- `GET /api/v1/campus/{campus_id}/users/logtime-top`
-- `GET /api/v1/campus/{campus_id}/projects/passed-recent`
-- `GET /api/v1/campus/{campus_id}/cursus/active-counts`
-- `GET /api/v1/campus/{campus_id}/attendance/weekly`
-- `GET /api/v1/campus/{campus_id}/projects/activity-weekly`
-- `GET /api/v1/campus/{campus_id}/achievements/earned-weekly`
-- `GET /api/v1/campus/{campus_id}/analytics/pills`
-- `GET /api/v1/summary`
-- `GET /api/v1/highlights?top_n=5`
-- `POST /api/v1/refresh?scope=all|long_term|short_term`
-- `POST /api/v1/refresh?scope=all|long_term|short_term&async_run=true`
-- `GET /api/v1/refresh/status`
+| Doc | What's in it |
+| --- | --- |
+| [`backend/docs/API_CONTRACT.md`](backend/docs/API_CONTRACT.md) | The stable endpoint contract the frontend relies on |
+| [`backend/docs/API_Research.md`](backend/docs/API_Research.md) | How we scoped the 42 Intra API — endpoints, rate limits, response shapes |
+| [`backend/docs/ExecutionPlan.md`](backend/docs/ExecutionPlan.md) | DB schema and sync job design |
+| [`backend/docs/Notes.md`](backend/docs/Notes.md) | Early planning notes |
 
-Responses include freshness metadata:
+## License
 
-- `source_mode`: `fresh_cache`, `refreshed`, or `stale_fallback`
-- `cache_age_seconds`
-- `data_timestamp`
-
-Refresh status includes job progress:
-
-- `jobs.long_term.state`: `idle`, `running`, `completed`, `failed`
-- `jobs.long_term.stage`: current phase (`fetch_campus`, `fetch_coalitions`, `fetch_campus_users`, `persist_cache`, etc.)
-- `jobs.long_term.processed`, `jobs.long_term.total`, `jobs.long_term.failures`
-- `jobs.long_term.last_error`
-
-## Frontend (React + Vite)
-
-The frontend now has a first dashboard shell with:
-
-- animated top highlights carousel
-- middle stat cards for key totals and cache state
-- two rotating chart panels powered by Recharts
-- polling against the FastAPI backend every 60 seconds
-
-### Install and run frontend
-
-From `frontend/`:
-
-```bash
-npm install
-npm run dev
-```
-
-The Vite dev server proxies `/api/*` and `/health` to `http://127.0.0.1:8000` by default.
-You can override it with `VITE_BACKEND_TARGET`, for example:
-
-```bash
-VITE_BACKEND_TARGET=http://127.0.0.1:8025 npm run dev
-```
-
-### Frontend environment
-
-- Optional: `VITE_PRIMARY_CAMPUS_ID=67`
-- Optional: `VITE_BACKEND_TARGET=http://127.0.0.1:8000`
-
-This defaults to the cached Warsaw campus id if not provided.
+[GNU AGPL v3](LICENSE)

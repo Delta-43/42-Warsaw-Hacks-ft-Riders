@@ -50,6 +50,10 @@ Frontend endpoint contract:
 
 - `backend/docs/API_CONTRACT.md`
 
+42 Intra API research (endpoints explored, rate limits, response shapes):
+
+- `backend/docs/API_Research.md`
+
 Planning notes:
 
 - `backend/docs/Notes.md`

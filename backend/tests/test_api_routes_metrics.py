@@ -178,7 +178,10 @@ def test_recent_passes_endpoint_returns_data_and_future_toggle(tmp_path) -> None
     payload = response.json()
     assert "projects_passed_recent" in payload
     assert payload["projects_passed_recent"]["total"] == 1
-    assert payload["projects_passed_recent"]["items"][0]["project_name"] == "Libft"
+    item = payload["projects_passed_recent"]["items"][0]
+    assert item["project_name"] == "Libft"
+    assert item["first_name"] == "Test"
+    assert item["last_name"] == "User"
     assert payload["future_capability"]["implemented"] is False
 
 

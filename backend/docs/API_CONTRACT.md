@@ -204,6 +204,10 @@ Optional query:
 Frontend use:
 - recent project passes card/list
 
+`first_name`/`last_name` are joined in from `campus_user` by `user_id` and
+can be `null` if that user isn't in the cached roster (e.g. not yet synced).
+Fall back to `user_login` in that case.
+
 Response shape:
 
 ```json
@@ -227,6 +231,8 @@ Response shape:
         "projects_user_id": 555001,
         "marked_at": "2026-08-02T00:30:00+00:00",
         "user_login": "tester",
+        "first_name": "Test",
+        "last_name": "User",
         "user_image_url": "https://...",
         "user_profile_url": "https://api.intra.42.fr/v2/users/tester",
         "collected_at": "2026-08-02T01:16:16.803410+00:00"

@@ -492,19 +492,22 @@ def get_recent_project_passes(db_path: str, campus_id: int, hours: int, limit: i
     rows = conn.execute(
         """
         SELECT
-            user_id,
-            project_id,
-            project_name,
-            projects_user_id,
-            marked_at,
-            user_login,
-            user_image_url,
-            user_profile_url,
-            collected_at
-        FROM project_pass_event
-        WHERE campus_id = ?
-          AND datetime(replace(marked_at, 'Z', '+00:00')) >= datetime(?)
-        ORDER BY datetime(replace(marked_at, 'Z', '+00:00')) DESC
+            p.user_id,
+            p.project_id,
+            p.project_name,
+            p.projects_user_id,
+            p.marked_at,
+            p.user_login,
+            p.user_image_url,
+            p.user_profile_url,
+            p.collected_at,
+            usr.first_name,
+            usr.last_name
+        FROM project_pass_event p
+        LEFT JOIN campus_user usr ON usr.campus_id = p.campus_id AND usr.user_id = p.user_id
+        WHERE p.campus_id = ?
+          AND datetime(replace(p.marked_at, 'Z', '+00:00')) >= datetime(?)
+        ORDER BY datetime(replace(p.marked_at, 'Z', '+00:00')) DESC
         LIMIT ?
         """,
         (campus_id, cutoff.isoformat(), limit),
