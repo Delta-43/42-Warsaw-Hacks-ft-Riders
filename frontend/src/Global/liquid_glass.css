@@ -22,6 +22,14 @@
   pointer-events: none;
 }
 
+/* Stories sits on a light backing (readable dark text/story names) instead
+   of the dark liquid-glass tint every other panel uses. */
+.stories-panel.glass-panel {
+  background: #f8f6f1;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 .panel-float {
   animation:
     panelEnter 0.6s ease-out both,
@@ -33,6 +41,10 @@
      panel skips the infinite vertical float bob that the other two keep —
      only the one-time entrance settles here. */
   animation: panelEnter 0.6s ease-out both;
+}
+
+.metrics-strip.panel-float {
+  animation-delay: 0.04s, 0.64s;
 }
 
 .graphs-panel.panel-float {

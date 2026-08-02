@@ -1,12 +1,7 @@
-/* Base structural layout of the Stats panel and its content stage. */
+/* Content stage of the Stats panel. (.stats-panel itself is a global
+   panel-slot class — see Global/layout.css.) */
 
-.stats-panel {
-  display: flex;
-  flex-direction: column;
-  padding: 30px 32px;
-}
-
-.stats-stage {
+.statsStage {
   display: flex;
   flex: 1;
   align-items: center;
@@ -15,7 +10,15 @@
   margin-top: 8px;
 }
 
-.stats-empty {
+.statsSlide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.statsEmpty {
   display: flex;
   flex: 1;
   align-items: center;

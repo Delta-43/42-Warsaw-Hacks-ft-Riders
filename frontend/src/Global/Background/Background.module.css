@@ -9,31 +9,31 @@
    HOW IT LOOPS (read this before touching blob positions)
    Each wave is a strip rendered at 200vw (twice the screen width) and
    holds every color blob TWICE: once at its authored `left` position,
-   and again exactly 100vw further right via the ".bg-blob-repeat"
+   and again exactly 100vw further right via the ".bgBlobRepeat"
    copies. Animating the strip's transform between translateX(-100vw)
    and translateX(0) therefore loops with no visible seam — the instant
    one copy has fully scrolled past, its twin is sitting in exactly the
    position the first one started in. If you add/move a blob, only ever
-   edit the base blob's `left` — the matching `.bg-blob-repeat` element
+   edit the base blob's `left` — the matching `.bgBlobRepeat` element
    picks it up automatically by adding 100vw on top.
 
    WHAT TO TWEAK
    - Colors               -> the --color-* variables below
    - Speed                -> --wave-top-duration / --wave-bottom-duration
                               (bigger number = slower; unit is seconds)
-   - Direction            -> the `reverse` keyword on .bg-wave-top's
+   - Direction            -> the `reverse` keyword on .waveTop's
                               animation (remove it to make both waves
                               drift the same way)
    - Height / position    -> --wave-top-height / --wave-bottom-height,
                               and the `top` / `bottom` offsets on
-                              .bg-wave-top / .bg-wave-bottom
+                              .waveTop / .waveBottom
    - Softness (blur)      -> --wave-blur
    - Intensity            -> --wave-top-opacity / --wave-bottom-opacity
    - Blob size / spread   -> --blob-size, and each blob's `left` in the
                               "wave blobs" sections below
    ============================================================ */
 
-.bg-root {
+.bgRoot {
   /* No z-index here on purpose — <body> has its own opaque background
      (styles.css), and as a non-positioned element that always paints
      above anything with a NEGATIVE z-index in the same stacking context,
@@ -74,7 +74,7 @@
   --color-amber: #f8dfa0;
 }
 
-.bg-wave {
+.bgWave {
   position: absolute;
   left: 0;
   width: 100%;
@@ -82,19 +82,19 @@
   filter: blur(var(--wave-blur));
 }
 
-.bg-wave-top {
+.bgWaveTop {
   top: -15vh;
   height: var(--wave-top-height);
   opacity: var(--wave-top-opacity);
 }
 
-.bg-wave-bottom {
+.bgWaveBottom {
   bottom: -15vh;
   height: var(--wave-bottom-height);
   opacity: var(--wave-bottom-opacity);
 }
 
-.bg-wave-strip {
+.bgWaveStrip {
   position: absolute;
   top: 0;
   left: 0;
@@ -103,7 +103,7 @@
   will-change: transform;
 }
 
-.bg-wave-bottom .bg-wave-strip {
+.bgWaveBottom .bgWaveStrip {
   animation: bgWavePan var(--wave-bottom-duration) linear infinite;
 }
 
@@ -111,7 +111,7 @@
    keyframe played backwards keeps the two waves' motion mathematically
    tied together instead of two hand-authored keyframes drifting out of
    sync from each other over time. */
-.bg-wave-top .bg-wave-strip {
+.bgWaveTop .bgWaveStrip {
   animation: bgWavePan var(--wave-top-duration) linear infinite reverse;
 }
 
@@ -124,7 +124,7 @@
   }
 }
 
-.bg-blob {
+.bgBlob {
   position: absolute;
   top: 50%;
   width: var(--blob-size);
@@ -133,47 +133,47 @@
   transform: translateY(-50%);
 }
 
-.bg-blob-repeat {
+.bgBlobRepeat {
   transform: translateY(-50%) translateX(100vw);
 }
 
 /* ---- Top wave blobs: cool sky blues/periwinkle, echoing the upper
    portion of the reference wallpapers ---- */
-.bg-blob-top-a {
+.bgBlobTopA {
   left: 5vw;
   background: radial-gradient(circle, var(--color-sky), transparent 70%);
 }
-.bg-blob-top-b {
+.bgBlobTopB {
   left: 38vw;
   background: radial-gradient(circle, var(--color-periwinkle), transparent 70%);
 }
-.bg-blob-top-c {
+.bgBlobTopC {
   left: 68vw;
   background: radial-gradient(circle, var(--color-sky), transparent 70%);
 }
 
 /* ---- Bottom wave blobs: warm pinks/corals/ambers/lilac, echoing the
    lower, more saturated bands of the reference wallpapers ---- */
-.bg-blob-bottom-a {
+.bgBlobBottomA {
   left: -5vw;
   background: radial-gradient(circle, var(--color-pink), transparent 70%);
 }
-.bg-blob-bottom-b {
+.bgBlobBottomB {
   left: 25vw;
   background: radial-gradient(circle, var(--color-coral), transparent 70%);
 }
-.bg-blob-bottom-c {
+.bgBlobBottomC {
   left: 55vw;
   background: radial-gradient(circle, var(--color-lilac), transparent 70%);
 }
-.bg-blob-bottom-d {
+.bgBlobBottomD {
   left: 82vw;
   background: radial-gradient(circle, var(--color-amber), transparent 70%);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bg-wave-bottom .bg-wave-strip,
-  .bg-wave-top .bg-wave-strip {
+  .bgWaveBottom .bgWaveStrip,
+  .bgWaveTop .bgWaveStrip {
     animation: none;
   }
 }

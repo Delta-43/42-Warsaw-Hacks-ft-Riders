@@ -2,14 +2,16 @@
 
 .panel-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
 }
 
 .panel-header h2 {
   margin: 0;
-  font-size: 1.55rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 /* Shared by every eyebrow header regardless of background — only color

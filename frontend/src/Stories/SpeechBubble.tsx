@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import type { StoryEvent } from './storyEvents'
+import styles from './speech_bubbles.module.css'
 
 type SpeechBubbleProps = {
   event: StoryEvent
@@ -32,17 +33,27 @@ const textVariants = {
 export function SpeechBubble({ event }: SpeechBubbleProps) {
   return (
     <motion.div
-      className="speech-bubble"
+      className={styles.speechBubble}
       style={{ transformOrigin: 'left center' }}
       variants={bubbleVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
     >
-      <motion.p className="speech-bubble-line speech-bubble-meta" variants={textVariants} initial="hidden" animate="visible">
+      <motion.p
+        className={`${styles.speechBubbleLine} ${styles.speechBubbleMeta}`}
+        variants={textVariants}
+        initial="hidden"
+        animate="visible"
+      >
         @{event.login}
       </motion.p>
-      <motion.p className="speech-bubble-line speech-bubble-project" variants={textVariants} initial="hidden" animate="visible">
+      <motion.p
+        className={`${styles.speechBubbleLine} ${styles.speechBubbleProject}`}
+        variants={textVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {event.kind === 'project_pass' ? (
           <>
             Recently completed <strong>{event.projectName}</strong>
@@ -53,7 +64,7 @@ export function SpeechBubble({ event }: SpeechBubbleProps) {
           </>
         )}
       </motion.p>
-      <span className="speech-bubble-tail" />
+      <span className={styles.speechBubbleTail} />
     </motion.div>
   )
 }

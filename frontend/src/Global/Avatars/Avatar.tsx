@@ -1,4 +1,4 @@
-import './Avatar.css'
+import styles from './Avatar.module.css'
 
 // Ring/gap thickness as a fraction of avatar size. Every avatar in the app
 // goes through this one formula by default, so the border reads the same
@@ -16,6 +16,10 @@ type AvatarProps = {
   size?: number
   ringWidth?: number
   gapWidth?: number
+  // Lets a caller extend the outer ring's styling (e.g. Stories' active-tier
+  // glow) by composing a scoped class from its own module, instead of
+  // reaching into Avatar's internals via a cross-file CSS selector.
+  className?: string
 }
 
 export function Avatar({
@@ -27,20 +31,21 @@ export function Avatar({
   size = 96,
   ringWidth,
   gapWidth,
+  className,
 }: AvatarProps) {
   const resolvedRingWidth = ringWidth ?? size * RING_RATIO
   const resolvedGapWidth = gapWidth ?? size * GAP_RATIO
 
   return (
     <span
-      className="avatar-ring"
+      className={className ? `${styles.avatarRing} ${className}` : styles.avatarRing}
       role="img"
       aria-label={name}
       style={{ width: size, height: size, padding: resolvedRingWidth, background: 'var(--avatar-ring-gradient)' }}
     >
-      <span className="avatar-gap" style={{ padding: resolvedGapWidth }}>
+      <span className={styles.avatarGap} style={{ padding: resolvedGapWidth }}>
         <span
-          className="avatar-photo"
+          className={styles.avatarPhoto}
           style={{
             background: `linear-gradient(160deg, ${colorFrom}, ${colorTo})`,
             fontSize: size * 0.32,
@@ -49,7 +54,7 @@ export function Avatar({
           {initials}
           {photoUrl && (
             <img
-              className="avatar-photo-img"
+              className={styles.avatarPhotoImg}
               src={photoUrl}
               alt=""
               loading="lazy"

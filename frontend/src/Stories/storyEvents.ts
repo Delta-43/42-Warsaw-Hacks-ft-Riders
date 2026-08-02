@@ -1,4 +1,5 @@
 import type { LogtimeTopResponse, ProjectsPassedRecentResponse } from '../App'
+import { isKnownTestUser } from '../Global/testUsers'
 
 // Real activity feed for the Stories carousel — no invented stats. Built from
 // two live endpoints: recent project passes (freshest, narrative-friendly —
@@ -48,7 +49,7 @@ export function buildStoryEvents(
   }
 
   for (const pass of projectsPassedRecent.projects_passed_recent.items) {
-    if (seenUserIds.has(pass.user_id)) {
+    if (seenUserIds.has(pass.user_id) || isKnownTestUser(pass.user_id)) {
       continue
     }
     seenUserIds.add(pass.user_id)
@@ -65,7 +66,7 @@ export function buildStoryEvents(
   }
 
   for (const user of logtimeTop.logtime_rankings.items) {
-    if (seenUserIds.has(user.user_id)) {
+    if (seenUserIds.has(user.user_id) || isKnownTestUser(user.user_id)) {
       continue
     }
     seenUserIds.add(user.user_id)

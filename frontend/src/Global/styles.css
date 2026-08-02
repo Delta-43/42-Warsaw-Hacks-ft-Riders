@@ -16,8 +16,9 @@
   --brand-purple: #af38ca;
   --brand-yellow: #f7cf6e;
   --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.28);
-  --font-body: 'Space Grotesk', sans-serif;
-  --font-display: 'Newsreader', serif;
+  --font-body: 'Noto Sans', sans-serif;
+  --font-display: 'Noto Sans', sans-serif;
+  --font-watermark: 'Bitcount Prop Single', sans-serif;
 
   /* Avatar ring + fade palette */
   --avatar-ring-gradient: conic-gradient(from 180deg, #6fbbf9, #af38ca, #f7cf6e, #6fbbf9);
@@ -31,6 +32,14 @@
   --avatar-mint-to: #2fa98a;
   --avatar-red-from: #f98f8f;
   --avatar-red-to: #d65c5c;
+
+  /* Graph accent palette — charts only (bars, pie, legend swatches). Not
+     used for background or avatar rings; those keep their own palette. */
+  --graph-navy-950: #0b0742;
+  --graph-navy-800: #120c6e;
+  --graph-periwinkle: #5e72eb;
+  --graph-coral: #ff9190;
+  --graph-peach: #fdc094;
 
   color: var(--text-main);
   background: var(--bg-base);

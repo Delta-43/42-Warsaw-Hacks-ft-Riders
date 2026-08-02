@@ -1,97 +1,18 @@
 import type {
-  CampusResponse,
+  AchievementsEarnedWeeklyResponse,
+  AnalyticsPillsResponse,
+  AttendanceWeeklyResponse,
   CoalitionStandingsResponse,
   CoalitionTopScorersResponse,
-  HighlightsResponse,
-  HistoryPoint,
-  HistoryResponse,
   LogtimeTopResponse,
+  ProjectActivityWeeklyResponse,
   ProjectsPassedRecentResponse,
-  SummaryResponse,
 } from './App'
 
 const NOW = new Date()
 
 function hoursAgoIso(hours: number): string {
   return new Date(NOW.getTime() - hours * 60 * 60 * 1000).toISOString()
-}
-
-function buildHistory(basePoint: number, count: number): HistoryPoint[] {
-  const points: HistoryPoint[] = []
-  let running = basePoint
-
-  for (let i = count - 1; i >= 0; i -= 1) {
-    running += Math.round(Math.sin(i / 3) * 4 + (Math.random() - 0.3) * 3)
-    points.push({
-      users_count: Math.max(running, 0),
-      collected_at: hoursAgoIso(i),
-      source_status: 'live_api',
-    })
-  }
-
-  return points
-}
-
-const warsawHistory = buildHistory(540, 24)
-const warsawUsersCount = warsawHistory[warsawHistory.length - 1].users_count
-
-export const mockSummary: SummaryResponse = {
-  source_mode: 'fresh_cache',
-  cache_age_seconds: 128,
-  data_timestamp: hoursAgoIso(0),
-  summary: {
-    total_campuses: 52,
-    total_users: 31840,
-    top_campus: {
-      id: 1,
-      name: '42Paris',
-      users_count: 4210,
-    },
-  },
-}
-
-export const mockHighlights: HighlightsResponse = {
-  source_mode: 'fresh_cache',
-  cache_age_seconds: 128,
-  data_timestamp: hoursAgoIso(0),
-  highlights: {
-    top_count: 6,
-    items: [
-      { id: 1, name: '42Paris', city: 'Paris', country: 'France', users_count: 4210, users_delta_since_prev: 12 },
-      { id: 21, name: '42Berlin', city: 'Berlin', country: 'Germany', users_count: 2870, users_delta_since_prev: -4 },
-      { id: 67, name: '42Warsaw', city: 'Warsaw', country: 'Poland', users_count: warsawUsersCount, users_delta_since_prev: 7 },
-      { id: 9, name: '42London', city: 'London', country: 'United Kingdom', users_count: 2510, users_delta_since_prev: 3 },
-      { id: 14, name: '42Lisboa', city: 'Lisbon', country: 'Portugal', users_count: 1980, users_delta_since_prev: 0 },
-      { id: 33, name: '42Amsterdam', city: 'Amsterdam', country: 'Netherlands', users_count: 1745, users_delta_since_prev: -2 },
-    ],
-  },
-}
-
-export const mockPrimaryCampus: CampusResponse = {
-  source_mode: 'fresh_cache',
-  cache_age_seconds: 128,
-  data_timestamp: hoursAgoIso(0),
-  campus: {
-    id: 67,
-    name: '42Warsaw',
-    city: 'Warsaw',
-    country: 'Poland',
-    users_count: warsawUsersCount,
-    collected_at: hoursAgoIso(0),
-    source_status: 'live_api',
-  },
-}
-
-export const mockHistory: HistoryResponse = {
-  source_mode: 'fresh_cache',
-  cache_age_seconds: 128,
-  data_timestamp: hoursAgoIso(0),
-  campus: {
-    id: 67,
-    name: '42Warsaw',
-  },
-  points: warsawHistory.length,
-  history: warsawHistory,
 }
 
 const LOGTIME_USERS = [
@@ -189,35 +110,112 @@ export const mockCoalitionStandings: CoalitionStandingsResponse = {
   },
 }
 
+// 10 scorers per coalition, so mock mode exercises the same "full top 10"
+// dataset shape the live backend returns (limit_per_coalition=10).
+const TOP_SCORER_POOL = [
+  { login: 'akowalsk', first: 'Aleksandra', last: 'Kowalska' },
+  { login: 'mwisniew', first: 'Marek', last: 'Wiśniewski' },
+  { login: 'znowak', first: 'Zofia', last: 'Nowak' },
+  { login: 'jzielins', first: 'Jakub', last: 'Zieliński' },
+  { login: 'jszymans', first: 'Julia', last: 'Szymańska' },
+  { login: 'kwojcik', first: 'Kacper', last: 'Wójcik' },
+  { login: 'mkowalcz', first: 'Maja', last: 'Kowalczyk' },
+  { login: 'fkaminsk', first: 'Filip', last: 'Kamiński' },
+  { login: 'nlewando', first: 'Natalia', last: 'Lewandowska' },
+  { login: 'adabrows', first: 'Antoni', last: 'Dąbrowski' },
+]
+
 export const mockCoalitionTopScorers: CoalitionTopScorersResponse = {
   source_mode: 'fresh_cache',
   data_timestamp: hoursAgoIso(0),
   top_scorers: {
     campus_id: 67,
-    total: COALITIONS.length,
-    items: COALITIONS.map((coalition, index) => ({
-      coalition_id: coalition.id,
-      user_id: 3000 + index,
-      score: 4200 - index * 350,
-      rank: 1,
-      collected_at: hoursAgoIso(1),
-      coalition_name: coalition.name,
-      slug: coalition.slug,
-      color: coalition.color,
-      login: LOGTIME_USERS[index].login,
-      first_name: LOGTIME_USERS[index].first,
-      last_name: LOGTIME_USERS[index].last,
-    })),
+    total: COALITIONS.length * TOP_SCORER_POOL.length,
+    items: COALITIONS.flatMap((coalition, coalitionIndex) =>
+      TOP_SCORER_POOL.map((user, rankIndex) => ({
+        coalition_id: coalition.id,
+        user_id: 3000 + coalitionIndex * 100 + rankIndex,
+        score: 4200 - coalitionIndex * 150 - rankIndex * 320,
+        rank: rankIndex + 1,
+        collected_at: hoursAgoIso(1),
+        coalition_name: coalition.name,
+        slug: coalition.slug,
+        color: coalition.color,
+        login: `${user.login}${coalitionIndex}`,
+        first_name: user.first,
+        last_name: user.last,
+      })),
+    ),
+  },
+}
+
+export const mockAttendanceWeekly: AttendanceWeeklyResponse = {
+  source_mode: 'fresh_cache',
+  data_timestamp: hoursAgoIso(0),
+  attendance: {
+    campus_id: 67,
+    week_start_date: hoursAgoIso(7 * 24).slice(0, 10),
+    unique_students_count: 316,
+    collected_at: hoursAgoIso(1),
+  },
+}
+
+export const mockProjectActivityWeekly: ProjectActivityWeeklyResponse = {
+  source_mode: 'fresh_cache',
+  data_timestamp: hoursAgoIso(0),
+  project_activity: {
+    campus_id: 67,
+    week_start_date: hoursAgoIso(7 * 24).slice(0, 10),
+    active_or_started_projects_count: 182,
+    created_events_count: 31,
+    updated_events_count: 46,
+    collected_at: hoursAgoIso(1),
+  },
+}
+
+export const mockAchievementsEarnedWeekly: AchievementsEarnedWeeklyResponse = {
+  source_mode: 'fresh_cache',
+  data_timestamp: hoursAgoIso(0),
+  weekly_achievements_earned: {
+    metric_name: 'weekly_achievements_earned',
+    metric_value: 83,
+    collected_at: hoursAgoIso(1),
+    source_status: 'live_api',
+    payload: {
+      week_start_date: hoursAgoIso(7 * 24).slice(0, 10),
+      window_end_date: hoursAgoIso(0).slice(0, 10),
+    },
+  },
+}
+
+export const mockAnalyticsPills: AnalyticsPillsResponse = {
+  source_mode: 'fresh_cache',
+  data_timestamp: hoursAgoIso(0),
+  analytics: {
+    campus_id: 67,
+    users: {
+      total: 1550,
+      active: 353,
+      active_ratio: 0.2277,
+    },
+    achievements: {
+      earned_this_week: 83,
+    },
+    coalition_scores: {
+      avg_user_score: 1200.5,
+      top_user_score: 4200,
+      ranked_users: 515,
+    },
   },
 }
 
 export const mockDashboardData = {
-  summary: mockSummary,
-  highlights: mockHighlights,
-  primaryCampus: mockPrimaryCampus,
-  history: mockHistory,
   logtimeTop: mockLogtimeTop,
   projectsPassedRecent: mockProjectsPassedRecent,
   coalitionStandings: mockCoalitionStandings,
   coalitionTopScorers: mockCoalitionTopScorers,
+  attendanceWeekly: mockAttendanceWeekly,
+  projectActivityWeekly: mockProjectActivityWeekly,
+  achievementsEarnedWeekly: mockAchievementsEarnedWeekly,
+  analyticsPills: mockAnalyticsPills,
 }

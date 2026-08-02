@@ -1,4 +1,4 @@
-.hero-card {
+.heroCard {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6,7 +6,7 @@
   text-align: center;
 }
 
-.hero-category {
+.heroCategory {
   margin: 10px 0 0;
   color: var(--text-faint);
   font-size: 0.8rem;
@@ -14,23 +14,20 @@
   text-transform: uppercase;
 }
 
-.hero-name {
+.heroName {
   margin: 0;
   font-size: 1.3rem;
 }
 
-.hero-value {
+.heroValue {
   margin-top: 8px;
-  background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: var(--text-main);
   font-family: var(--font-display);
   font-size: 3.2rem;
   line-height: 1;
 }
 
-.hero-unit {
+.heroUnit {
   margin: 0;
   color: var(--text-muted);
 }

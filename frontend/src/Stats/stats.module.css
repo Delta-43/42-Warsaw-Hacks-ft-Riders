@@ -1,0 +1,96 @@
+/* Stats content beyond Hero of the Week: top 3 per coalition and the
+   analytics summary grid. (The coalition scores pie chart + leader callout
+   lives in Graphs/graphs_main.module.css — it's a Graphs slide.) */
+
+.coalitionTop3 {
+  display: flex;
+  justify-content: space-between;
+  gap: 28px;
+  width: 100%;
+}
+
+.coalitionTop3Group {
+  flex: 1;
+  min-width: 0;
+}
+
+.coalitionTop3Name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  color: var(--text-main);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.coalitionTop3Swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.coalitionTop3List {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.coalitionTop3List li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.coalitionTop3Rank {
+  color: var(--text-faint);
+  font-size: 0.76rem;
+}
+
+.coalitionTop3ScorerName {
+  flex: 1;
+  overflow: hidden;
+  color: var(--text-main);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coalitionTop3Score {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 24px;
+  width: 100%;
+}
+
+.analyticsTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.analyticsValue {
+  color: var(--text-main);
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.analyticsLabel {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

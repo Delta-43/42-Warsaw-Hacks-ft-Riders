@@ -1,6 +1,4 @@
-/* The 3-dot carousel-page indicator, shared by Graphs and Stats. */
-
-.carousel-dots {
+.carouselDots {
   display: flex;
   flex-shrink: 0;
   gap: 8px;

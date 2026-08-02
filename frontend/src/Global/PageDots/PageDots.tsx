@@ -1,4 +1,4 @@
-import '../page_dots.css'
+import styles from './PageDots.module.css'
 
 type PageDotsProps = {
   count: number
@@ -9,12 +9,12 @@ type PageDotsProps = {
 
 export function PageDots({ count, activeIndex, onSelect, ariaLabel }: PageDotsProps) {
   return (
-    <div className="carousel-dots" aria-label={ariaLabel}>
+    <div className={styles.carouselDots} aria-label={ariaLabel}>
       {Array.from({ length: count }).map((_, dotIndex) => (
         <button
           key={dotIndex}
           type="button"
-          className={dotIndex === activeIndex ? 'dot active' : 'dot'}
+          className={dotIndex === activeIndex ? `${styles.dot} ${styles.active}` : styles.dot}
           onClick={() => onSelect(dotIndex)}
           aria-label={`Slide ${dotIndex + 1}`}
         />

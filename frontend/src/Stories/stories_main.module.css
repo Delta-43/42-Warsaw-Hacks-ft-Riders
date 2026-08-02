@@ -1,0 +1,97 @@
+/* Base structural layout of the Stories bar's contents, plus the sliding
+   queue / tiered visual-priority treatment: active avatar > speech bubble
+   > next-up avatar > everything still queued. Every avatar and the bubble
+   slot is absolutely positioned by role (point 0, waiting point, or a
+   formulaic slot beyond that) — see stories_main.tsx for the coordinates.
+   Nothing here reacts to bubble state, so opening or closing it can never
+   nudge another avatar's position.
+
+   (Merged from the former stories_main.css + carousel.css: both target
+   .story-item/.story-name, and CSS Modules hashes class tokens per file, so
+   those compound selectors only keep resolving if they live in one scope.
+   .stories-panel itself is NOT here — it's a global panel-slot class, see
+   Global/layout.css and Global/liquid_glass.css.) */
+
+.storiesEyebrow {
+  position: absolute;
+  top: 10px;
+  left: 32px;
+  margin: 0;
+}
+
+.storiesEmpty {
+  margin: 0;
+  align-self: center;
+  color: #1c2430;
+  opacity: 0.5;
+  font-size: 1.1rem;
+}
+
+.storiesRow {
+  position: relative;
+  width: 100%;
+  height: 216px;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, black, black calc(100% - 48px), transparent);
+  -webkit-mask-image: linear-gradient(to right, black, black calc(100% - 48px), transparent);
+}
+
+.storyItem {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.storyName {
+  max-width: 150px;
+  overflow: hidden;
+  color: #1c2430;
+  font-size: 1.404rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Active-tier glow, passed into Avatar's `className` prop rather than
+   reached into via a descendant selector — see Avatar.tsx. */
+.activeAvatarGlow {
+  box-shadow: 0 14px 32px rgba(28, 36, 48, 0.3);
+}
+
+.storyItem.isActive .storyName {
+  font-size: 1.55rem;
+  font-weight: 600;
+}
+
+.storyItem.isNext {
+  opacity: 0.88;
+}
+
+.storyItem.isNext .storyName {
+  font-size: 1.1rem;
+}
+
+.storyItem.isQueued {
+  opacity: 0.55;
+}
+
+.storyItem.isQueued .storyName {
+  font-size: 0.95rem;
+}
+
+.storyBubbleSlot {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  /* Matches the avatar column's reserved name-label space, so the bubble
+     centers on the avatar circle rather than the full avatar+name block. */
+  padding-bottom: 38px;
+}

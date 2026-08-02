@@ -1,8 +1,14 @@
-import type { CoalitionTopScorersResponse, LogtimeTopResponse, ProjectsPassedRecentResponse } from '../App'
+import type { LogtimeTopResponse, ProjectsPassedRecentResponse } from '../App'
+import { isKnownTestUser } from '../Global/testUsers'
 
 // "Hero of the week" cards, built from real endpoints only. XP and wallet
 // (Altarian Dollars) categories were removed permanently — no endpoint
 // anywhere exposes either. Revisit if the backend ever adds one.
+//
+// A third "top coalition scorer" hero used to live here, but it's now
+// redundant with the Stats panel's "Top 3 per coalition" slide (which shows
+// the same #1 scorer per coalition, plus 2 more) — dropped to avoid
+// repeating the same person/score in two places.
 export type Hero = {
   id: string
   category: string
@@ -29,14 +35,10 @@ function fullName(login: string, firstName?: string | null, lastName?: string | 
   return login
 }
 
-export function buildHeroes(
-  logtimeTop: LogtimeTopResponse,
-  topScorers: CoalitionTopScorersResponse,
-  projectsPassedRecent: ProjectsPassedRecentResponse,
-): Hero[] {
+export function buildHeroes(logtimeTop: LogtimeTopResponse, projectsPassedRecent: ProjectsPassedRecentResponse): Hero[] {
   const heroes: Hero[] = []
 
-  const topLogtimeUser = logtimeTop.logtime_rankings.items[0]
+  const topLogtimeUser = logtimeTop.logtime_rankings.items.find((user) => !isKnownTestUser(user.user_id))
   if (topLogtimeUser) {
     heroes.push({
       id: 'hours',
@@ -51,26 +53,11 @@ export function buildHeroes(
     })
   }
 
-  const topScorer = topScorers.top_scorers.items.reduce<
-    CoalitionTopScorersResponse['top_scorers']['items'][number] | null
-  >((best, item) => (!best || item.score > best.score ? item : best), null)
-  if (topScorer) {
-    heroes.push({
-      id: 'coalition',
-      category: `Top ${topScorer.coalition_name} scorer`,
-      name: fullName(topScorer.login, topScorer.first_name, topScorer.last_name),
-      value: topScorer.score.toLocaleString(),
-      unit: 'coalition points',
-      initials: initialsFor(topScorer.login, topScorer.first_name, topScorer.last_name),
-      colorFrom: 'var(--avatar-purple-from)',
-      colorTo: 'var(--avatar-purple-to)',
-      // coalitions/top-scorers doesn't carry a photo field per the API contract
-      photoUrl: null,
-    })
-  }
-
   const passCounts = new Map<number, { count: number; login: string; imageUrl: string | null }>()
   for (const item of projectsPassedRecent.projects_passed_recent.items) {
+    if (isKnownTestUser(item.user_id)) {
+      continue
+    }
     const existing = passCounts.get(item.user_id)
     if (existing) {
       existing.count += 1

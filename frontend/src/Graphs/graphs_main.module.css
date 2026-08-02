@@ -1,0 +1,100 @@
+/* Base structural layout of the Graphs panel and its chart stage. */
+
+.graphsChartStage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-top: 12px;
+}
+
+.graphsChartInner {
+  width: 100%;
+  height: 100%;
+}
+
+/* Recharts injects this class itself (unscoped, from the library) — can't
+   be renamed/hashed like our own classes, so it has to stay :global(). */
+:global(.recharts-tooltip-wrapper) {
+  outline: none;
+}
+
+.coalitionScoresSlide {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.coalitionLeader {
+  text-align: center;
+}
+
+.coalitionLeaderSwatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 10px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.coalitionLeaderName {
+  display: inline;
+  margin: 0;
+  color: var(--text-main);
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  line-height: 1.1;
+  vertical-align: middle;
+}
+
+.coalitionLeaderScore {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* Swatch + plain-ink label instead of coloring the legend text itself —
+   see ChartLegend in graphs_main.tsx. */
+.chartLegend {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chartLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.chartLegendSwatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+/* Recharts' Pie only renders as a true circle when the box ResponsiveContainer
+   measures is square — a flex child sized by its parent's leftover space is
+   whatever aspect ratio that happens to be, which is what was making the
+   coalition pie look skewed. `container-type: size` + `min(100cqw, 100cqh)`
+   on the inner box below gives the largest square that fits, with no JS. */
+.coalitionScoresChart {
+  container-type: size;
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+}
+
+.coalitionScoresChartSquare {
+  width: min(100cqw, 100cqh);
+  height: min(100cqw, 100cqh);
+}

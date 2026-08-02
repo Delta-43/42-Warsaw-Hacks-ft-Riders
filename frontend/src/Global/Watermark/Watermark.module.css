@@ -1,0 +1,12 @@
+.watermark {
+  position: fixed;
+  right: 22px;
+  bottom: 14px;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-watermark);
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  user-select: none;
+}

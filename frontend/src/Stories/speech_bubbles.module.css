@@ -1,7 +1,7 @@
 /* Liquid-glass speech bubble that surfaces beside the active story avatar,
    vertically centered on the avatar circle. */
 
-.speech-bubble {
+.speechBubble {
   position: relative;
   display: inline-flex;
   flex-direction: column;
@@ -19,7 +19,7 @@
   white-space: nowrap;
 }
 
-.speech-bubble-tail {
+.speechBubbleTail {
   position: absolute;
   top: 50%;
   left: -8px;
@@ -32,22 +32,22 @@
   transform: translateY(-50%) rotate(45deg);
 }
 
-.speech-bubble-line {
+.speechBubbleLine {
   margin: 0;
 }
 
-.speech-bubble-meta {
+.speechBubbleMeta {
   font-weight: 600;
   font-size: 0.95rem;
   color: #1c2430;
 }
 
-.speech-bubble-project {
+.speechBubbleProject {
   font-size: 0.85rem;
   color: rgba(28, 36, 48, 0.62);
 }
 
-.speech-bubble-project strong {
+.speechBubbleProject strong {
   color: #1c2430;
   font-weight: 600;
 }
