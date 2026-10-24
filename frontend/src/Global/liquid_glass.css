@@ -5,7 +5,10 @@
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 32px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+  /* The dark base keeps light text readable over the pastel waves. */
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02)),
+    rgba(14, 28, 58, 0.5);
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.32),
@@ -34,7 +37,7 @@
 
 .panel-float {
   animation:
-    panelEnter 0.6s ease-out both,
+    panelEnter 0.6s var(--ease-out) both,
     panelFloat 9s ease-in-out 0.6s infinite;
 }
 
@@ -42,7 +45,7 @@
   /* Stories content must stay perfectly top-to-bottom centered, so this
      panel skips the infinite vertical float bob that the other two keep —
      only the one-time entrance settles here. */
-  animation: panelEnter 0.6s ease-out both;
+  animation: panelEnter 0.6s var(--ease-out) both;
 }
 
 .metrics-strip.panel-float {
@@ -55,6 +58,29 @@
 
 .stats-panel.panel-float {
   animation-delay: 0.16s, 0.76s;
+}
+
+/* Reduced motion: no float, and the entrance becomes a plain fade. */
+@media (prefers-reduced-motion: reduce) {
+  .panel-float,
+  .stories-panel.panel-float {
+    animation: panelFade 0.4s ease-out both;
+  }
+
+  .metrics-strip.panel-float,
+  .graphs-panel.panel-float,
+  .stats-panel.panel-float {
+    animation-delay: 0s;
+  }
+}
+
+@keyframes panelFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes panelEnter {

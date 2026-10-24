@@ -33,3 +33,7 @@
 .eyebrow-on-light {
   color: #1c2430;
 }
+
+.panel-header h2 {
+  text-wrap: balance;
+}

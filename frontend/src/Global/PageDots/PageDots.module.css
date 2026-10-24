@@ -1,21 +1,39 @@
 .carouselDots {
   display: flex;
   flex-shrink: 0;
-  gap: 8px;
-  padding-top: 4px;
+  gap: 0;
 }
 
+/* The visible dot is the ::before; the button itself is a 24px hit area
+   (WCAG 2.5.8) so the small dot stays easy to hit. */
 .dot {
-  width: 0.625rem;
-  height: 0.625rem;
+  position: relative;
+  width: 24px;
+  height: 24px;
+  padding: 0;
   border: 0;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.22);
+  background: transparent;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.dot.active {
+.dot::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  transition-property: scale, background-color;
+  transition-duration: 200ms;
+  transition-timing-function: var(--ease-out);
+}
+
+.dot.active::before {
   background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
-  transform: scale(1.2);
+  scale: 1.25;
+}
+
+.dot:focus-visible {
+  outline: 2px solid var(--accent-sun);
+  outline-offset: 0;
+  border-radius: 999px;
 }

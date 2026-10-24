@@ -43,7 +43,7 @@ export function MetricsStrip({
   ]
 
   return (
-    <section className="panel glass-panel panel-float metrics-strip">
+    <section className="panel glass-panel panel-float metrics-strip" aria-label="Campus metrics">
       {tiles.map((tile) => (
         <div key={tile.id} className={styles.metricsTile}>
           <span className={styles.metricsValue}>{tile.value}</span>
