@@ -46,7 +46,7 @@ everything about how that JSON is displayed without knowing any Python.
 | `config.yml` / `config.sample.yml` | 42 API credentials/config for `main.py`. |
 | `data/dashboard_cache.db` | SQLite cache — campus snapshots over time. |
 | `data/campus.json`, `data/full_campus.json` | Fallback seed data if the DB is empty and the 42 API is unreachable. |
-| `trial_data/*.json` | Sample payloads (coalition scores, log hours, users) — not currently wired into any endpoint, likely for future features. |
+| `trial_data/*.json` | Removed from the repo (real user data). `test.py` regenerates them locally; the folder is git-ignored. |
 
 ### `frontend/` — configuration
 

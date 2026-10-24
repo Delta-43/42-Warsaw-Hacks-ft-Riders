@@ -42,4 +42,4 @@ This file is the working baseline for the project. It combines the endpoint list
 - `campus_id` is the root key for most downstream requests.
 - `coalition_id` comes from the bloc response and drives coalition member fetches.
 - `achievement_id` is only needed if we decide to include the achievement counts in the plan.
-- The saved `trial_data/` files are the quickest reference for actual payload shapes while we rebuild the execution plan.
+- The locally saved `trial_data/` files (git-ignored, they contain real user data) are the quickest reference for actual payload shapes while we rebuild the execution plan.
