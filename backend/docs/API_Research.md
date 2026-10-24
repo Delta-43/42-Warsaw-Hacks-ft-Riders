@@ -5,7 +5,7 @@ artifacts are still here if you want the unfiltered version:
 
 - [`../.test_cases/apis to work with.txt`](../.test_cases/apis%20to%20work%20with.txt) — the endpoint shortlist as we found it
 - [`../.test_cases/test.py`](../.test_cases/test.py) — exploratory calls against the real API
-- [`../.test_cases/trial_data/`](../.test_cases/trial_data/) — saved JSON responses used to design the DB schema
+- `../.test_cases/trial_data/` — saved JSON responses used to design the DB schema (removed from the repo because they contained real user data; regenerate locally with `../.test_cases/test.py`)
 
 ## Data flow
 
@@ -41,7 +41,7 @@ endpoint it feeds lives in [`ExecutionPlan.md`](ExecutionPlan.md).
 
 ## What the responses actually look like
 
-Sampled from `trial_data/` (~1,550 real Warsaw users):
+Sampled from the local `trial_data/` (~1,550 real Warsaw users, no longer committed):
 
 - **Campus** — flat object: `id`, `name`, `city`, `users_count`, plus nested `language`/`endpoint` blocks.
 - **Users** — `id`, `login`, `first_name`/`last_name`, `image`, `pool_month`/`pool_year`, `staff?`.

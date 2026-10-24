@@ -228,3 +228,6 @@ backend/config.*.yml
 
 # Runtime SQLite cache — generated at startup, never commit
 backend/data/*.db
+
+# Raw 42 Intra API responses saved by backend/.test_cases/test.py; contain real user data, never commit
+backend/.test_cases/trial_data/
