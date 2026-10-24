@@ -30,11 +30,16 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
+
+      # Static demo build: bundled synthetic fixtures, no API, no secrets,
+      # no network calls at runtime.
       - name: Build
         working-directory: frontend
         env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-          VITE_PRIMARY_CAMPUS_ID: ${{ vars.VITE_PRIMARY_CAMPUS_ID }}
+          VITE_DEMO: 'true'
           VITE_BASE_PATH: /42-Warsaw-Hacks-ft-Riders/
         run: npm run build
 

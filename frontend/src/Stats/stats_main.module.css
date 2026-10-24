@@ -28,3 +28,12 @@
   color: var(--text-muted);
   font-size: 1.1rem;
 }
+
+:global(.dashboard-shell.is-mobile) .statsStage {
+  min-height: 280px;
+}
+
+:global(.dashboard-shell.is-mobile) .statsSlide {
+  height: auto;
+  min-height: 280px;
+}

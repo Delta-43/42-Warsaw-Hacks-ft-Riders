@@ -21,13 +21,13 @@ const bubbleVariants = {
     opacity: 0,
     scale: 0.92,
     x: -56,
-    transition: { duration: 0.3, ease: 'easeIn' as const },
+    transition: { duration: 0.25, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] },
   },
 }
 
 const textVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.3, delay: 0.2, ease: 'easeOut' as const } },
+  visible: { opacity: 1, transition: { duration: 0.3, delay: 0.2, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
 }
 
 export function SpeechBubble({ event }: SpeechBubbleProps) {
@@ -64,7 +64,7 @@ export function SpeechBubble({ event }: SpeechBubbleProps) {
           </>
         )}
       </motion.p>
-      <span className={styles.speechBubbleTail} />
+      <span className={styles.speechBubbleTail} aria-hidden="true" />
     </motion.div>
   )
 }

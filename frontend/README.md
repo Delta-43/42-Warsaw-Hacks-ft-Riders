@@ -24,10 +24,11 @@ VITE_BACKEND_TARGET=http://127.0.0.1:8025 npm run dev
 | Variable | Purpose | Default |
 | --- | --- | --- |
 | `VITE_BACKEND_TARGET` | Dev-server proxy target for `/api/*` and `/health` | `http://127.0.0.1:8000` |
-| `VITE_API_BASE_URL` | Backend base URL baked into a static build (GitHub Pages) | *(empty — same-origin)* |
+| `VITE_API_BASE_URL` | Backend base URL baked into a live static build | *(empty — same-origin)* |
 | `VITE_PRIMARY_CAMPUS_ID` | Fallback campus id, only used if `GET /api/v1/config` is unreachable | `67` |
 | `VITE_BASE_PATH` | Asset base path for subpath hosting (set by the deploy workflow) | `/` |
-| `VITE_USE_MOCK_DATA` | Set to `true` to render with bundled mock data, no backend required | `false` |
+| `VITE_DEMO` | `true` serves bundled **synthetic** fixtures with a guided tour and makes no network calls. Production builds with no `VITE_API_BASE_URL` default to demo mode; `false` forces live mode | `false` in dev |
+| `VITE_USE_MOCK_DATA` | Legacy alias for `VITE_DEMO=true` | `false` |
 
 The primary campus id is normally fetched at runtime from the backend's
 `GET /api/v1/config` — see [`backend/docs/API_CONTRACT.md`](../backend/docs/API_CONTRACT.md).
@@ -58,3 +59,20 @@ npm run lint   # oxlint
 If you are developing a production application, we recommend enabling
 type-aware lint rules by installing `oxlint-tsgolint` and editing
 `.oxlintrc.json` — see the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules).
+
+## Demo mode (GitHub Pages)
+
+The Pages site runs entirely from fixtures in `src/demo/` (all students,
+logins and numbers are invented). A scripted tour with two replayable
+scenarios, "Recent wins" and "Coalition race", is driven by `src/demo/scenarios.ts`.
+Try it locally:
+
+```bash
+npm ci
+VITE_BASE_PATH=/42-Warsaw-Hacks-ft-Riders/ npm run build
+VITE_BASE_PATH=/42-Warsaw-Hacks-ft-Riders/ npx vite preview
+# open http://localhost:4173/42-Warsaw-Hacks-ft-Riders/
+```
+
+`vite preview` needs the same `VITE_BASE_PATH` as the build, or it will serve
+the app at `/` and asset URLs will not match.

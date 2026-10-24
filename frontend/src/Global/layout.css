@@ -9,6 +9,7 @@
   justify-content: center;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -17,7 +18,7 @@
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr 0.7fr 3.3fr;
+  grid-template-rows: 1fr 0.7fr 3.3fr auto;
   gap: 24px;
   width: 100%;
   height: 100%;
@@ -86,12 +87,35 @@
   grid-row: 3;
 }
 
+/* Footer (demo controls + credits) spans the bottom row. */
+.dashboard-shell > footer {
+  grid-column: 1 / -1;
+  grid-row: 4;
+}
+
+/* Guided-tour spotlight: the tour sets data-spotlight on the shell and the
+   matching panel gets a ring. Outline (not box-shadow) so it cannot fight
+   the panels' own shadows or animations. */
+.dashboard-shell[data-spotlight] .panel {
+  outline: 2px solid transparent;
+  outline-offset: 4px;
+  transition: outline-color 300ms ease-out;
+}
+
+.dashboard-shell[data-spotlight='stories'] .stories-panel,
+.dashboard-shell[data-spotlight='metrics'] .metrics-strip,
+.dashboard-shell[data-spotlight='graphs'] .graphs-panel,
+.dashboard-shell[data-spotlight='stats'] .stats-panel {
+  outline-color: var(--accent-sun);
+}
+
 /* Mobile: collapse the fixed 1920x1080 stage into a stacked, scrollable 1-column layout */
 @media (max-width: 760px) {
   .stage.is-mobile {
     display: block;
     height: auto;
     min-height: 100vh;
+    min-height: 100dvh;
     overflow-y: auto;
     padding: 16px 0 32px;
   }

@@ -95,3 +95,9 @@
      centers on the avatar circle rather than the full avatar+name block. */
   padding-bottom: 38px;
 }
+
+/* No right-edge fade on phones: the bubble sits close to the edge. */
+:global(.dashboard-shell.is-mobile) .storiesRow {
+  mask-image: none;
+  -webkit-mask-image: none;
+}

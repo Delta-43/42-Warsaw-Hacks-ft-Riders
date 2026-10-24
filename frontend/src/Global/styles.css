@@ -8,13 +8,15 @@
   --border: rgba(183, 224, 255, 0.12);
   --text-main: #f7f3ea;
   --text-muted: #b7c5d6;
-  --text-faint: #7f95ad;
+  --text-faint: #a9bbd0;
   --accent-sun: #ffd166;
   --accent-orange: #ff9f43;
   --accent-mint: #4ecdc4;
-  --brand-blue: #6fbbf9;
+  --brand-blue: #8ccbff;
   --brand-purple: #af38ca;
   --brand-yellow: #f7cf6e;
+  /* Easing: strong ease-out for entrances (starts fast, settles gently). */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.28);
   --font-body: 'Noto Sans', sans-serif;
   --font-display: 'Noto Sans', sans-serif;
@@ -54,8 +56,10 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Widescreen/kiosk scaling: above the mobile breakpoint, root font-size

@@ -98,3 +98,14 @@
   width: min(100cqw, 100cqh);
   height: min(100cqw, 100cqh);
 }
+
+/* Mobile stacks panels at auto height, so the chart stage has no definite
+   height to fill and a 100%-height chart collapses to nothing. Give it a
+   floor. */
+:global(.dashboard-shell.is-mobile) .graphsChartStage {
+  min-height: 300px;
+}
+
+:global(.dashboard-shell.is-mobile) .graphsChartInner {
+  height: 300px;
+}

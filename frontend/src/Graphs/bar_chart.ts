@@ -12,3 +12,7 @@ export const BAR_COLOR = 'var(--graph-periwinkle)'
 // a small rounded data-end rather than a big pill cap.
 export const BAR_MAX_SIZE = 24
 export const BAR_RADIUS: [number, number, number, number] = [4, 4, 0, 0]
+
+// Recharts' default axis text is mid-grey (#666), which disappears on the dark
+// glass panels. Axis labels use the muted text token instead.
+export const AXIS_TICK = { fill: 'var(--text-muted)', fontSize: 12 }

@@ -9,14 +9,15 @@ type PageDotsProps = {
 
 export function PageDots({ count, activeIndex, onSelect, ariaLabel }: PageDotsProps) {
   return (
-    <div className={styles.carouselDots} aria-label={ariaLabel}>
+    <div className={styles.carouselDots} role="group" aria-label={ariaLabel}>
       {Array.from({ length: count }).map((_, dotIndex) => (
         <button
           key={dotIndex}
           type="button"
           className={dotIndex === activeIndex ? `${styles.dot} ${styles.active}` : styles.dot}
           onClick={() => onSelect(dotIndex)}
-          aria-label={`Slide ${dotIndex + 1}`}
+          aria-label={`Slide ${dotIndex + 1} of ${count}`}
+          aria-current={dotIndex === activeIndex ? 'true' : undefined}
         />
       ))}
     </div>
