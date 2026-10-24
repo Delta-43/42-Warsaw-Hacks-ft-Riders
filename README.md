@@ -12,7 +12,8 @@ standings, and project momentum, celebrated instead of buried in a spreadsheet.
 [![FastAPI](https://img.shields.io/badge/backend-FastAPI-009688)](backend/README.md)
 [![React 19](https://img.shields.io/badge/frontend-React%2019-61dafb)](frontend/README.md)
 
-**[View the live dashboard →](https://delta-43.github.io/42-Warsaw-Hacks-ft-Riders/)**
+**[Open the demo →](https://delta-43.github.io/42-Warsaw-Hacks-ft-Riders/)**
+(static GitHub Pages build on synthetic data; no student data is shown)
 
 </div>
 
