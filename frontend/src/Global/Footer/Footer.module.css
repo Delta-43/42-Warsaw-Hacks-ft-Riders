@@ -1,0 +1,124 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  background: rgba(10, 20, 44, 0.62);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.badge {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--accent-sun);
+  color: #1c2430;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.caption {
+  flex: 1 1 18rem;
+  min-width: 0;
+  color: var(--text-main);
+  text-wrap: pretty;
+}
+
+.stepCount {
+  margin-inline-end: 8px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.segment {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.button,
+.segmentButton {
+  min-height: 28px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition-property: background-color, color, scale;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+
+.button {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+@media (hover: hover) {
+  .button:hover,
+  .segmentButton:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
+}
+
+.button:active,
+.segmentButton:active {
+  scale: 0.96;
+}
+
+.segmentButton[aria-pressed='true'] {
+  background: var(--text-main);
+  color: #1c2430;
+}
+
+.button:focus-visible,
+.segmentButton:focus-visible,
+.credits a:focus-visible {
+  outline: 2px solid var(--accent-sun);
+  outline-offset: 2px;
+}
+
+.credits {
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+.credits strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.credits a {
+  color: var(--text-main);
+  text-underline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .footer {
+    padding: 14px 16px;
+  }
+
+  .button,
+  .segmentButton {
+    min-height: 36px;
+  }
+}

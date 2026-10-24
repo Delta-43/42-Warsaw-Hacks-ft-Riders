@@ -3,6 +3,7 @@ import { Avatar } from '../Global/Avatars/Avatar'
 import { SpeechBubble } from './SpeechBubble'
 import type { StoryEvent } from './storyEvents'
 import { useStoryCycle } from './useStoryCycle'
+import { useIsMobile } from '../Global/hooks/useIsMobile'
 import styles from './stories_main.module.css'
 
 const WINDOW_SIZE = 8
@@ -21,6 +22,10 @@ const SLOT_STEP = 170 // item width + the queue's resting gap
 // fade mask is what handles a narrower viewport, not the coordinate math.)
 const POINT_ZERO_LEFT = 33
 const BUBBLE_LEFT = POINT_ZERO_LEFT + ITEM_WIDTH
+// Phones: the row is ~300px wide, so the active avatar hugs the left edge and
+// the bubble (which wraps there) takes the remaining width.
+const MOBILE_POINT_ZERO_LEFT = 6
+const MOBILE_BUBBLE_LEFT = 138
 
 // Where the queue starts, fixed px from the row's left edge. Comfortably
 // clear of the widest realistic speech-bubble content (bubble text is
@@ -33,9 +38,9 @@ function visibleWindow(events: StoryEvent[], start: number, size: number): Story
   return Array.from({ length: count }, (_, offset) => events[(start + offset) % events.length])
 }
 
-function leftForPosition(position: number): string {
+function leftForPosition(position: number, pointZeroLeft: number): string {
   if (position === 0) {
-    return `${POINT_ZERO_LEFT}px`
+    return `${pointZeroLeft}px`
   }
   return `${WAITING_POINT_LEFT + (position - 1) * SLOT_STEP}px`
 }
@@ -65,14 +70,18 @@ function tierClassName(position: number): string {
 
 type StoriesPanelProps = {
   events: StoryEvent[]
+  resetKey?: string
 }
 
-export function StoriesPanel({ events }: StoriesPanelProps) {
-  const { activeIndex, bubbleOpen } = useStoryCycle(events.length)
+export function StoriesPanel({ events, resetKey }: StoriesPanelProps) {
+  const { activeIndex, bubbleOpen } = useStoryCycle(events.length, resetKey)
+  const isMobile = useIsMobile(760)
+  const pointZeroLeft = isMobile ? MOBILE_POINT_ZERO_LEFT : POINT_ZERO_LEFT
+  const bubbleLeft = isMobile ? MOBILE_BUBBLE_LEFT : BUBBLE_LEFT
 
   if (events.length === 0) {
     return (
-      <section className="panel glass-panel panel-float stories-panel">
+      <section className="panel glass-panel panel-float stories-panel" aria-label="Stories">
         <p className={`eyebrow eyebrow-on-light ${styles.storiesEyebrow}`}>Stories</p>
         <p className={styles.storiesEmpty}>No recent campus activity yet</p>
       </section>
@@ -83,7 +92,7 @@ export function StoriesPanel({ events }: StoriesPanelProps) {
   const visibleEvents = visibleWindow(events, activeIndex, WINDOW_SIZE)
 
   return (
-    <section className="panel glass-panel panel-float stories-panel">
+    <section className="panel glass-panel panel-float stories-panel" aria-label="Stories">
       <p className={`eyebrow eyebrow-on-light ${styles.storiesEyebrow}`}>Stories</p>
       <div className={styles.storiesRow}>
         <AnimatePresence initial={false} mode="popLayout">
@@ -92,7 +101,7 @@ export function StoriesPanel({ events }: StoriesPanelProps) {
               layout
               key={event.id}
               className={`${styles.storyItem} ${tierClassName(position)}`}
-              style={{ left: leftForPosition(position), zIndex: WINDOW_SIZE - position }}
+              style={{ left: leftForPosition(position, pointZeroLeft), zIndex: WINDOW_SIZE - position }}
               initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -60 }}
@@ -112,7 +121,7 @@ export function StoriesPanel({ events }: StoriesPanelProps) {
           ))}
         </AnimatePresence>
 
-        <div className={styles.storyBubbleSlot} style={{ left: `${BUBBLE_LEFT}px` }}>
+        <div className={styles.storyBubbleSlot} style={{ left: `${bubbleLeft}px` }}>
           <AnimatePresence>{bubbleOpen && <SpeechBubble key={activeEvent.id} event={activeEvent} />}</AnimatePresence>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { startTransition, useEffect, useEffectEvent, useMemo, useState } from 'react'
+import { MotionConfig } from 'framer-motion'
 import './Global/liquid_glass.css'
 import './Global/titles.css'
 import './Global/layout.css'
@@ -11,14 +12,25 @@ import { GraphsPanel } from './Graphs/graphs_main'
 import { StatsPanel } from './Stats/stats_main'
 import { buildHeroes } from './Stats/heroes'
 import { useIsMobile } from './Global/hooks/useIsMobile'
-import { mockDashboardData } from './dashboardData.mock'
+import { Footer } from './Global/Footer/Footer'
+import { PlaybackContext } from './Global/playback'
+import { buildFixture } from './demo/fixtures'
+import { useDemoTour } from './demo/useDemoTour'
 
 const DEFAULT_CAMPUS_ID = Number(import.meta.env.VITE_PRIMARY_CAMPUS_ID || 67)
 const POLL_INTERVAL_MS = 60_000
-const USE_MOCK_DATA = import.meta.env.VITE_USE_MOCK_DATA === 'true'
 // In dev the Vite proxy forwards /api/* to the backend, so base is empty.
-// In a static build (GitHub Pages) set VITE_API_BASE_URL to the Railway backend URL.
+// A static build that should talk to a real backend sets VITE_API_BASE_URL.
 const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
+
+// Demo mode serves bundled synthetic fixtures and makes zero network calls.
+// It is on when VITE_DEMO=true (or the legacy VITE_USE_MOCK_DATA=true), and
+// it is the default for production builds that have no backend configured,
+// which is what the GitHub Pages build is. VITE_DEMO=false turns it off.
+const DEMO_MODE =
+  import.meta.env.VITE_DEMO === 'true' ||
+  import.meta.env.VITE_USE_MOCK_DATA === 'true' ||
+  (import.meta.env.PROD && import.meta.env.VITE_DEMO !== 'false' && !API_BASE)
 
 export type SourceMode = 'fresh_cache' | 'refreshed' | 'stale_fallback'
 
@@ -179,7 +191,7 @@ export type AnalyticsPillsResponse = {
   }
 }
 
-type DashboardData = {
+export type DashboardData = {
   logtimeTop: LogtimeTopResponse
   projectsPassedRecent: ProjectsPassedRecentResponse
   coalitionStandings: CoalitionStandingsResponse
@@ -208,14 +220,23 @@ async function resolvePrimaryCampusId(): Promise<number> {
 }
 
 function App() {
-  const [dashboard, setDashboard] = useState<DashboardData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [liveDashboard, setDashboard] = useState<DashboardData | null>(null)
+  const [loading, setLoading] = useState(!DEMO_MODE)
   const [error, setError] = useState<string | null>(null)
 
   const isMobile = useIsMobile(760)
+  const tour = useDemoTour(DEMO_MODE)
+  const [manualPause, setManualPause] = useState(false)
+  // The tour has its own pause state; outside demo mode only the manual one.
+  const paused = DEMO_MODE ? tour.paused : manualPause
+  const setPaused = DEMO_MODE ? tour.setPaused : setManualPause
+  const dashboard = useMemo(
+    () => (DEMO_MODE ? buildFixture(tour.step.frame) : liveDashboard),
+    [liveDashboard, tour.step.frame],
+  )
 
   const fetchDashboard = useEffectEvent(async () => {
-    const campusId = USE_MOCK_DATA ? DEFAULT_CAMPUS_ID : await resolvePrimaryCampusId()
+    const campusId = await resolvePrimaryCampusId()
     const [
       logtimeTop,
       projectsPassedRecent,
@@ -225,35 +246,7 @@ function App() {
       projectActivityWeekly,
       achievementsEarnedWeekly,
       analyticsPills,
-    ] = USE_MOCK_DATA
-      ? await new Promise<
-          [
-            LogtimeTopResponse,
-            ProjectsPassedRecentResponse,
-            CoalitionStandingsResponse,
-            CoalitionTopScorersResponse,
-            AttendanceWeeklyResponse,
-            ProjectActivityWeeklyResponse,
-            AchievementsEarnedWeeklyResponse,
-            AnalyticsPillsResponse,
-          ]
-        >((resolve) => {
-          window.setTimeout(
-            () =>
-              resolve([
-                mockDashboardData.logtimeTop,
-                mockDashboardData.projectsPassedRecent,
-                mockDashboardData.coalitionStandings,
-                mockDashboardData.coalitionTopScorers,
-                mockDashboardData.attendanceWeekly,
-                mockDashboardData.projectActivityWeekly,
-                mockDashboardData.achievementsEarnedWeekly,
-                mockDashboardData.analyticsPills,
-              ]),
-            300,
-          )
-        })
-      : await Promise.all([
+    ] = await Promise.all([
           readJson<LogtimeTopResponse>(`/api/v1/campus/${campusId}/users/logtime-top?limit=10`),
           readJson<ProjectsPassedRecentResponse>(
             `/api/v1/campus/${campusId}/projects/passed-recent?hours=168&limit=50`,
@@ -266,7 +259,7 @@ function App() {
           readJson<ProjectActivityWeeklyResponse>(`/api/v1/campus/${campusId}/projects/activity-weekly`),
           readJson<AchievementsEarnedWeeklyResponse>(`/api/v1/campus/${campusId}/achievements/earned-weekly`),
           readJson<AnalyticsPillsResponse>(`/api/v1/campus/${campusId}/analytics/pills`),
-        ])
+    ])
 
     startTransition(() => {
       setDashboard({
@@ -285,6 +278,10 @@ function App() {
   })
 
   useEffect(() => {
+    // Demo mode never touches the network.
+    if (DEMO_MODE) {
+      return
+    }
     let cancelled = false
 
     const load = async () => {
@@ -316,6 +313,8 @@ function App() {
     }
     return buildStoryEvents(dashboard.logtimeTop, dashboard.projectsPassedRecent)
   }, [dashboard])
+  // Restart the story cycle when the scripted data advances or the tour replays.
+  const storyResetKey = DEMO_MODE ? `${tour.runId}:${tour.step.frame}` : ''
 
   const heroes = useMemo(() => {
     if (!dashboard) {
@@ -332,7 +331,7 @@ function App() {
       <main className="stage loading-state">
         <Background />
         <Watermark />
-        <section className="loading-card glass-panel">
+        <section className="loading-card glass-panel" role="status">
           <p className="eyebrow eyebrow-on-color">Booting dashboard</p>
           <h1>Preparing the first 42Warsaw community view.</h1>
           <p>Fetching live campus activity from the FastAPI cache.</p>
@@ -358,29 +357,44 @@ function App() {
     )
   }
 
+  const controlling = DEMO_MODE && tour.controlling
+  const forcedGraph = controlling ? tour.step.graphSlide : undefined
+  const forcedStats = controlling ? tour.step.statsSlide : undefined
+
   return (
-    <main className={stageClassName}>
-      <Background />
-      <div className={shellClassName}>
-        <StoriesPanel events={storyEvents} />
-        <MetricsStrip
-          analytics={dashboard.analyticsPills.analytics}
-          achievementsEarnedWeekly={dashboard.achievementsEarnedWeekly}
-          projectActivityWeekly={dashboard.projectActivityWeekly}
-          attendanceWeekly={dashboard.attendanceWeekly}
-        />
-        <GraphsPanel
-          logtimeLeaders={dashboard.logtimeTop.logtime_rankings.items}
-          coalitionStandings={dashboard.coalitionStandings.standings.items}
-          coalitionTopScorers={dashboard.coalitionTopScorers.top_scorers.items}
-        />
-        <StatsPanel
-          heroes={heroes}
-          coalitionTopScorers={dashboard.coalitionTopScorers.top_scorers.items}
-          analytics={dashboard.analyticsPills.analytics}
-        />
-      </div>
-    </main>
+    <MotionConfig reducedMotion="user">
+      <PlaybackContext.Provider value={{ paused }}>
+        <main className={stageClassName}>
+          <Background />
+          <div className={shellClassName} data-spotlight={controlling ? tour.step.spotlight : undefined}>
+            <StoriesPanel events={storyEvents} resetKey={storyResetKey} />
+            <MetricsStrip
+              analytics={dashboard.analyticsPills.analytics}
+              achievementsEarnedWeekly={dashboard.achievementsEarnedWeekly}
+              projectActivityWeekly={dashboard.projectActivityWeekly}
+              attendanceWeekly={dashboard.attendanceWeekly}
+            />
+            <GraphsPanel
+              logtimeLeaders={dashboard.logtimeTop.logtime_rankings.items}
+              coalitionStandings={dashboard.coalitionStandings.standings.items}
+              coalitionTopScorers={dashboard.coalitionTopScorers.top_scorers.items}
+              forcedSlide={forcedGraph}
+            />
+            <StatsPanel
+              heroes={heroes}
+              coalitionTopScorers={dashboard.coalitionTopScorers.top_scorers.items}
+              analytics={dashboard.analyticsPills.analytics}
+              forcedSlide={forcedStats}
+            />
+            <Footer
+              tour={DEMO_MODE ? tour : null}
+              paused={paused}
+              onTogglePaused={() => setPaused(!paused)}
+            />
+          </div>
+        </main>
+      </PlaybackContext.Provider>
+    </MotionConfig>
   )
 }
 

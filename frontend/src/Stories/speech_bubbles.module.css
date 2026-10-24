@@ -51,3 +51,8 @@
   color: #1c2430;
   font-weight: 600;
 }
+
+:global(.dashboard-shell.is-mobile) .speechBubble {
+  max-width: 150px;
+  white-space: normal;
+}

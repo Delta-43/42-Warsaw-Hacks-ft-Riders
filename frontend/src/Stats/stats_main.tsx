@@ -16,6 +16,7 @@ type StatsPanelProps = {
   heroes: Hero[]
   coalitionTopScorers: CoalitionTopScorer[]
   analytics: AnalyticsPillsResponse['analytics']
+  forcedSlide?: string
 }
 
 type StatsSlide = {
@@ -25,7 +26,7 @@ type StatsSlide = {
   content: ReactElement
 }
 
-export function StatsPanel({ heroes, coalitionTopScorers, analytics }: StatsPanelProps) {
+export function StatsPanel({ heroes, coalitionTopScorers, analytics, forcedSlide }: StatsPanelProps) {
   const slides: StatsSlide[] = []
 
   for (const hero of heroes) {
@@ -41,7 +42,7 @@ export function StatsPanel({ heroes, coalitionTopScorers, analytics }: StatsPane
             colorFrom={hero.colorFrom}
             colorTo={hero.colorTo}
             photoUrl={hero.photoUrl}
-            size={140}
+            size={120}
           />
           <p className={heroStyles.heroCategory}>{hero.category}</p>
           <h3 className={heroStyles.heroName}>{hero.name}</h3>
@@ -117,11 +118,12 @@ export function StatsPanel({ heroes, coalitionTopScorers, analytics }: StatsPane
     ),
   })
 
-  const { index, setIndex } = useCarousel(slides.length, 6500)
+  const forcedIndex = forcedSlide ? slides.findIndex((slide) => slide.id.startsWith(forcedSlide)) : -1
+  const { index, setIndex } = useCarousel(slides.length, 6500, forcedIndex >= 0 ? forcedIndex : undefined)
 
   if (slides.length === 0) {
     return (
-      <section className="panel glass-panel panel-float stats-panel">
+      <section className="panel glass-panel panel-float stats-panel" aria-label="Stats">
         <header className="panel-header">
           <div>
             <p className="eyebrow eyebrow-on-color">Stats</p>
@@ -137,7 +139,7 @@ export function StatsPanel({ heroes, coalitionTopScorers, analytics }: StatsPane
   const active = slides[index]
 
   return (
-    <section className="panel glass-panel panel-float stats-panel">
+    <section className="panel glass-panel panel-float stats-panel" aria-label="Stats">
       <header className="panel-header">
         <div>
           <p className="eyebrow eyebrow-on-color">{active.eyebrow}</p>
@@ -154,7 +156,7 @@ export function StatsPanel({ heroes, coalitionTopScorers, analytics }: StatsPane
             initial={{ opacity: 0, y: 20, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.98 }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
+            transition={{ duration: 0.45, ease: [0.23, 1, 0.32, 1] }}
           >
             {active.content}
           </motion.div>

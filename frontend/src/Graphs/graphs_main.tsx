@@ -19,7 +19,7 @@ import { PageDots } from '../Global/PageDots/PageDots'
 import { useCarousel } from '../Global/hooks/useCarousel'
 import { groupTopScorersByCoalition } from '../Global/coalitionScorers'
 import { colorForCoalition } from '../Global/coalitionPalette'
-import { BAR_COLOR, BAR_MAX_SIZE, BAR_RADIUS } from './bar_chart'
+import { AXIS_TICK, BAR_COLOR, BAR_MAX_SIZE, BAR_RADIUS } from './bar_chart'
 import { TOOLTIP_CONTENT_STYLE, TOOLTIP_CURSOR, TOOLTIP_ITEM_STYLE, TOOLTIP_LABEL_STYLE } from './tooltip'
 import styles from './graphs_main.module.css'
 
@@ -46,6 +46,8 @@ function ChartLegend({ payload }: { payload?: ReadonlyArray<LegendPayload> }) {
 type GraphSlide = {
   eyebrow: string
   title: string
+  // Text alternative for the chart (screen readers get this instead of the SVG).
+  summary: string
   chart: ReactElement
 }
 
@@ -53,9 +55,10 @@ type GraphsPanelProps = {
   logtimeLeaders: LogtimeUser[]
   coalitionStandings: CoalitionStanding[]
   coalitionTopScorers: CoalitionTopScorer[]
+  forcedSlide?: number
 }
 
-export function GraphsPanel({ logtimeLeaders, coalitionStandings, coalitionTopScorers }: GraphsPanelProps) {
+export function GraphsPanel({ logtimeLeaders, coalitionStandings, coalitionTopScorers, forcedSlide }: GraphsPanelProps) {
   const logtimeSeries = logtimeLeaders.map((user) => ({
     login: user.first_name ?? user.login,
     hours: Math.round(user.hours_logged * 10) / 10,
@@ -82,12 +85,13 @@ export function GraphsPanel({ logtimeLeaders, coalitionStandings, coalitionTopSc
     {
       eyebrow: 'Momentum',
       title: 'Logtime leaders this week',
+      summary: `Bar chart of weekly logtime hours. ${logtimeSeries.map((row) => `${row.login} ${row.hours}`).join(', ')}.`,
       chart: (
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={logtimeSeries} barCategoryGap="24%">
             <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-            <XAxis dataKey="login" tickLine={false} axisLine={false} />
-            <YAxis tickLine={false} axisLine={false} width={44} />
+            <XAxis dataKey="login" tick={AXIS_TICK} tickLine={false} axisLine={false} />
+            <YAxis tick={AXIS_TICK} tickLine={false} axisLine={false} width={44} />
             <Tooltip
               cursor={TOOLTIP_CURSOR}
               contentStyle={TOOLTIP_CONTENT_STYLE}
@@ -102,12 +106,13 @@ export function GraphsPanel({ logtimeLeaders, coalitionStandings, coalitionTopSc
     {
       eyebrow: 'Standings',
       title: 'Top 10 scorers per coalition',
+      summary: `Grouped bar chart of the top ${maxRank} scores per coalition, for ${coalitionGroups.map((group) => group.coalitionName).join(', ')}.`,
       chart: (
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={rankSeries} barGap={2} barCategoryGap="20%">
             <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-            <XAxis dataKey="rank" tickLine={false} axisLine={false} />
-            <YAxis tickLine={false} axisLine={false} width={52} />
+            <XAxis dataKey="rank" tick={AXIS_TICK} tickLine={false} axisLine={false} />
+            <YAxis tick={AXIS_TICK} tickLine={false} axisLine={false} width={52} />
             <Tooltip
               cursor={TOOLTIP_CURSOR}
               contentStyle={TOOLTIP_CONTENT_STYLE}
@@ -131,6 +136,7 @@ export function GraphsPanel({ logtimeLeaders, coalitionStandings, coalitionTopSc
     {
       eyebrow: 'Standings',
       title: 'Coalition scores',
+      summary: `Donut chart of coalition scores. ${standingsWithScore.map((item) => `${item.coalition_name} ${item.score.toLocaleString()}`).join(', ')}.`,
       chart: (
         <div className={styles.coalitionScoresSlide}>
           {leader && (
@@ -173,11 +179,11 @@ export function GraphsPanel({ logtimeLeaders, coalitionStandings, coalitionTopSc
     },
   ]
 
-  const { index, setIndex } = useCarousel(slides.length, 7000)
+  const { index, setIndex } = useCarousel(slides.length, 7000, forcedSlide)
   const active = slides[index]
 
   return (
-    <section className="panel glass-panel panel-float graphs-panel">
+    <section className="panel glass-panel panel-float graphs-panel" aria-label="Graphs">
       <header className="panel-header">
         <div>
           <p className="eyebrow eyebrow-on-color">{active.eyebrow}</p>
@@ -191,10 +197,12 @@ export function GraphsPanel({ logtimeLeaders, coalitionStandings, coalitionTopSc
           <motion.div
             key={active.title}
             className={styles.graphsChartInner}
+            role="img"
+            aria-label={active.summary}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
+            transition={{ duration: 0.45, ease: [0.23, 1, 0.32, 1] }}
           >
             {active.chart}
           </motion.div>
